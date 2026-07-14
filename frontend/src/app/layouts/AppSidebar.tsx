@@ -1,11 +1,14 @@
-import { LayoutDashboard, PanelLeftClose, PanelLeftOpen } from 'lucide-react'
+import { LayoutDashboard, PanelLeftClose, PanelLeftOpen, Users } from 'lucide-react'
 import { NavLink } from 'react-router-dom'
 import { Button } from '@/shared/components/Button'
 import { cn } from '@/shared/lib/cn'
 import { useUiStore } from '@/shared/state/uiStore'
 import { useAuth } from '@/features/auth/AuthProvider'
 
-const navigation = [{ label: 'Dashboard', to: '/dashboard', icon: LayoutDashboard, permission: undefined as string | undefined }]
+const navigation = [
+  { label: 'Dashboard', to: '/dashboard', icon: LayoutDashboard, permission: undefined as string | undefined },
+  { label: 'Users', to: '/users', icon: Users, permission: 'users.read' },
+]
 
 export function AppSidebar() {
   const isSidebarOpen = useUiStore((state) => state.isSidebarOpen)
