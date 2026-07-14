@@ -1,4 +1,6 @@
-import { Menu, Moon, Sun } from 'lucide-react'
+import { LogOut, Menu, Moon, Sun } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
+import { useAuth } from '@/features/auth/AuthProvider'
 import { Button } from '@/shared/components/Button'
 import { useUiStore } from '@/shared/state/uiStore'
 
@@ -6,6 +8,13 @@ export function AppHeader() {
   const theme = useUiStore((state) => state.theme)
   const toggleSidebar = useUiStore((state) => state.toggleSidebar)
   const toggleTheme = useUiStore((state) => state.toggleTheme)
+  const navigate = useNavigate()
+  const { logout, session } = useAuth()
+
+  const handleLogout = async () => {
+    await logout()
+    navigate('/login', { replace: true })
+  }
 
   return (
     <header className="fixed inset-x-0 top-0 z-30 flex h-16 items-center border-b border-border bg-surface/95 px-4 backdrop-blur sm:px-6">
@@ -24,8 +33,8 @@ export function AppHeader() {
         </div>
       </div>
       <div className="ml-auto flex items-center gap-2">
-        <span className="hidden rounded-full bg-subtle px-3 py-1 text-xs font-medium text-muted sm:inline-flex">
-          Foundation mode
+        <span className="hidden rounded-full bg-subtle px-3 py-1 text-xs font-medium text-muted md:inline-flex">
+          {session?.user.displayName}
         </span>
         <Button
           aria-label={theme === 'light' ? 'Switch to dark theme' : 'Switch to light theme'}
@@ -34,6 +43,9 @@ export function AppHeader() {
           onClick={toggleTheme}
         >
           {theme === 'light' ? <Moon aria-hidden="true" size={18} /> : <Sun aria-hidden="true" size={18} />}
+        </Button>
+        <Button aria-label="Sign out" variant="ghost" size="icon" onClick={() => void handleLogout()}>
+          <LogOut aria-hidden="true" size={18} />
         </Button>
       </div>
     </header>

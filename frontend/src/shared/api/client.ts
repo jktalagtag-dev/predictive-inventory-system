@@ -11,6 +11,18 @@ export type ApiError = {
 export const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL ?? '/api/v1',
   withCredentials: true,
+  withXSRFToken: true,
+  xsrfCookieName: 'XSRF-TOKEN',
+  xsrfHeaderName: 'X-XSRF-TOKEN',
+  headers: { Accept: 'application/json' },
+})
+
+export const sessionClient = axios.create({
+  baseURL: import.meta.env.VITE_BACKEND_URL ?? window.location.origin,
+  withCredentials: true,
+  withXSRFToken: true,
+  xsrfCookieName: 'XSRF-TOKEN',
+  xsrfHeaderName: 'X-XSRF-TOKEN',
   headers: { Accept: 'application/json' },
 })
 

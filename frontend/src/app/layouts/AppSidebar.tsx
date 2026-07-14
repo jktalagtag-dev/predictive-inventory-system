@@ -3,12 +3,15 @@ import { NavLink } from 'react-router-dom'
 import { Button } from '@/shared/components/Button'
 import { cn } from '@/shared/lib/cn'
 import { useUiStore } from '@/shared/state/uiStore'
+import { useAuth } from '@/features/auth/AuthProvider'
 
-const navigation = [{ label: 'Workspace', to: '/workspace', icon: LayoutDashboard }]
+const navigation = [{ label: 'Workspace', to: '/workspace', icon: LayoutDashboard, permission: undefined as string | undefined }]
 
 export function AppSidebar() {
   const isSidebarOpen = useUiStore((state) => state.isSidebarOpen)
   const toggleSidebar = useUiStore((state) => state.toggleSidebar)
+  const { hasPermission } = useAuth()
+  const visibleNavigation = navigation.filter((item) => !item.permission || hasPermission(item.permission))
 
   return (
     <aside
@@ -18,7 +21,7 @@ export function AppSidebar() {
       )}
     >
       <nav aria-label="Primary navigation" className="flex-1 space-y-2 p-3">
-        {navigation.map(({ label, to, icon: Icon }) => (
+        {visibleNavigation.map(({ label, to, icon: Icon }) => (
           <NavLink
             key={to}
             to={to}

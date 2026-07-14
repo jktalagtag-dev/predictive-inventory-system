@@ -3,10 +3,12 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { AppShell } from '@/app/layouts/AppShell'
 import { AuthenticationLayout } from '@/app/layouts/AuthenticationLayout'
 import { RouteErrorBoundary } from '@/app/router/RouteErrorBoundary'
+import { ProtectedRoute } from '@/app/router/ProtectedRoute'
+import { PublicOnlyRoute } from '@/app/router/PublicOnlyRoute'
 import { PageSkeleton } from '@/shared/components/PageSkeleton'
 
 const WorkspacePlaceholder = lazy(() => import('@/app/router/WorkspacePlaceholder'))
-const SignInPlaceholder = lazy(() => import('@/app/router/SignInPlaceholder'))
+const LoginPage = lazy(() => import('@/features/auth/pages/LoginPage'))
 const NotFoundPage = lazy(() => import('@/app/router/NotFoundPage'))
 
 export function AppRouter() {
@@ -15,11 +17,15 @@ export function AppRouter() {
       <RouteErrorBoundary>
         <Suspense fallback={<PageSkeleton />}>
           <Routes>
-            <Route element={<AuthenticationLayout />}>
-              <Route path="/login" element={<SignInPlaceholder />} />
+            <Route element={<PublicOnlyRoute />}>
+              <Route element={<AuthenticationLayout />}>
+                <Route path="/login" element={<LoginPage />} />
+              </Route>
             </Route>
-            <Route element={<AppShell />}>
-              <Route path="/workspace" element={<WorkspacePlaceholder />} />
+            <Route element={<ProtectedRoute />}>
+              <Route element={<AppShell />}>
+                <Route path="/workspace" element={<WorkspacePlaceholder />} />
+              </Route>
             </Route>
             <Route path="/" element={<Navigate to="/workspace" replace />} />
             <Route path="*" element={<NotFoundPage />} />
