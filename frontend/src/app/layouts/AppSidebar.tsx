@@ -5,7 +5,7 @@ import { cn } from '@/shared/lib/cn'
 import { useUiStore } from '@/shared/state/uiStore'
 import { useAuth } from '@/features/auth/AuthProvider'
 
-const navigation = [{ label: 'Workspace', to: '/workspace', icon: LayoutDashboard, permission: undefined as string | undefined }]
+const navigation = [{ label: 'Dashboard', to: '/dashboard', icon: LayoutDashboard, permission: undefined as string | undefined }]
 
 export function AppSidebar() {
   const isSidebarOpen = useUiStore((state) => state.isSidebarOpen)

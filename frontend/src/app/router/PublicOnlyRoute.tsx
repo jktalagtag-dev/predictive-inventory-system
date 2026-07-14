@@ -9,5 +9,5 @@ export function PublicOnlyRoute() {
     return <PageSkeleton />
   }
 
-  return isAuthenticated ? <Navigate replace to="/workspace" /> : <Outlet />
+  return isAuthenticated ? <Navigate replace to="/dashboard" /> : <Outlet />
 }

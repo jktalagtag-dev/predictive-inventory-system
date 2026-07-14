@@ -28,7 +28,7 @@ export function LoginForm() {
         && typeof location.state.from.pathname === 'string'
         && location.state.from.pathname.startsWith('/')
         ? location.state.from.pathname
-        : '/workspace'
+        : '/dashboard'
 
       navigate(returnPath, { replace: true })
     },

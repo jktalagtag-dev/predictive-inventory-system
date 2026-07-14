@@ -9,7 +9,7 @@ export default function NotFoundPage() {
         <h1 className="mt-2 text-3xl font-bold tracking-tight text-ink">Page not found</h1>
         <p className="mt-3 text-sm leading-6 text-muted">The page you requested is unavailable or has moved.</p>
         <Button asChild className="mt-6">
-          <Link to="/workspace">Return to workspace</Link>
+          <Link to="/dashboard">Return to dashboard</Link>
         </Button>
       </section>
     </main>
