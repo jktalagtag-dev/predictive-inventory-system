@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+  --color-canvas: 247 249 252;
+  --color-surface: 255 255 255;
+  --color-subtle: 241 245 249;
+  --color-border: 216 224 234;
+  --color-ink: 23 32 51;
+  --color-muted: 82 97 118;
+  --color-brand-50: 239 246 255;
+  --color-brand-600: 37 99 235;
+  --color-brand-700: 29 78 216;
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --color-canvas: 15 23 42;
+  --color-surface: 30 41 59;
+  --color-subtle: 51 65 85;
+  --color-border: 71 85 105;
+  --color-ink: 241 245 249;
+  --color-muted: 203 213 225;
+  --color-brand-50: 30 58 138;
+  --color-brand-600: 96 165 250;
+  --color-brand-700: 147 197 253;
+}
+
+* {
+  border-color: rgb(var(--color-border));
+}
+
+html {
+  min-width: 320px;
+  background: rgb(var(--color-canvas));
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background: rgb(var(--color-canvas));
+  color: rgb(var(--color-ink));
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+:focus-visible {
+  outline: none;
+}
