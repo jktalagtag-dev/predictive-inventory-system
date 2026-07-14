@@ -9,6 +9,7 @@ import { PageSkeleton } from '@/shared/components/PageSkeleton'
 
 const DashboardPage = lazy(() => import('@/features/dashboard/pages/DashboardPage'))
 const UsersPage = lazy(() => import('@/features/users/pages/UsersPage'))
+const ProductsPage = lazy(() => import('@/features/products/pages/ProductsPage'))
 const LoginPage = lazy(() => import('@/features/auth/pages/LoginPage'))
 const NotFoundPage = lazy(() => import('@/app/router/NotFoundPage'))
 
@@ -27,6 +28,7 @@ export function AppRouter() {
               <Route element={<AppShell />}>
                 <Route path="/dashboard" element={<DashboardPage />} />
                 <Route path="/users" element={<UsersPage />} />
+                <Route path="/products" element={<ProductsPage />} />
               </Route>
             </Route>
             <Route path="/workspace" element={<Navigate to="/dashboard" replace />} />
