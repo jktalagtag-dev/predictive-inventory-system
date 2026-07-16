@@ -6,7 +6,7 @@ services:
       MYSQL_DATABASE: predictive_inventory
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
     ports:
-      - "3306:3306"
+      - "3307:3306"
     volumes:
       - mysql_data:/var/lib/mysql
     healthcheck:
@@ -35,6 +35,7 @@ services:
       CACHE_STORE: database
       SANCTUM_STATEFUL_DOMAINS: "localhost:5188,127.0.0.1:5188"
       FRONTEND_URL: "http://localhost:5188"
+      CORS_ALLOWED_ORIGINS: "http://localhost:5188,http://127.0.0.1:5188"
     ports:
       - "8001:8000"
     volumes:

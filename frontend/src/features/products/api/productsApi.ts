@@ -77,3 +77,8 @@ export async function getUnitOptions(): Promise<UnitOption[]> {
   const response = await apiClient.get<ApiEnvelope<Array<{ id: string; code: string; name: string; symbol: string }>>>('/units-of-measure', { params: { isActive: true } })
   return response.data.data.map((unit) => ({ id: unit.id, code: unit.code, name: unit.name, symbol: unit.symbol }))
 }
+
+export async function getProductOptions(): Promise<Array<{ id: string; sku: string; name: string }>> {
+  const response = await apiClient.get<ApiEnvelope<Product[]>>('/products', { params: { isActive: true, perPage: 100, sort: 'name' } })
+  return response.data.data.map((product) => ({ id: product.id, sku: product.sku, name: product.name }))
+}

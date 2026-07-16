@@ -28,8 +28,18 @@ export function AuthProvider({ children }: PropsWithChildren) {
   const logout = useCallback(async () => {
     try {
       await signOut()
+    } catch (error) {
+      // Sign-out must still be reflected locally even if the network call
+      // fails, so a flaky connection can never leave the UI stuck showing
+      // an authenticated screen after the user asked to sign out.
+      console.error('Failed to notify the server of sign-out.', error)
     } finally {
       queryClient.clear()
+      // clear() only invalidates the cache and lets the session query
+      // refetch in the background; that refetch can lose the race against
+      // the redirect that follows logout(). Setting the session to null
+      // directly makes isAuthenticated flip to false synchronously.
+      queryClient.setQueryData(authQueryKeys.session, null)
     }
   }, [queryClient])
 

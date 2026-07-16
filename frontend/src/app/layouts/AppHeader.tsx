@@ -1,5 +1,4 @@
 import { LogOut, Menu, Moon, Sun } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/features/auth/AuthProvider'
 import { Button } from '@/shared/components/Button'
 import { useUiStore } from '@/shared/state/uiStore'
@@ -8,12 +7,17 @@ export function AppHeader() {
   const theme = useUiStore((state) => state.theme)
   const toggleSidebar = useUiStore((state) => state.toggleSidebar)
   const toggleTheme = useUiStore((state) => state.toggleTheme)
-  const navigate = useNavigate()
   const { logout, session } = useAuth()
 
   const handleLogout = async () => {
     await logout()
-    navigate('/login', { replace: true })
+    // A hard navigation (not react-router's navigate) guarantees every
+    // in-memory store — React Query cache, Zustand state, component
+    // closures — is discarded on sign-out, not just the auth session
+    // query. Client-side navigation left this racing against in-flight
+    // requests started before logout, which could re-populate the
+    // session cache with stale authenticated data after clear().
+    window.location.assign('/login')
   }
 
   return (
