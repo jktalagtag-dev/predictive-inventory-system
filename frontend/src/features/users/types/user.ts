@@ -1,5 +1,16 @@
-export type UserRole = 'Owner' | 'Manager' | 'Staff'
-export type UserStatus = 'active' | 'inactive'
+export type RoleOption = {
+  id: string
+  code: string
+  name: string
+}
+
+export type BranchOption = {
+  id: string
+  code: string
+  name: string
+}
+
+export type UserBranchAssignment = BranchOption & { isDefault: boolean }
 
 export type ManagedUser = {
   id: string
@@ -7,17 +18,18 @@ export type ManagedUser = {
   lastName: string
   displayName: string
   email: string
-  roles: UserRole[]
-  branches: string[]
-  status: UserStatus
+  phone: string | null
+  isActive: boolean
+  roles: RoleOption[]
+  branches: UserBranchAssignment[]
   lastLoginAt: string | null
   version: number
 }
 
 export type UserFilters = {
   search: string
-  role: UserRole | 'all'
-  status: UserStatus | 'all'
+  roleCode: string | 'all'
+  status: 'all' | 'active' | 'inactive'
   page: number
   perPage: number
 }
@@ -26,8 +38,11 @@ export type UserFormValues = {
   firstName: string
   lastName: string
   email: string
-  roles: UserRole[]
-  status: UserStatus
+  phone: string
+  roleIds: string[]
+  branchIds: string[]
+  defaultBranchId: string
+  isActive: boolean
 }
 
 export type PaginatedUsers = {

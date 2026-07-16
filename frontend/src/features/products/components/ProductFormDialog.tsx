@@ -1,18 +1,54 @@
 import { type FormEvent, useEffect, useState } from 'react'
 import { X } from 'lucide-react'
-import type { Product, ProductFormValues } from '@/features/products/types/product'
+import type { CategoryOption, Product, ProductFormValues, UnitOption } from '@/features/products/types/product'
 import { Button } from '@/shared/components/Button'
 
-type ProductFormDialogProps = { product?: Product; isSaving: boolean; onClose: () => void; onSave: (values: ProductFormValues) => void }
-
-function valuesFrom(product?: Product): ProductFormValues {
-  return product ? { sku: product.sku, barcode: product.barcode ?? '', name: product.name, category: product.category, stockUnit: product.stockUnit, productType: product.productType, taxRate: product.taxRate, isActive: product.isActive } : { sku: '', barcode: '', name: '', category: '', stockUnit: 'EA', productType: 'stock', taxRate: '12.0000', isActive: true }
+type ProductFormDialogProps = {
+  product?: Product
+  categoryOptions: CategoryOption[]
+  unitOptions: UnitOption[]
+  isSaving: boolean
+  onClose: () => void
+  onSave: (values: ProductFormValues) => void
 }
 
-export function ProductFormDialog({ product, isSaving, onClose, onSave }: ProductFormDialogProps) {
+function valuesFrom(product?: Product): ProductFormValues {
+  return product
+    ? {
+        categoryId: product.category?.id ?? '',
+        stockUnitId: product.stockUnit?.id ?? '',
+        sku: product.sku,
+        barcode: product.barcode ?? '',
+        name: product.name,
+        description: product.description ?? '',
+        productType: product.productType,
+        defaultTaxRate: product.defaultTaxRate,
+        isActive: product.isActive,
+        isLotTracked: product.isLotTracked,
+        isSerialTracked: product.isSerialTracked,
+        isExpiryTracked: product.isExpiryTracked,
+      }
+    : {
+        categoryId: '',
+        stockUnitId: '',
+        sku: '',
+        barcode: '',
+        name: '',
+        description: '',
+        productType: 'stock',
+        defaultTaxRate: '12.0000',
+        isActive: true,
+        isLotTracked: false,
+        isSerialTracked: false,
+        isExpiryTracked: false,
+      }
+}
+
+export function ProductFormDialog({ product, categoryOptions, unitOptions, isSaving, onClose, onSave }: ProductFormDialogProps) {
   const [values, setValues] = useState<ProductFormValues>(() => valuesFrom(product))
   useEffect(() => setValues(valuesFrom(product)), [product])
   const submit = (event: FormEvent<HTMLFormElement>) => { event.preventDefault(); onSave(values) }
+  const isValid = values.categoryId !== '' && values.stockUnitId !== ''
 
   return (
     <div className="fixed inset-0 z-50 grid place-items-center bg-slate-950/40 p-4" role="presentation">
@@ -21,13 +57,31 @@ export function ProductFormDialog({ product, isSaving, onClose, onSave }: Produc
         <form className="mt-6 grid gap-4 sm:grid-cols-2" onSubmit={submit}>
           <label className="text-sm font-semibold text-ink">Product name<input className="mt-2 h-10 w-full rounded-lg border border-border bg-surface px-3 text-sm outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-600/20" required value={values.name} onChange={(event) => setValues((state) => ({ ...state, name: event.target.value }))} /></label>
           <label className="text-sm font-semibold text-ink">SKU<input className="mt-2 h-10 w-full rounded-lg border border-border bg-surface px-3 text-sm outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-600/20" required value={values.sku} onChange={(event) => setValues((state) => ({ ...state, sku: event.target.value }))} /></label>
-          <label className="text-sm font-semibold text-ink">Category<input className="mt-2 h-10 w-full rounded-lg border border-border bg-surface px-3 text-sm outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-600/20" required value={values.category} onChange={(event) => setValues((state) => ({ ...state, category: event.target.value }))} /></label>
-          <label className="text-sm font-semibold text-ink">Stock unit<input className="mt-2 h-10 w-full rounded-lg border border-border bg-surface px-3 text-sm uppercase outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-600/20" required value={values.stockUnit} onChange={(event) => setValues((state) => ({ ...state, stockUnit: event.target.value.toUpperCase() }))} /></label>
+          <label className="text-sm font-semibold text-ink">Category
+            <select className="mt-2 h-10 w-full rounded-lg border border-border bg-surface px-3 text-sm outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-600/20" required value={values.categoryId} onChange={(event) => setValues((state) => ({ ...state, categoryId: event.target.value }))}>
+              <option value="" disabled>Select a category</option>
+              {categoryOptions.map((category) => <option key={category.id} value={category.id}>{category.name}</option>)}
+            </select>
+          </label>
+          <label className="text-sm font-semibold text-ink">Stock unit
+            <select className="mt-2 h-10 w-full rounded-lg border border-border bg-surface px-3 text-sm outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-600/20" required value={values.stockUnitId} onChange={(event) => setValues((state) => ({ ...state, stockUnitId: event.target.value }))}>
+              <option value="" disabled>Select a unit</option>
+              {unitOptions.map((unit) => <option key={unit.id} value={unit.id}>{unit.name} ({unit.symbol})</option>)}
+            </select>
+          </label>
           <label className="text-sm font-semibold text-ink">Barcode<input className="mt-2 h-10 w-full rounded-lg border border-border bg-surface px-3 text-sm outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-600/20" value={values.barcode} onChange={(event) => setValues((state) => ({ ...state, barcode: event.target.value }))} /></label>
-          <label className="text-sm font-semibold text-ink">Tax rate<input className="mt-2 h-10 w-full rounded-lg border border-border bg-surface px-3 text-sm outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-600/20" min="0" required step="0.0001" type="number" value={values.taxRate} onChange={(event) => setValues((state) => ({ ...state, taxRate: event.target.value }))} /></label>
+          <label className="text-sm font-semibold text-ink">Tax rate<input className="mt-2 h-10 w-full rounded-lg border border-border bg-surface px-3 text-sm outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-600/20" min="0" required step="0.0001" type="number" value={values.defaultTaxRate} onChange={(event) => setValues((state) => ({ ...state, defaultTaxRate: event.target.value }))} /></label>
           <label className="text-sm font-semibold text-ink">Product type<select className="mt-2 h-10 w-full rounded-lg border border-border bg-surface px-3 text-sm outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-600/20" value={values.productType} onChange={(event) => setValues((state) => ({ ...state, productType: event.target.value as ProductFormValues['productType'] }))}><option value="stock">Stock product</option><option value="non_stock">Non-stock product</option><option value="service">Service</option></select></label>
-          <label className="flex items-center gap-2 self-end pb-2 text-sm text-ink"><input checked={values.isActive} type="checkbox" onChange={(event) => setValues((state) => ({ ...state, isActive: event.target.checked }))} /> Active for new transactions</label>
-          <div className="col-span-full flex justify-end gap-3 border-t border-border pt-5"><Button type="button" variant="secondary" onClick={onClose}>Cancel</Button><Button disabled={isSaving} type="submit">{isSaving ? 'Saving' : product ? 'Save changes' : 'Create product'}</Button></div>
+          <label className="block text-sm font-semibold text-ink sm:col-span-2">Description
+            <textarea className="mt-2 w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-600/20" rows={2} value={values.description} onChange={(event) => setValues((state) => ({ ...state, description: event.target.value }))} />
+          </label>
+          <div className="flex flex-wrap gap-4 sm:col-span-2">
+            <label className="flex items-center gap-2 text-sm text-ink"><input checked={values.isActive} type="checkbox" onChange={(event) => setValues((state) => ({ ...state, isActive: event.target.checked }))} /> Active for new transactions</label>
+            <label className="flex items-center gap-2 text-sm text-ink"><input checked={values.isLotTracked} type="checkbox" onChange={(event) => setValues((state) => ({ ...state, isLotTracked: event.target.checked }))} /> Lot tracked</label>
+            <label className="flex items-center gap-2 text-sm text-ink"><input checked={values.isSerialTracked} type="checkbox" onChange={(event) => setValues((state) => ({ ...state, isSerialTracked: event.target.checked }))} /> Serial tracked</label>
+            <label className="flex items-center gap-2 text-sm text-ink"><input checked={values.isExpiryTracked} type="checkbox" onChange={(event) => setValues((state) => ({ ...state, isExpiryTracked: event.target.checked }))} /> Expiry tracked</label>
+          </div>
+          <div className="col-span-full flex justify-end gap-3 border-t border-border pt-5"><Button type="button" variant="secondary" onClick={onClose}>Cancel</Button><Button disabled={isSaving || !isValid} type="submit">{isSaving ? 'Saving' : product ? 'Save changes' : 'Create product'}</Button></div>
         </form>
       </section>
     </div>

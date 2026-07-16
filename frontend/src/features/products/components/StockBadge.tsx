@@ -1,13 +1,13 @@
-import type { StockStatus } from '@/features/products/types/product'
+import type { ProductStock } from '@/features/products/types/product'
 
-const stockStyles: Record<StockStatus, { label: string; className: string }> = {
-  in_stock: { label: 'In stock', className: 'bg-emerald-50 text-emerald-700' },
-  low_stock: { label: 'Low stock', className: 'bg-amber-50 text-amber-700' },
-  critical_stock: { label: 'Critical stock', className: 'bg-red-50 text-red-700' },
-  out_of_stock: { label: 'Out of stock', className: 'bg-slate-100 text-slate-700' },
-}
+export function StockBadge({ stock }: { stock: ProductStock | null }) {
+  if (!stock) {
+    return <span className="inline-flex rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-600">Not tracked</span>
+  }
 
-export function StockBadge({ status }: { status: StockStatus }) {
-  const style = stockStyles[status]
-  return <span className={`inline-flex rounded-full px-2.5 py-1 text-xs font-semibold ${style.className}`}>{style.label}</span>
+  const available = Number(stock.availableQuantity)
+  const style = available <= 0 ? 'bg-red-50 text-red-700' : 'bg-emerald-50 text-emerald-700'
+  const label = available <= 0 ? 'Out of stock' : `${stock.availableQuantity} available`
+
+  return <span className={`inline-flex rounded-full px-2.5 py-1 text-xs font-semibold ${style}`}>{label}</span>
 }

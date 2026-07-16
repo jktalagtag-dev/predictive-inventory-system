@@ -1,44 +1,69 @@
-export type StockStatus = 'in_stock' | 'low_stock' | 'critical_stock' | 'out_of_stock'
+export type ProductType = 'stock' | 'non_stock' | 'service'
+
+export type CategoryOption = {
+  id: string
+  name: string
+}
+
+export type UnitOption = {
+  id: string
+  code: string
+  name: string
+  symbol: string
+}
+
+export type ProductStock = {
+  onHandQuantity: string
+  availableQuantity: string
+  incomingQuantity: string
+  lastMovementAt: string | null
+}
 
 export type Product = {
   id: string
   sku: string
   barcode: string | null
   name: string
-  category: string
-  stockUnit: string
-  productType: 'stock' | 'non_stock' | 'service'
-  taxRate: string
+  description: string | null
+  category: CategoryOption | null
+  stockUnit: { id: string; code: string; symbol: string } | null
+  productType: ProductType
   isActive: boolean
-  stock: {
-    onHand: string
-    available: string
-    incoming: string
-    reorderPoint: string
-    status: StockStatus
-  }
+  isLotTracked: boolean
+  isSerialTracked: boolean
+  isExpiryTracked: boolean
+  defaultTaxRate: string
+  // Present only when the list/detail request included a branchId the
+  // caller is authorized to see; null means "not requested or not
+  // authorized", never a fabricated zero.
+  stock: ProductStock | null
   updatedAt: string
   version: number
 }
 
 export type ProductFilters = {
   search: string
-  category: string
-  stockStatus: StockStatus | 'all'
+  categoryId: string | 'all'
+  productType: ProductType | 'all'
   active: 'all' | 'active' | 'inactive'
+  branchId: string | null
   page: number
   perPage: number
 }
 
 export type ProductFormValues = {
+  categoryId: string
+  stockUnitId: string
   sku: string
   barcode: string
   name: string
-  category: string
-  stockUnit: string
-  productType: Product['productType']
-  taxRate: string
+  description: string
+  productType: ProductType
+  defaultTaxRate: string
   isActive: boolean
+  isLotTracked: boolean
+  isSerialTracked: boolean
+  isExpiryTracked: boolean
 }
 
 export type PaginatedProducts = {
