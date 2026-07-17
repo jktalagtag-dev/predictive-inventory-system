@@ -183,6 +183,19 @@ class InventoryAdjustmentTest extends TestCase
         $this->getJson("/api/v1/inventory/adjustments?branchId={$this->branch->id}")->assertStatus(403);
     }
 
+    public function test_list_endpoint_reports_line_count_without_loading_full_lines(): void
+    {
+        $manager = $this->userWithRole('manager');
+        $this->actAs($manager);
+
+        $this->postJson('/api/v1/inventory/adjustments', $this->draftPayload(5))->assertCreated();
+
+        $index = $this->getJson("/api/v1/inventory/adjustments?branchId={$this->branch->id}");
+        $index->assertOk();
+        $index->assertJsonPath('data.0.lineCount', 1);
+        $index->assertJsonPath('data.0.lines', []);
+    }
+
     public function test_staff_can_create_draft_but_not_approve(): void
     {
         $staff = $this->userWithRole('staff');

@@ -45,7 +45,7 @@ class InventoryAdjustmentController extends Controller
         $perPage = min(max((int) $request->integer('perPage', 20), 1), 100);
         $page = max((int) $request->integer('page', 1), 1);
 
-        $query = InventoryAdjustment::query()->where('branch_id', $branchId);
+        $query = InventoryAdjustment::query()->withCount('lines')->where('branch_id', $branchId);
 
         if ($request->filled('status')) {
             $query->where('status', $request->query('status'));

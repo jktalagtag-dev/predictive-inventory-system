@@ -1,4 +1,4 @@
-import { Boxes, ClipboardList, LayoutDashboard, PackageCheck, PanelLeftClose, PanelLeftOpen, Tags, Truck, Users } from 'lucide-react'
+import { Boxes, ClipboardList, LayoutDashboard, PackageCheck, PackageSearch, PanelLeftClose, PanelLeftOpen, Tags, Truck, Users } from 'lucide-react'
 import { NavLink } from 'react-router-dom'
 import { Button } from '@/shared/components/Button'
 import { cn } from '@/shared/lib/cn'
@@ -10,6 +10,7 @@ const navigation = [
   { label: 'Users', to: '/users', icon: Users, permission: 'users.read' },
   { label: 'Products', to: '/products', icon: Boxes, permission: 'products.read' },
   { label: 'Categories', to: '/categories', icon: Tags, permission: 'categories.read' },
+  { label: 'Inventory', to: '/inventory', icon: PackageSearch, permission: 'inventory.read' },
   { label: 'Suppliers', to: '/suppliers', icon: Truck, permission: 'suppliers.read' },
   { label: 'Purchase Orders', to: '/purchase-orders', icon: ClipboardList, permission: 'purchase_orders.read' },
   { label: 'Goods Receiving', to: '/goods-receipts', icon: PackageCheck, permission: 'goods_receipts.read' },

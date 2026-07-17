@@ -14,6 +14,7 @@ const CategoriesPage = lazy(() => import('@/features/categories/pages/Categories
 const SuppliersPage = lazy(() => import('@/features/suppliers/pages/SuppliersPage'))
 const PurchaseOrdersPage = lazy(() => import('@/features/purchase-orders/pages/PurchaseOrdersPage'))
 const GoodsReceiptsPage = lazy(() => import('@/features/receiving/pages/GoodsReceiptsPage'))
+const InventoryPage = lazy(() => import('@/features/inventory/pages/InventoryPage'))
 const LoginPage = lazy(() => import('@/features/auth/pages/LoginPage'))
 const NotFoundPage = lazy(() => import('@/app/router/NotFoundPage'))
 
@@ -37,6 +38,7 @@ export function AppRouter() {
                 <Route path="/suppliers" element={<SuppliersPage />} />
                 <Route path="/purchase-orders" element={<PurchaseOrdersPage />} />
                 <Route path="/goods-receipts" element={<GoodsReceiptsPage />} />
+                <Route path="/inventory" element={<InventoryPage />} />
               </Route>
             </Route>
             <Route path="/workspace" element={<Navigate to="/dashboard" replace />} />
