@@ -1,3 +1,9 @@
+import { Badge } from '@/shared/components/Badge'
+
+// Role identity, not a workflow status, so it intentionally keeps its
+// own color mapping outside the five status tones (CLAUDE.md section 28
+// reserves those for stable state meanings) while still using Badge for
+// consistent shape, padding, and typography.
 const roleClasses: Record<string, string> = {
   owner: 'bg-violet-50 text-violet-700',
   manager: 'bg-brand-50 text-brand-700',
@@ -5,5 +11,5 @@ const roleClasses: Record<string, string> = {
 }
 
 export function RoleBadge({ code, name }: { code: string; name: string }) {
-  return <span className={`inline-flex rounded-full px-2.5 py-1 text-xs font-semibold ${roleClasses[code] ?? 'bg-slate-100 text-slate-700'}`}>{name}</span>
+  return <Badge className={roleClasses[code] ?? 'bg-slate-100 text-slate-700'}>{name}</Badge>
 }

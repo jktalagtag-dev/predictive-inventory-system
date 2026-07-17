@@ -32,6 +32,7 @@ import { useOnlineStatus } from '@/shared/offline/useOnlineStatus'
 import { type ApiError } from '@/shared/api/client'
 import { Button } from '@/shared/components/Button'
 import { PageHeader } from '@/shared/components/PageHeader'
+import { useToast } from '@/shared/components/Toast'
 
 type Tab = 'balances' | 'movements' | 'adjustments'
 
@@ -56,6 +57,7 @@ export default function InventoryPage() {
   const [queuedMessage, setQueuedMessage] = useState<string | null>(null)
   const queryClient = useQueryClient()
   const isOnline = useOnlineStatus()
+  const { toast } = useToast()
 
   const defaultBranchId = (session?.user.branches.find((branch) => branch.isDefault) ?? session?.user.branches[0])?.id
   useEffect(() => {
@@ -144,9 +146,18 @@ export default function InventoryPage() {
     // the browser is offline, so it would never even run.
     networkMode: 'always',
   })
-  const approveMutation = useMutation({ mutationFn: (adjustment: InventoryAdjustment) => approveInventoryAdjustment(adjustment), onSuccess: invalidate })
-  const postMutation = useMutation({ mutationFn: (adjustment: InventoryAdjustment) => postInventoryAdjustment(adjustment), onSuccess: invalidate })
-  const reverseMutation = useMutation({ mutationFn: ({ adjustment, reason }: { adjustment: InventoryAdjustment; reason: string }) => reverseInventoryAdjustment(adjustment, reason), onSuccess: invalidate })
+  const approveMutation = useMutation({
+    mutationFn: (adjustment: InventoryAdjustment) => approveInventoryAdjustment(adjustment),
+    onSuccess: (adjustment) => { invalidate(); toast({ title: 'Adjustment approved', description: adjustment.adjustmentNumber, variant: 'success' }) },
+  })
+  const postMutation = useMutation({
+    mutationFn: (adjustment: InventoryAdjustment) => postInventoryAdjustment(adjustment),
+    onSuccess: (adjustment) => { invalidate(); toast({ title: 'Adjustment posted', description: adjustment.adjustmentNumber, variant: 'success' }) },
+  })
+  const reverseMutation = useMutation({
+    mutationFn: ({ adjustment, reason }: { adjustment: InventoryAdjustment; reason: string }) => reverseInventoryAdjustment(adjustment, reason),
+    onSuccess: (adjustment) => { invalidate(); toast({ title: 'Adjustment reversed', description: adjustment.adjustmentNumber, variant: 'success' }) },
+  })
 
   const isActing = approveMutation.isPending || postMutation.isPending || reverseMutation.isPending
   const error = (createMutation.error ?? approveMutation.error ?? postMutation.error ?? reverseMutation.error) as ApiError | null

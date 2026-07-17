@@ -1,13 +1,12 @@
 import type { ProductStock } from '@/features/products/types/product'
+import { Badge } from '@/shared/components/Badge'
 
 export function StockBadge({ stock }: { stock: ProductStock | null }) {
   if (!stock) {
-    return <span className="inline-flex rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-600">Not tracked</span>
+    return <Badge tone="neutral">Not tracked</Badge>
   }
 
   const available = Number(stock.availableQuantity)
-  const style = available <= 0 ? 'bg-red-50 text-red-700' : 'bg-emerald-50 text-emerald-700'
-  const label = available <= 0 ? 'Out of stock' : `${stock.availableQuantity} available`
 
-  return <span className={`inline-flex rounded-full px-2.5 py-1 text-xs font-semibold ${style}`}>{label}</span>
+  return <Badge tone={available <= 0 ? 'danger' : 'success'}>{available <= 0 ? 'Out of stock' : `${stock.availableQuantity} available`}</Badge>
 }

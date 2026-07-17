@@ -1,12 +1,13 @@
 import type { GoodsReceiptStatus } from '@/features/receiving/types/goodsReceipt'
+import { Badge, type BadgeTone } from '@/shared/components/Badge'
 
-const statusStyles: Record<GoodsReceiptStatus, { label: string; className: string }> = {
-  draft: { label: 'Draft', className: 'bg-slate-100 text-slate-700' },
-  posted: { label: 'Posted', className: 'bg-emerald-50 text-emerald-700' },
-  reversed: { label: 'Reversed', className: 'bg-red-50 text-red-700' },
+const statusStyles: Record<GoodsReceiptStatus, { label: string; tone: BadgeTone }> = {
+  draft: { label: 'Draft', tone: 'neutral' },
+  posted: { label: 'Posted', tone: 'success' },
+  reversed: { label: 'Reversed', tone: 'danger' },
 }
 
 export function GoodsReceiptStatusBadge({ status }: { status: GoodsReceiptStatus }) {
   const style = statusStyles[status]
-  return <span className={`inline-flex rounded-full px-2.5 py-1 text-xs font-semibold ${style.className}`}>{style.label}</span>
+  return <Badge tone={style.tone}>{style.label}</Badge>
 }

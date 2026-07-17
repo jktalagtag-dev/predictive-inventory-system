@@ -1,12 +1,11 @@
 import { useQuery } from '@tanstack/react-query'
-import { dashboardPlaceholder, dashboardQueryKeys, getDashboard } from '@/features/dashboard/api/dashboardApi'
+import { dashboardQueryKeys, getDashboard } from '@/features/dashboard/api/dashboardApi'
 
-export function useDashboard() {
+export function useDashboard(branchId: string | undefined) {
   return useQuery({
-    queryKey: dashboardQueryKeys.overview,
-    queryFn: getDashboard,
-    placeholderData: dashboardPlaceholder,
-    retry: false,
+    queryKey: dashboardQueryKeys.overview(branchId ?? ''),
+    queryFn: () => getDashboard(branchId as string),
+    enabled: branchId !== undefined,
     refetchOnWindowFocus: true,
   })
 }

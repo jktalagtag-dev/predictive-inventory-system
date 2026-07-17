@@ -4,31 +4,85 @@ export type DashboardMetric = {
   detail: string
 }
 
-export type StockAlert = {
-  id: string
-  productName: string
-  sku: string
-  availableQuantity: string
-  reorderPoint: string
-  status: 'low' | 'critical'
+export type DashboardKpis = {
+  inventoryOnHand: DashboardMetric
+  salesToday: DashboardMetric
+  lowStockCount: DashboardMetric
+  criticalStockCount: DashboardMetric
 }
 
-export type ActivityItem = {
+export type LowStockItem = {
   id: string
-  title: string
-  detail: string
-  occurredAt: string
-  type: 'receipt' | 'sale' | 'adjustment' | 'forecast'
+  productId: string
+  productSku: string
+  productName: string
+  availableQuantity: string
+  reorderPointQuantity: string
+  severity: 'low' | 'medium' | 'high' | 'critical'
+}
+
+export type PendingPurchaseOrderItem = {
+  id: string
+  poNumber: string
+  supplierName: string
+  status: string
+  totalAmount: string
+}
+
+export type RecentSaleItem = {
+  id: string
+  saleNumber: string
+  totalAmount: string
+  soldAt: string | null
+  cashierName: string | null
+}
+
+export type SalesTrendPoint = {
+  date: string
+  totalAmount: string
+  saleCount: number
+}
+
+export type ForecastSummary = {
+  forecastRunId: string
+  modelCode: string
+  periodGrain: string
+  generatedAt: string | null
+  totalProductCount: number
+  sufficientHistoryCount: number
+  coverageRatio: number
+} | null
+
+export type SyncHealth = {
+  pendingCount: number
+  conflictedCount: number
+  rejectedCount: number
+  acceptedCount: number
+  lastReceivedAt: string | null
 }
 
 export type DashboardData = {
+  kpis: DashboardKpis
+  lowStock: LowStockItem[]
+  pendingPurchaseOrders: { count: number; items: PendingPurchaseOrderItem[] }
+  recentSales: RecentSaleItem[]
+  salesTrend: SalesTrendPoint[]
+  forecastSummary: ForecastSummary
+  syncHealth: SyncHealth
+}
+
+export type DashboardMeta = {
+  requestId: string
+  branchId: string
+  from: string
+  to: string
+  timezone: string
+  currency: string
   generatedAt: string
-  inventorySummary: DashboardMetric
-  salesToday: DashboardMetric
-  lowStock: DashboardMetric
-  criticalStock: DashboardMetric
-  forecastSummary: DashboardMetric
-  eoqSummary: DashboardMetric
-  stockAlerts: StockAlert[]
-  recentActivity: ActivityItem[]
+  freshness: string
+}
+
+export type DashboardResponse = {
+  data: DashboardData
+  meta: DashboardMeta
 }

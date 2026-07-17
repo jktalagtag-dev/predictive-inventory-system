@@ -11,6 +11,7 @@ Route::middleware('auth:sanctum')->group(function (): void {
     Route::post('/auth/logout', [AuthController::class, 'logout']);
     Route::get('/auth/me', [AuthController::class, 'me']);
 
+    require __DIR__.'/api_v1_dashboard.php';
     require __DIR__.'/api_v1_identity.php';
     require __DIR__.'/api_v1_catalog.php';
     require __DIR__.'/api_v1_inventory.php';
