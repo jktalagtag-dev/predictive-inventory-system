@@ -6,10 +6,18 @@ use App\Domains\Catalog\Models\Category;
 use App\Domains\Catalog\Models\Product;
 use App\Domains\Catalog\Policies\CategoryPolicy;
 use App\Domains\Catalog\Policies\ProductPolicy;
+use App\Domains\Governance\Models\AuditLog;
+use App\Domains\Governance\Policies\AuditLogPolicy;
 use App\Domains\Identity\Models\Branch;
 use App\Domains\Identity\Models\User;
 use App\Domains\Identity\Policies\BranchPolicy;
 use App\Domains\Identity\Policies\UserPolicy;
+use App\Domains\Inventory\Models\InventoryAdjustment;
+use App\Domains\Inventory\Policies\InventoryAdjustmentPolicy;
+use App\Domains\Procurement\Models\PurchaseOrder;
+use App\Domains\Procurement\Models\Supplier;
+use App\Domains\Procurement\Policies\PurchaseOrderPolicy;
+use App\Domains\Procurement\Policies\SupplierPolicy;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 
@@ -32,5 +40,9 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(Branch::class, BranchPolicy::class);
         Gate::policy(Category::class, CategoryPolicy::class);
         Gate::policy(Product::class, ProductPolicy::class);
+        Gate::policy(Supplier::class, SupplierPolicy::class);
+        Gate::policy(PurchaseOrder::class, PurchaseOrderPolicy::class);
+        Gate::policy(InventoryAdjustment::class, InventoryAdjustmentPolicy::class);
+        Gate::policy(AuditLog::class, AuditLogPolicy::class);
     }
 }

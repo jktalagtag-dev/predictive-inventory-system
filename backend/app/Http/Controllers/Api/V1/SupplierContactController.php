@@ -20,6 +20,8 @@ class SupplierContactController extends Controller
 
     public function store(StoreSupplierContactRequest $request, Supplier $supplier): JsonResponse
     {
+        $this->authorize('update', $supplier);
+
         $validated = $request->validated();
 
         $contact = $this->supplierService->createContact($supplier, [
@@ -36,6 +38,8 @@ class SupplierContactController extends Controller
 
     public function update(UpdateSupplierContactRequest $request, Supplier $supplier, SupplierContact $contact): SupplierContactResource|JsonResponse
     {
+        $this->authorize('update', $supplier);
+
         $validated = $request->validated();
 
         if ((int) $validated['version'] !== $contact->row_version) {

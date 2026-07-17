@@ -9,7 +9,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\StoreSupplierRequest;
 use App\Http\Requests\Api\V1\UpdateSupplierRequest;
 use App\Http\Resources\Api\V1\SupplierResource;
-use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -22,9 +21,7 @@ class SupplierController extends Controller
 
     public function index(Request $request): JsonResponse
     {
-        if (! $request->user()->hasPermission('suppliers.read')) {
-            throw new AuthorizationException;
-        }
+        $this->authorize('viewAny', Supplier::class);
 
         $perPage = min(max((int) $request->integer('perPage', 20), 1), 100);
         $page = max((int) $request->integer('page', 1), 1);
@@ -56,6 +53,8 @@ class SupplierController extends Controller
 
     public function store(StoreSupplierRequest $request): JsonResponse
     {
+        $this->authorize('create', Supplier::class);
+
         $validated = $request->validated();
 
         try {
@@ -83,15 +82,15 @@ class SupplierController extends Controller
 
     public function show(Request $request, Supplier $supplier): SupplierResource
     {
-        if (! $request->user()->hasPermission('suppliers.read')) {
-            throw new AuthorizationException;
-        }
+        $this->authorize('view', $supplier);
 
         return new SupplierResource($supplier->load('contacts'));
     }
 
     public function update(UpdateSupplierRequest $request, Supplier $supplier): SupplierResource|JsonResponse
     {
+        $this->authorize('update', $supplier);
+
         $validated = $request->validated();
 
         if ((int) $validated['version'] !== $supplier->row_version) {

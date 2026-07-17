@@ -50,6 +50,7 @@ class PermissionSeeder extends Seeder
         'purchase_orders.order' => ['procurement', 'Mark purchase orders as ordered'],
         'purchase_orders.cancel' => ['procurement', 'Cancel purchase orders'],
         'purchase_orders.close' => ['procurement', 'Close purchase orders'],
+        'audit.read' => ['governance', 'View audit trail'],
     ];
 
     /**
@@ -68,6 +69,7 @@ class PermissionSeeder extends Seeder
             'suppliers.read', 'suppliers.create', 'suppliers.update',
             'purchase_orders.read', 'purchase_orders.create', 'purchase_orders.update', 'purchase_orders.submit',
             'purchase_orders.approve', 'purchase_orders.order', 'purchase_orders.cancel', 'purchase_orders.close',
+            'audit.read',
         ],
         'manager' => [
             'dashboard.read', 'categories.read', 'categories.create', 'categories.update', 'categories.delete',
@@ -79,6 +81,7 @@ class PermissionSeeder extends Seeder
             'suppliers.read', 'suppliers.create', 'suppliers.update',
             'purchase_orders.read', 'purchase_orders.create', 'purchase_orders.update', 'purchase_orders.submit',
             'purchase_orders.approve', 'purchase_orders.order', 'purchase_orders.cancel', 'purchase_orders.close',
+            'audit.read',
         ],
         'staff' => [
             'dashboard.read', 'products.read', 'categories.read', 'units.read',

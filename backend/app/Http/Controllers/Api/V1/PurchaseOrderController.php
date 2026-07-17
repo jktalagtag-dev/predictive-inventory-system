@@ -28,9 +28,7 @@ class PurchaseOrderController extends Controller
 
     public function index(Request $request): JsonResponse
     {
-        if (! $request->user()->hasPermission('purchase_orders.read')) {
-            throw new AuthorizationException;
-        }
+        $this->authorize('viewAny', PurchaseOrder::class);
 
         if (! $request->filled('branchId')) {
             throw ValidationException::withMessages(['branchId' => ['A branch is required to view purchase orders.']]);
@@ -84,6 +82,8 @@ class PurchaseOrderController extends Controller
     {
         $validated = $request->validated();
 
+        $this->authorize('create', [PurchaseOrder::class, (int) $validated['branchId']]);
+
         try {
             $po = $this->purchaseOrderService->createDraft([
                 'branch_id' => $validated['branchId'],
@@ -102,7 +102,7 @@ class PurchaseOrderController extends Controller
                     'expected_receipt_at' => $line['expectedReceiptAt'] ?? null,
                     'notes' => $line['notes'] ?? null,
                 ], $validated['lines']),
-            ], $request->user());
+            ], $request->user(), $this->correlationId($request));
         } catch (PurchaseOrderException $exception) {
             return $this->exceptionResponse($exception);
         }
@@ -112,18 +112,14 @@ class PurchaseOrderController extends Controller
 
     public function show(Request $request, PurchaseOrder $purchaseOrder): PurchaseOrderResource
     {
-        if (! $request->user()->hasPermission('purchase_orders.read') || ! $request->user()->canAccessBranch($purchaseOrder->branch_id)) {
-            throw new AuthorizationException;
-        }
+        $this->authorize('view', $purchaseOrder);
 
         return new PurchaseOrderResource($purchaseOrder->load(['supplier', 'lines', 'approvals']));
     }
 
     public function update(UpdatePurchaseOrderRequest $request, PurchaseOrder $purchaseOrder): PurchaseOrderResource|JsonResponse
     {
-        if (! $request->user()->canAccessBranch($purchaseOrder->branch_id)) {
-            throw new AuthorizationException;
-        }
+        $this->authorize('update', $purchaseOrder);
 
         $validated = $request->validated();
 
@@ -147,7 +143,7 @@ class PurchaseOrderController extends Controller
                     'expected_receipt_at' => $line['expectedReceiptAt'] ?? null,
                     'notes' => $line['notes'] ?? null,
                 ], $validated['lines'])] : []),
-            ], $request->user());
+            ], $request->user(), $this->correlationId($request));
         } catch (PurchaseOrderException $exception) {
             return $this->exceptionResponse($exception);
         }
@@ -157,9 +153,7 @@ class PurchaseOrderController extends Controller
 
     public function submit(SubmitPurchaseOrderRequest $request, PurchaseOrder $purchaseOrder): PurchaseOrderResource|JsonResponse
     {
-        if (! $request->user()->canAccessBranch($purchaseOrder->branch_id)) {
-            throw new AuthorizationException;
-        }
+        $this->authorize('submit', $purchaseOrder);
 
         $validated = $request->validated();
         if ((int) $validated['version'] !== $purchaseOrder->row_version) {
@@ -167,7 +161,7 @@ class PurchaseOrderController extends Controller
         }
 
         try {
-            $submitted = $this->purchaseOrderService->submit($purchaseOrder, $request->user());
+            $submitted = $this->purchaseOrderService->submit($purchaseOrder, $request->user(), $this->correlationId($request));
         } catch (PurchaseOrderException $exception) {
             return $this->exceptionResponse($exception);
         }
@@ -177,9 +171,7 @@ class PurchaseOrderController extends Controller
 
     public function decide(DecidePurchaseOrderRequest $request, PurchaseOrder $purchaseOrder): PurchaseOrderResource|JsonResponse
     {
-        if (! $request->user()->canAccessBranch($purchaseOrder->branch_id)) {
-            throw new AuthorizationException;
-        }
+        $this->authorize('approve', $purchaseOrder);
 
         $validated = $request->validated();
         if ((int) $validated['version'] !== $purchaseOrder->row_version) {
@@ -187,7 +179,7 @@ class PurchaseOrderController extends Controller
         }
 
         try {
-            $decided = $this->purchaseOrderService->decide($purchaseOrder, $validated['decision'], $validated['reason'] ?? null, $request->user());
+            $decided = $this->purchaseOrderService->decide($purchaseOrder, $validated['decision'], $validated['reason'] ?? null, $request->user(), $this->correlationId($request));
         } catch (PurchaseOrderException $exception) {
             return $this->exceptionResponse($exception);
         }
@@ -197,9 +189,7 @@ class PurchaseOrderController extends Controller
 
     public function markOrdered(MarkOrderedPurchaseOrderRequest $request, PurchaseOrder $purchaseOrder): PurchaseOrderResource|JsonResponse
     {
-        if (! $request->user()->canAccessBranch($purchaseOrder->branch_id)) {
-            throw new AuthorizationException;
-        }
+        $this->authorize('markOrdered', $purchaseOrder);
 
         $validated = $request->validated();
         if ((int) $validated['version'] !== $purchaseOrder->row_version) {
@@ -207,7 +197,7 @@ class PurchaseOrderController extends Controller
         }
 
         try {
-            $ordered = $this->purchaseOrderService->markOrdered($purchaseOrder, new \DateTimeImmutable($validated['orderedAt']), $validated['supplierReference'] ?? null, $request->user());
+            $ordered = $this->purchaseOrderService->markOrdered($purchaseOrder, new \DateTimeImmutable($validated['orderedAt']), $validated['supplierReference'] ?? null, $request->user(), $this->correlationId($request));
         } catch (PurchaseOrderException $exception) {
             return $this->exceptionResponse($exception);
         }
@@ -217,9 +207,7 @@ class PurchaseOrderController extends Controller
 
     public function cancel(CancelPurchaseOrderRequest $request, PurchaseOrder $purchaseOrder): PurchaseOrderResource|JsonResponse
     {
-        if (! $request->user()->canAccessBranch($purchaseOrder->branch_id)) {
-            throw new AuthorizationException;
-        }
+        $this->authorize('cancel', $purchaseOrder);
 
         $validated = $request->validated();
         if ((int) $validated['version'] !== $purchaseOrder->row_version) {
@@ -227,7 +215,7 @@ class PurchaseOrderController extends Controller
         }
 
         try {
-            $cancelled = $this->purchaseOrderService->cancel($purchaseOrder, $validated['reason'], $request->user());
+            $cancelled = $this->purchaseOrderService->cancel($purchaseOrder, $validated['reason'], $request->user(), $this->correlationId($request));
         } catch (PurchaseOrderException $exception) {
             return $this->exceptionResponse($exception);
         }
@@ -237,9 +225,7 @@ class PurchaseOrderController extends Controller
 
     public function close(ClosePurchaseOrderRequest $request, PurchaseOrder $purchaseOrder): PurchaseOrderResource|JsonResponse
     {
-        if (! $request->user()->canAccessBranch($purchaseOrder->branch_id)) {
-            throw new AuthorizationException;
-        }
+        $this->authorize('close', $purchaseOrder);
 
         $validated = $request->validated();
         if ((int) $validated['version'] !== $purchaseOrder->row_version) {
@@ -247,12 +233,17 @@ class PurchaseOrderController extends Controller
         }
 
         try {
-            $closed = $this->purchaseOrderService->close($purchaseOrder, $validated['reason'] ?? null, $request->user());
+            $closed = $this->purchaseOrderService->close($purchaseOrder, $validated['reason'] ?? null, $request->user(), $this->correlationId($request));
         } catch (PurchaseOrderException $exception) {
             return $this->exceptionResponse($exception);
         }
 
         return new PurchaseOrderResource($closed->load('supplier'));
+    }
+
+    private function correlationId(Request $request): string
+    {
+        return $request->attributes->get('correlation_id') ?? (string) Str::uuid();
     }
 
     private function exceptionResponse(PurchaseOrderException $exception): JsonResponse

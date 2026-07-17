@@ -30,9 +30,7 @@ class InventoryAdjustmentController extends Controller
 
     public function index(Request $request): JsonResponse
     {
-        if (! $request->user()->hasPermission('inventory.adjustments.read')) {
-            throw new AuthorizationException;
-        }
+        $this->authorize('viewAny', InventoryAdjustment::class);
 
         if (! $request->filled('branchId')) {
             throw ValidationException::withMessages(['branchId' => ['A branch is required to view adjustments.']]);
@@ -82,6 +80,8 @@ class InventoryAdjustmentController extends Controller
     {
         $validated = $request->validated();
 
+        $this->authorize('create', [InventoryAdjustment::class, (int) $validated['branchId']]);
+
         try {
             $adjustment = $this->adjustmentService->createDraft([
                 'branch_id' => $validated['branchId'],
@@ -94,7 +94,7 @@ class InventoryAdjustmentController extends Controller
                     'unit_cost' => isset($line['unitCost']) ? (string) $line['unitCost'] : null,
                     'notes' => $line['notes'] ?? null,
                 ], $validated['lines']),
-            ], $request->user());
+            ], $request->user(), $this->correlationId($request));
         } catch (InventoryAdjustmentException $exception) {
             return $this->exceptionResponse($exception);
         }
@@ -104,18 +104,14 @@ class InventoryAdjustmentController extends Controller
 
     public function show(Request $request, InventoryAdjustment $adjustment): InventoryAdjustmentResource
     {
-        if (! $request->user()->hasPermission('inventory.adjustments.read') || ! $request->user()->canAccessBranch($adjustment->branch_id)) {
-            throw new AuthorizationException;
-        }
+        $this->authorize('view', $adjustment);
 
         return new InventoryAdjustmentResource($adjustment->load('lines'));
     }
 
     public function update(UpdateInventoryAdjustmentRequest $request, InventoryAdjustment $adjustment): InventoryAdjustmentResource|JsonResponse
     {
-        if (! $request->user()->canAccessBranch($adjustment->branch_id)) {
-            throw new AuthorizationException;
-        }
+        $this->authorize('update', $adjustment);
 
         $validated = $request->validated();
 
@@ -134,7 +130,7 @@ class InventoryAdjustmentController extends Controller
                     'unit_cost' => isset($line['unitCost']) ? (string) $line['unitCost'] : null,
                     'notes' => $line['notes'] ?? null,
                 ], $validated['lines'])] : []),
-            ], $request->user());
+            ], $request->user(), $this->correlationId($request));
         } catch (InventoryAdjustmentException $exception) {
             return $this->exceptionResponse($exception);
         }
@@ -144,9 +140,7 @@ class InventoryAdjustmentController extends Controller
 
     public function approve(ApproveInventoryAdjustmentRequest $request, InventoryAdjustment $adjustment): InventoryAdjustmentResource|JsonResponse
     {
-        if (! $request->user()->canAccessBranch($adjustment->branch_id)) {
-            throw new AuthorizationException;
-        }
+        $this->authorize('approve', $adjustment);
 
         $validated = $request->validated();
 
@@ -155,7 +149,7 @@ class InventoryAdjustmentController extends Controller
         }
 
         try {
-            $approved = $this->adjustmentService->approve($adjustment, $request->user());
+            $approved = $this->adjustmentService->approve($adjustment, $request->user(), $this->correlationId($request));
         } catch (InventoryAdjustmentException $exception) {
             return $this->exceptionResponse($exception);
         }
@@ -165,9 +159,7 @@ class InventoryAdjustmentController extends Controller
 
     public function post(PostInventoryAdjustmentRequest $request, InventoryAdjustment $adjustment): JsonResponse
     {
-        if (! $request->user()->canAccessBranch($adjustment->branch_id)) {
-            throw new AuthorizationException;
-        }
+        $this->authorize('post', $adjustment);
 
         $idempotencyKey = $request->header('Idempotency-Key');
         if (! $idempotencyKey) {
@@ -211,9 +203,7 @@ class InventoryAdjustmentController extends Controller
 
     public function reverse(ReverseInventoryAdjustmentRequest $request, InventoryAdjustment $adjustment): JsonResponse
     {
-        if (! $request->user()->canAccessBranch($adjustment->branch_id)) {
-            throw new AuthorizationException;
-        }
+        $this->authorize('reverse', $adjustment);
 
         $idempotencyKey = $request->header('Idempotency-Key');
         if (! $idempotencyKey) {
@@ -253,6 +243,11 @@ class InventoryAdjustmentController extends Controller
         $this->idempotencyGuard->complete($request->user(), 'inventory.adjustments.reverse', $idempotencyKey, 200, $responseBody, 'inventory_adjustment', $reversed->id);
 
         return response()->json($responseBody);
+    }
+
+    private function correlationId(Request $request): string
+    {
+        return $request->attributes->get('correlation_id') ?? (string) Str::uuid();
     }
 
     private function exceptionResponse(InventoryAdjustmentException $exception): JsonResponse

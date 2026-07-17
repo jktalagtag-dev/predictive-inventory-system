@@ -3,6 +3,7 @@
 namespace App\Domains\Procurement\Services;
 
 use App\Domains\Catalog\Models\Product;
+use App\Domains\Governance\Services\AuditLogger;
 use App\Domains\Identity\Models\User;
 use App\Domains\Procurement\Models\PurchaseOrder;
 use App\Domains\Procurement\Models\PurchaseOrderLine;
@@ -21,12 +22,19 @@ use Illuminate\Support\Str;
  * canonical stock unit directly instead of a product_units row, and "close"
  * is only reachable from "ordered" since there is no receiving workflow yet
  * to track partial/complete fulfillment.
+ *
+ * Every state-changing method writes an audit entry inside the same
+ * transaction as the fact it describes (CLAUDE.md section 55).
  */
 class PurchaseOrderService
 {
-    public function createDraft(array $data, User $actor): PurchaseOrder
+    public function __construct(private readonly AuditLogger $auditLogger)
     {
-        return DB::transaction(function () use ($data, $actor) {
+    }
+
+    public function createDraft(array $data, User $actor, string $correlationId): PurchaseOrder
+    {
+        return DB::transaction(function () use ($data, $actor, $correlationId) {
             $supplier = Supplier::query()->findOrFail($data['supplier_id']);
             if (! $supplier->is_active) {
                 throw new PurchaseOrderException('INACTIVE_SUPPLIER', 422, 'This supplier is not active and cannot receive new purchase orders.');
@@ -49,18 +57,27 @@ class PurchaseOrderService
             $this->replaceLines($po, $data['lines'], $actor);
             $this->recalculateTotals($po);
 
-            return $po->refresh()->load('lines');
+            $po->refresh()->load('lines');
+
+            $this->auditLogger->record(
+                $actor, 'purchase_order.created', 'purchase_order', $po->id, $po->branch_id, $correlationId,
+                null, ['status' => $po->status, 'poNumber' => $po->po_number, 'supplierId' => $po->supplier_id],
+            );
+
+            return $po;
         });
     }
 
-    public function updateDraft(PurchaseOrder $po, array $data, User $actor): PurchaseOrder
+    public function updateDraft(PurchaseOrder $po, array $data, User $actor, string $correlationId): PurchaseOrder
     {
-        return DB::transaction(function () use ($po, $data, $actor) {
+        return DB::transaction(function () use ($po, $data, $actor, $correlationId) {
             $locked = PurchaseOrder::query()->lockForUpdate()->findOrFail($po->id);
 
             if ($locked->status !== 'draft') {
                 throw new PurchaseOrderException('ILLEGAL_STATE', 409, 'Only a draft purchase order can be updated.');
             }
+
+            $before = ['totalAmount' => $locked->total_amount, 'supplierReference' => $locked->supplier_reference];
 
             $locked->fill(array_filter([
                 'currency_code' => $data['currency_code'] ?? null,
@@ -77,13 +94,20 @@ class PurchaseOrderService
                 $this->recalculateTotals($locked);
             }
 
-            return $locked->refresh()->load('lines');
+            $locked->refresh()->load('lines');
+
+            $this->auditLogger->record(
+                $actor, 'purchase_order.updated', 'purchase_order', $locked->id, $locked->branch_id, $correlationId,
+                $before, ['totalAmount' => $locked->total_amount, 'supplierReference' => $locked->supplier_reference],
+            );
+
+            return $locked;
         });
     }
 
-    public function submit(PurchaseOrder $po, User $actor): PurchaseOrder
+    public function submit(PurchaseOrder $po, User $actor, string $correlationId): PurchaseOrder
     {
-        return DB::transaction(function () use ($po, $actor) {
+        return DB::transaction(function () use ($po, $actor, $correlationId) {
             $locked = PurchaseOrder::query()->lockForUpdate()->with('lines')->findOrFail($po->id);
 
             if ($locked->status !== 'draft') {
@@ -100,13 +124,20 @@ class PurchaseOrderService
             $locked->row_version = $locked->row_version + 1;
             $locked->save();
 
-            return $locked->refresh()->load('lines');
+            $locked->refresh()->load('lines');
+
+            $this->auditLogger->record(
+                $actor, 'purchase_order.submitted', 'purchase_order', $locked->id, $locked->branch_id, $correlationId,
+                ['status' => 'draft'], ['status' => 'submitted'],
+            );
+
+            return $locked;
         });
     }
 
-    public function decide(PurchaseOrder $po, string $decision, ?string $reason, User $actor): PurchaseOrder
+    public function decide(PurchaseOrder $po, string $decision, ?string $reason, User $actor, string $correlationId): PurchaseOrder
     {
-        return DB::transaction(function () use ($po, $decision, $reason, $actor) {
+        return DB::transaction(function () use ($po, $decision, $reason, $actor, $correlationId) {
             $locked = PurchaseOrder::query()->lockForUpdate()->findOrFail($po->id);
 
             if ($locked->status !== 'submitted') {
@@ -141,13 +172,21 @@ class PurchaseOrderService
             $locked->row_version = $locked->row_version + 1;
             $locked->save();
 
-            return $locked->refresh()->load(['lines', 'approvals']);
+            $locked->refresh()->load(['lines', 'approvals']);
+
+            $this->auditLogger->record(
+                $actor, $decision === 'approved' ? 'purchase_order.approved' : 'purchase_order.rejected',
+                'purchase_order', $locked->id, $locked->branch_id, $correlationId,
+                ['status' => 'submitted'], ['status' => $locked->status, 'reason' => $reason],
+            );
+
+            return $locked;
         });
     }
 
-    public function markOrdered(PurchaseOrder $po, \DateTimeInterface $orderedAt, ?string $supplierReference, User $actor): PurchaseOrder
+    public function markOrdered(PurchaseOrder $po, \DateTimeInterface $orderedAt, ?string $supplierReference, User $actor, string $correlationId): PurchaseOrder
     {
-        return DB::transaction(function () use ($po, $orderedAt, $supplierReference, $actor) {
+        return DB::transaction(function () use ($po, $orderedAt, $supplierReference, $actor, $correlationId) {
             $locked = PurchaseOrder::query()->lockForUpdate()->findOrFail($po->id);
 
             if ($locked->status !== 'approved') {
@@ -163,13 +202,20 @@ class PurchaseOrderService
             $locked->row_version = $locked->row_version + 1;
             $locked->save();
 
-            return $locked->refresh()->load('lines');
+            $locked->refresh()->load('lines');
+
+            $this->auditLogger->record(
+                $actor, 'purchase_order.ordered', 'purchase_order', $locked->id, $locked->branch_id, $correlationId,
+                ['status' => 'approved'], ['status' => 'ordered', 'orderedAt' => $locked->ordered_at?->toIso8601String()],
+            );
+
+            return $locked;
         });
     }
 
-    public function cancel(PurchaseOrder $po, string $reason, User $actor): PurchaseOrder
+    public function cancel(PurchaseOrder $po, string $reason, User $actor, string $correlationId): PurchaseOrder
     {
-        return DB::transaction(function () use ($po, $reason, $actor) {
+        return DB::transaction(function () use ($po, $reason, $actor, $correlationId) {
             $locked = PurchaseOrder::query()->lockForUpdate()->with('lines')->findOrFail($po->id);
 
             if (in_array($locked->status, ['received', 'cancelled', 'closed'], true)) {
@@ -181,6 +227,7 @@ class PurchaseOrderService
                 throw new PurchaseOrderException('HAS_RECEIPTS', 409, 'A purchase order with recorded receipts cannot be cancelled.');
             }
 
+            $previousStatus = $locked->status;
             $locked->status = 'cancelled';
             $locked->cancelled_at = now();
             $locked->notes = trim(($locked->notes ? $locked->notes."\n" : '')."Cancelled: {$reason}");
@@ -188,13 +235,20 @@ class PurchaseOrderService
             $locked->row_version = $locked->row_version + 1;
             $locked->save();
 
-            return $locked->refresh()->load('lines');
+            $locked->refresh()->load('lines');
+
+            $this->auditLogger->record(
+                $actor, 'purchase_order.cancelled', 'purchase_order', $locked->id, $locked->branch_id, $correlationId,
+                ['status' => $previousStatus], ['status' => 'cancelled', 'reason' => $reason],
+            );
+
+            return $locked;
         });
     }
 
-    public function close(PurchaseOrder $po, ?string $reason, User $actor): PurchaseOrder
+    public function close(PurchaseOrder $po, ?string $reason, User $actor, string $correlationId): PurchaseOrder
     {
-        return DB::transaction(function () use ($po, $reason, $actor) {
+        return DB::transaction(function () use ($po, $reason, $actor, $correlationId) {
             $locked = PurchaseOrder::query()->lockForUpdate()->findOrFail($po->id);
 
             if ($locked->status !== 'ordered') {
@@ -209,7 +263,14 @@ class PurchaseOrderService
             $locked->row_version = $locked->row_version + 1;
             $locked->save();
 
-            return $locked->refresh()->load('lines');
+            $locked->refresh()->load('lines');
+
+            $this->auditLogger->record(
+                $actor, 'purchase_order.closed', 'purchase_order', $locked->id, $locked->branch_id, $correlationId,
+                ['status' => 'ordered'], ['status' => 'closed', 'reason' => $reason],
+            );
+
+            return $locked;
         });
     }
 

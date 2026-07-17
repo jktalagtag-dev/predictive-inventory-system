@@ -3,6 +3,7 @@
 namespace App\Domains\Inventory\Services;
 
 use App\Domains\Catalog\Models\Product;
+use App\Domains\Governance\Services\AuditLogger;
 use App\Domains\Identity\Models\User;
 use App\Domains\Inventory\Models\InventoryAdjustment;
 use App\Domains\Inventory\Models\InventoryAdjustmentLine;
@@ -16,15 +17,22 @@ use Illuminate\Support\Str;
  * -> posted -> reversed. Posting and reversal are the only actions that
  * mutate inventory_balances and append inventory_movements; both happen
  * inside one transaction with the document state change.
+ *
+ * Every state-changing method writes an audit entry inside the same
+ * transaction as the fact it describes (CLAUDE.md section 55).
  */
 class InventoryAdjustmentService
 {
+    public function __construct(private readonly AuditLogger $auditLogger)
+    {
+    }
+
     /**
      * @param array{branch_id:int, reason_code:string, reason_note:?string, effective_at:\DateTimeInterface, lines:array} $data
      */
-    public function createDraft(array $data, User $actor): InventoryAdjustment
+    public function createDraft(array $data, User $actor, string $correlationId): InventoryAdjustment
     {
-        return DB::transaction(function () use ($data, $actor) {
+        return DB::transaction(function () use ($data, $actor, $correlationId) {
             $adjustment = InventoryAdjustment::query()->create([
                 'branch_id' => $data['branch_id'],
                 'adjustment_number' => 'ADJ-'.strtoupper(Str::random(10)),
@@ -39,21 +47,30 @@ class InventoryAdjustmentService
 
             $this->replaceLines($adjustment, $data['lines'], $data['branch_id'], $actor);
 
-            return $adjustment->refresh()->load('lines');
+            $adjustment->refresh()->load('lines');
+
+            $this->auditLogger->record(
+                $actor, 'inventory_adjustment.created', 'inventory_adjustment', $adjustment->id, $adjustment->branch_id, $correlationId,
+                null, ['status' => $adjustment->status, 'adjustmentNumber' => $adjustment->adjustment_number, 'reasonCode' => $adjustment->reason_code],
+            );
+
+            return $adjustment;
         });
     }
 
     /**
      * @param array{reason_code?:string, reason_note?:?string, effective_at?:\DateTimeInterface, lines?:array} $data
      */
-    public function updateDraft(InventoryAdjustment $adjustment, array $data, User $actor): InventoryAdjustment
+    public function updateDraft(InventoryAdjustment $adjustment, array $data, User $actor, string $correlationId): InventoryAdjustment
     {
-        return DB::transaction(function () use ($adjustment, $data, $actor) {
+        return DB::transaction(function () use ($adjustment, $data, $actor, $correlationId) {
             $locked = InventoryAdjustment::query()->lockForUpdate()->findOrFail($adjustment->id);
 
             if ($locked->status !== 'pending_approval' || $locked->approved_at !== null) {
                 throw new InventoryAdjustmentException('ILLEGAL_STATE', 409, 'Only an unapproved draft adjustment can be updated.');
             }
+
+            $before = ['reasonCode' => $locked->reason_code, 'reasonNote' => $locked->reason_note];
 
             $locked->fill(array_filter([
                 'reason_code' => $data['reason_code'] ?? null,
@@ -68,13 +85,20 @@ class InventoryAdjustmentService
                 $this->replaceLines($locked, $data['lines'], $locked->branch_id, $actor);
             }
 
-            return $locked->refresh()->load('lines');
+            $locked->refresh()->load('lines');
+
+            $this->auditLogger->record(
+                $actor, 'inventory_adjustment.updated', 'inventory_adjustment', $locked->id, $locked->branch_id, $correlationId,
+                $before, ['reasonCode' => $locked->reason_code, 'reasonNote' => $locked->reason_note],
+            );
+
+            return $locked;
         });
     }
 
-    public function approve(InventoryAdjustment $adjustment, User $actor): InventoryAdjustment
+    public function approve(InventoryAdjustment $adjustment, User $actor, string $correlationId): InventoryAdjustment
     {
-        return DB::transaction(function () use ($adjustment, $actor) {
+        return DB::transaction(function () use ($adjustment, $actor, $correlationId) {
             $locked = InventoryAdjustment::query()->lockForUpdate()->findOrFail($adjustment->id);
 
             if ($locked->status !== 'pending_approval') {
@@ -95,7 +119,14 @@ class InventoryAdjustmentService
             $locked->row_version = $locked->row_version + 1;
             $locked->save();
 
-            return $locked->refresh()->load('lines');
+            $locked->refresh()->load('lines');
+
+            $this->auditLogger->record(
+                $actor, 'inventory_adjustment.approved', 'inventory_adjustment', $locked->id, $locked->branch_id, $correlationId,
+                ['approvedByUserId' => null], ['approvedByUserId' => $locked->approved_by_user_id],
+            );
+
+            return $locked;
         });
     }
 
@@ -118,7 +149,14 @@ class InventoryAdjustmentService
             $locked->row_version = $locked->row_version + 1;
             $locked->save();
 
-            return $locked->refresh()->load('lines');
+            $locked->refresh()->load('lines');
+
+            $this->auditLogger->record(
+                $actor, 'inventory_adjustment.posted', 'inventory_adjustment', $locked->id, $locked->branch_id, $correlationId,
+                ['status' => 'pending_approval'], ['status' => 'posted', 'lineCount' => $locked->lines->count()],
+            );
+
+            return $locked;
         });
     }
 
@@ -188,7 +226,14 @@ class InventoryAdjustmentService
             $locked->row_version = $locked->row_version + 1;
             $locked->save();
 
-            return $locked->refresh()->load('lines');
+            $locked->refresh()->load('lines');
+
+            $this->auditLogger->record(
+                $actor, 'inventory_adjustment.reversed', 'inventory_adjustment', $locked->id, $locked->branch_id, $correlationId,
+                ['status' => 'posted'], ['status' => 'reversed', 'reason' => $reason, 'reversalAdjustmentId' => $compensating->id],
+            );
+
+            return $locked;
         });
     }
 
