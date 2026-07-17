@@ -63,6 +63,18 @@ class PermissionSeeder extends Seeder
         'sales.read' => ['sales', 'View sales history'],
         'sales.void' => ['sales', 'Void completed sales'],
         'sales.refund' => ['sales', 'Refund completed sales'],
+        'forecasting.read' => ['planning', 'View forecast runs and results'],
+        'forecasting.run' => ['planning', 'Run demand forecasts'],
+        'forecasting.override' => ['planning', 'Record manual planning overrides'],
+        'planning.eoq.read' => ['planning', 'View EOQ calculation history'],
+        'planning.eoq.calculate' => ['planning', 'Calculate EOQ recommendations'],
+        'planning.rop.read' => ['planning', 'View reorder policies'],
+        'planning.rop.manage' => ['planning', 'Create and update reorder policies'],
+        'planning.rop.calculate' => ['planning', 'Recalculate reorder points'],
+        'restocking.read' => ['planning', 'View restocking alerts'],
+        'restocking.acknowledge' => ['planning', 'Acknowledge restocking alerts'],
+        'restocking.resolve' => ['planning', 'Resolve or dismiss restocking alerts'],
+        'restocking.evaluate' => ['planning', 'Trigger restocking alert evaluation'],
     ];
 
     /**
@@ -86,6 +98,10 @@ class PermissionSeeder extends Seeder
             'audit.read',
             'pos.use', 'pos.finalize', 'pos.price_override', 'pos.discount_override',
             'sales.read', 'sales.void', 'sales.refund',
+            'forecasting.read', 'forecasting.run', 'forecasting.override',
+            'planning.eoq.read', 'planning.eoq.calculate',
+            'planning.rop.read', 'planning.rop.manage', 'planning.rop.calculate',
+            'restocking.read', 'restocking.acknowledge', 'restocking.resolve', 'restocking.evaluate',
         ],
         'manager' => [
             'dashboard.read', 'categories.read', 'categories.create', 'categories.update', 'categories.delete',
@@ -102,6 +118,10 @@ class PermissionSeeder extends Seeder
             'audit.read',
             'pos.use', 'pos.finalize', 'pos.price_override', 'pos.discount_override',
             'sales.read', 'sales.void', 'sales.refund',
+            'forecasting.read', 'forecasting.run', 'forecasting.override',
+            'planning.eoq.read', 'planning.eoq.calculate',
+            'planning.rop.read', 'planning.rop.manage', 'planning.rop.calculate',
+            'restocking.read', 'restocking.acknowledge', 'restocking.resolve', 'restocking.evaluate',
         ],
         'staff' => [
             'dashboard.read', 'products.read', 'categories.read', 'units.read',
@@ -110,6 +130,7 @@ class PermissionSeeder extends Seeder
             'suppliers.read', 'purchase_orders.read',
             'goods_receipts.read', 'goods_receipts.create',
             'pos.use', 'pos.finalize', 'sales.read',
+            'forecasting.read', 'planning.rop.read', 'restocking.read', 'restocking.acknowledge',
         ],
     ];
 

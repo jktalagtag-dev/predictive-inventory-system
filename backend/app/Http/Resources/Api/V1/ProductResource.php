@@ -37,6 +37,7 @@ class ProductResource extends JsonResource
             'isExpiryTracked' => (bool) $product->is_expiry_tracked,
             'defaultTaxRate' => (string) $product->default_tax_rate,
             'sellingPrice' => (string) $product->selling_price,
+            'defaultLeadTimeDays' => $product->default_lead_time_days !== null ? (string) $product->default_lead_time_days : null,
             // Only present when the caller requested a branch-scoped stock
             // snapshot (see ProductController::attachStockSnapshots) and is
             // authorized to see it; otherwise null, never fabricated.

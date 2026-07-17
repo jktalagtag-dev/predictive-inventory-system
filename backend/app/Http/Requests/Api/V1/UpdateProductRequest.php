@@ -29,6 +29,7 @@ class UpdateProductRequest extends FormRequest
             'isExpiryTracked' => ['sometimes', 'boolean'],
             'defaultTaxRate' => ['sometimes', 'numeric', 'min:0'],
             'sellingPrice' => ['sometimes', 'numeric', 'min:0'],
+            'defaultLeadTimeDays' => ['nullable', 'numeric', 'min:0'],
             'version' => ['required', 'integer'],
         ];
     }

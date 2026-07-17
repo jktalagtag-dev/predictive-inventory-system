@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property bool $is_expiry_tracked
  * @property string $default_tax_rate
  * @property string $selling_price
+ * @property string|null $default_lead_time_days
  * @property int $row_version
  */
 class Product extends Model
@@ -32,7 +33,7 @@ class Product extends Model
     protected $fillable = [
         'category_id', 'stock_unit_id', 'sku', 'barcode', 'name', 'description',
         'product_type', 'is_active', 'is_lot_tracked', 'is_serial_tracked',
-        'is_expiry_tracked', 'default_tax_rate', 'selling_price',
+        'is_expiry_tracked', 'default_tax_rate', 'selling_price', 'default_lead_time_days',
     ];
 
     protected function casts(): array
@@ -44,6 +45,7 @@ class Product extends Model
             'is_expiry_tracked' => 'boolean',
             'default_tax_rate' => 'decimal:4',
             'selling_price' => 'decimal:4',
+            'default_lead_time_days' => 'decimal:2',
             'deleted_at' => 'datetime',
             'row_version' => 'integer',
         ];

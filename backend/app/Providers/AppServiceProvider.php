@@ -16,6 +16,12 @@ use App\Domains\Inventory\Models\GoodsReceipt;
 use App\Domains\Inventory\Models\InventoryAdjustment;
 use App\Domains\Inventory\Policies\GoodsReceiptPolicy;
 use App\Domains\Inventory\Policies\InventoryAdjustmentPolicy;
+use App\Domains\Planning\Models\ForecastRun;
+use App\Domains\Planning\Models\ReorderPolicy;
+use App\Domains\Planning\Models\RestockingAlert;
+use App\Domains\Planning\Policies\ForecastRunPolicy;
+use App\Domains\Planning\Policies\ReorderPolicyPolicy;
+use App\Domains\Planning\Policies\RestockingAlertPolicy;
 use App\Domains\Procurement\Models\PurchaseOrder;
 use App\Domains\Procurement\Models\Supplier;
 use App\Domains\Procurement\Policies\PurchaseOrderPolicy;
@@ -50,5 +56,8 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(GoodsReceipt::class, GoodsReceiptPolicy::class);
         Gate::policy(AuditLog::class, AuditLogPolicy::class);
         Gate::policy(Sale::class, SalePolicy::class);
+        Gate::policy(ForecastRun::class, ForecastRunPolicy::class);
+        Gate::policy(ReorderPolicy::class, ReorderPolicyPolicy::class);
+        Gate::policy(RestockingAlert::class, RestockingAlertPolicy::class);
     }
 }
