@@ -50,6 +50,11 @@ class PermissionSeeder extends Seeder
         'purchase_orders.order' => ['procurement', 'Mark purchase orders as ordered'],
         'purchase_orders.cancel' => ['procurement', 'Cancel purchase orders'],
         'purchase_orders.close' => ['procurement', 'Close purchase orders'],
+        'goods_receipts.read' => ['inventory', 'View goods receipts'],
+        'goods_receipts.create' => ['inventory', 'Create goods receipt drafts'],
+        'goods_receipts.update' => ['inventory', 'Update goods receipt drafts'],
+        'goods_receipts.post' => ['inventory', 'Post goods receipts'],
+        'goods_receipts.reverse' => ['inventory', 'Reverse posted goods receipts'],
         'audit.read' => ['governance', 'View audit trail'],
     ];
 
@@ -69,6 +74,8 @@ class PermissionSeeder extends Seeder
             'suppliers.read', 'suppliers.create', 'suppliers.update',
             'purchase_orders.read', 'purchase_orders.create', 'purchase_orders.update', 'purchase_orders.submit',
             'purchase_orders.approve', 'purchase_orders.order', 'purchase_orders.cancel', 'purchase_orders.close',
+            'goods_receipts.read', 'goods_receipts.create', 'goods_receipts.update',
+            'goods_receipts.post', 'goods_receipts.reverse',
             'audit.read',
         ],
         'manager' => [
@@ -81,6 +88,8 @@ class PermissionSeeder extends Seeder
             'suppliers.read', 'suppliers.create', 'suppliers.update',
             'purchase_orders.read', 'purchase_orders.create', 'purchase_orders.update', 'purchase_orders.submit',
             'purchase_orders.approve', 'purchase_orders.order', 'purchase_orders.cancel', 'purchase_orders.close',
+            'goods_receipts.read', 'goods_receipts.create', 'goods_receipts.update',
+            'goods_receipts.post', 'goods_receipts.reverse',
             'audit.read',
         ],
         'staff' => [
@@ -88,6 +97,7 @@ class PermissionSeeder extends Seeder
             'inventory.read', 'inventory.movements.read', 'inventory.adjustments.read',
             'inventory.adjustments.create',
             'suppliers.read', 'purchase_orders.read',
+            'goods_receipts.read', 'goods_receipts.create',
         ],
     ];
 

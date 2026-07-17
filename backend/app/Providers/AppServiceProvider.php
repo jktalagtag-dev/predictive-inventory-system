@@ -12,7 +12,9 @@ use App\Domains\Identity\Models\Branch;
 use App\Domains\Identity\Models\User;
 use App\Domains\Identity\Policies\BranchPolicy;
 use App\Domains\Identity\Policies\UserPolicy;
+use App\Domains\Inventory\Models\GoodsReceipt;
 use App\Domains\Inventory\Models\InventoryAdjustment;
+use App\Domains\Inventory\Policies\GoodsReceiptPolicy;
 use App\Domains\Inventory\Policies\InventoryAdjustmentPolicy;
 use App\Domains\Procurement\Models\PurchaseOrder;
 use App\Domains\Procurement\Models\Supplier;
@@ -43,6 +45,7 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(Supplier::class, SupplierPolicy::class);
         Gate::policy(PurchaseOrder::class, PurchaseOrderPolicy::class);
         Gate::policy(InventoryAdjustment::class, InventoryAdjustmentPolicy::class);
+        Gate::policy(GoodsReceipt::class, GoodsReceiptPolicy::class);
         Gate::policy(AuditLog::class, AuditLogPolicy::class);
     }
 }
