@@ -1,8 +1,11 @@
 import type { PropsWithChildren } from 'react'
-import { createContext, useCallback, useContext, useMemo } from 'react'
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef } from 'react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { authQueryKeys, getCurrentSession, signOut } from '@/features/auth/api/authApi'
 import type { AuthSession } from '@/features/auth/types/auth'
+import { clearOfflineDataForUser } from '@/shared/offline/db'
+import { refreshProductCache } from '@/shared/offline/productCache'
+import { syncCoordinator } from '@/shared/offline/syncCoordinator'
 
 type AuthContextValue = {
   session: AuthSession | null
@@ -25,7 +28,11 @@ export function AuthProvider({ children }: PropsWithChildren) {
     refetchOnWindowFocus: true,
   })
 
+  const userIdRef = useRef<string | null>(null)
+
   const logout = useCallback(async () => {
+    const userId = userIdRef.current
+
     try {
       await signOut()
     } catch (error) {
@@ -40,8 +47,27 @@ export function AuthProvider({ children }: PropsWithChildren) {
       // the redirect that follows logout(). Setting the session to null
       // directly makes isAuthenticated flip to false synchronously.
       queryClient.setQueryData(authQueryKeys.session, null)
+      syncCoordinator.setActiveUser(null)
+      // Clearing offline data on logout — rather than only on next
+      // login — prevents one user's cached queue and reference data from
+      // ever being visible to whoever signs in on this device next
+      // (DEVELOPMENT_ROADMAP.md M9 acceptance criteria).
+      if (userId) void clearOfflineDataForUser(userId)
     }
   }, [queryClient])
+
+  const sessionUserId = sessionQuery.data?.user.id ?? null
+
+  useEffect(() => {
+    userIdRef.current = sessionUserId
+
+    if (sessionUserId) {
+      syncCoordinator.setActiveUser(sessionUserId)
+      void refreshProductCache(sessionUserId)
+    } else {
+      syncCoordinator.setActiveUser(null)
+    }
+  }, [sessionUserId])
 
   const value = useMemo<AuthContextValue>(() => {
     const session = sessionQuery.data ?? null

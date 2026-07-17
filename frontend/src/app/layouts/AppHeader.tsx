@@ -1,5 +1,6 @@
 import { LogOut, Menu, Moon, Sun } from 'lucide-react'
 import { useAuth } from '@/features/auth/AuthProvider'
+import { SyncStatusIndicator } from '@/features/sync/components/SyncStatusIndicator'
 import { Button } from '@/shared/components/Button'
 import { useUiStore } from '@/shared/state/uiStore'
 
@@ -37,6 +38,7 @@ export function AppHeader() {
         </div>
       </div>
       <div className="ml-auto flex items-center gap-2">
+        <SyncStatusIndicator userId={session?.user.id} />
         <span className="hidden rounded-full bg-subtle px-3 py-1 text-xs font-medium text-muted md:inline-flex">
           {session?.user.displayName}
         </span>

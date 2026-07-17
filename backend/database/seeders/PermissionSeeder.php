@@ -80,6 +80,7 @@ class PermissionSeeder extends Seeder
         'settings.read' => ['governance', 'View system settings'],
         'settings.manage' => ['governance', 'Change system settings'],
         'settings.read_sensitive' => ['governance', 'View sensitive system setting values'],
+        'sync.use' => ['sync', 'Submit and check status of offline-queued operations'],
     ];
 
     /**
@@ -109,6 +110,7 @@ class PermissionSeeder extends Seeder
             'restocking.read', 'restocking.acknowledge', 'restocking.resolve', 'restocking.evaluate',
             'reports.read', 'reports.export',
             'settings.read', 'settings.manage', 'settings.read_sensitive',
+            'sync.use',
         ],
         'manager' => [
             'dashboard.read', 'categories.read', 'categories.create', 'categories.update', 'categories.delete',
@@ -131,6 +133,7 @@ class PermissionSeeder extends Seeder
             'restocking.read', 'restocking.acknowledge', 'restocking.resolve', 'restocking.evaluate',
             'reports.read', 'reports.export',
             'settings.read', 'settings.manage',
+            'sync.use',
         ],
         'staff' => [
             'dashboard.read', 'products.read', 'categories.read', 'units.read',
@@ -140,6 +143,7 @@ class PermissionSeeder extends Seeder
             'goods_receipts.read', 'goods_receipts.create',
             'pos.use', 'pos.finalize', 'sales.read',
             'forecasting.read', 'planning.rop.read', 'restocking.read', 'restocking.acknowledge',
+            'sync.use',
         ],
     ];
 

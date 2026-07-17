@@ -26,6 +26,9 @@ import type {
   InventoryMovementFilters,
   MovementType,
 } from '@/features/inventory/types/inventory'
+import { getCachedProducts } from '@/shared/offline/productCache'
+import { syncCoordinator } from '@/shared/offline/syncCoordinator'
+import { useOnlineStatus } from '@/shared/offline/useOnlineStatus'
 import { type ApiError } from '@/shared/api/client'
 import { Button } from '@/shared/components/Button'
 import { PageHeader } from '@/shared/components/PageHeader'
@@ -50,7 +53,9 @@ export default function InventoryPage() {
   const [adjustmentFilters, setAdjustmentFilters] = useState<InventoryAdjustmentFilters>(defaultAdjustmentFilters)
   const [selectedAdjustmentId, setSelectedAdjustmentId] = useState<string | undefined>()
   const [isFormOpen, setIsFormOpen] = useState(false)
+  const [queuedMessage, setQueuedMessage] = useState<string | null>(null)
   const queryClient = useQueryClient()
+  const isOnline = useOnlineStatus()
 
   const defaultBranchId = (session?.user.branches.find((branch) => branch.isDefault) ?? session?.user.branches[0])?.id
   useEffect(() => {
@@ -64,10 +69,22 @@ export default function InventoryPage() {
   const movementsQuery = useInventoryMovements(movementFilters)
   const adjustmentsQuery = useInventoryAdjustments(adjustmentFilters)
   const productOptionsQuery = useProductOptions()
+  const offlineProductOptionsQuery = useQuery({
+    queryKey: ['offline-product-cache', session?.user.id],
+    queryFn: () => getCachedProducts(session?.user.id as string),
+    enabled: !isOnline && session?.user.id !== undefined,
+    // This reads IndexedDB, not the network — without this, TanStack
+    // Query's own online-manager (which listens to the same native
+    // online/offline events as useOnlineStatus) pauses the query
+    // whenever the browser is offline, which is exactly when it's
+    // needed.
+    networkMode: 'always',
+  })
+  const productOptions = isOnline ? (productOptionsQuery.data ?? []) : (offlineProductOptionsQuery.data ?? [])
   const selectedAdjustmentQuery = useQuery({
     queryKey: inventoryQueryKeys.adjustmentDetail(selectedAdjustmentId ?? ''),
     queryFn: () => getInventoryAdjustment(selectedAdjustmentId as string),
-    enabled: selectedAdjustmentId !== undefined,
+    enabled: selectedAdjustmentId !== undefined && isOnline,
   })
 
   const invalidate = () => {
@@ -78,8 +95,54 @@ export default function InventoryPage() {
   }
 
   const createMutation = useMutation({
-    mutationFn: (values: AdjustmentFormValues) => createInventoryAdjustment(adjustmentFilters.branchId as string, values),
-    onSuccess: () => { invalidate(); setIsFormOpen(false) },
+    mutationFn: async (values: AdjustmentFormValues): Promise<InventoryAdjustment | null> => {
+      const branchId = adjustmentFilters.branchId as string
+
+      if (!isOnline) {
+        const userId = session?.user.id
+        if (!userId) throw new Error('No active session to queue this adjustment against.')
+
+        // Queued, never shown as a finalized record — the Adjustments
+        // list only ever reflects server-accepted state
+        // (DEVELOPMENT_ROADMAP.md M9 acceptance criteria).
+        await syncCoordinator.enqueue({
+          clientOperationId: crypto.randomUUID(),
+          userId,
+          operationType: 'inventory_adjustment.create',
+          branchId,
+          payloadVersion: 1,
+          idempotencyKey: crypto.randomUUID(),
+          dependencyOperationId: null,
+          payload: {
+            reasonCode: values.reasonCode,
+            reasonNote: values.reasonNote || undefined,
+            effectiveAt: values.effectiveAt,
+            lines: values.lines.map((line) => ({
+              productId: line.productId,
+              quantityDelta: line.quantityDelta,
+              unitCost: line.unitCost || undefined,
+              notes: line.notes || undefined,
+            })),
+          },
+          summary: `Adjustment: ${values.lines.length} line${values.lines.length === 1 ? '' : 's'} (${values.reasonCode})`,
+        })
+        return null
+      }
+
+      return createInventoryAdjustment(branchId, values)
+    },
+    onSuccess: (result) => {
+      if (result === null) {
+        setQueuedMessage('Adjustment queued on this device — it will sync automatically once you are back online.')
+      } else {
+        invalidate()
+      }
+      setIsFormOpen(false)
+    },
+    // The offline branch only writes to IndexedDB; without this,
+    // TanStack Query's online-manager pauses the mutation entirely while
+    // the browser is offline, so it would never even run.
+    networkMode: 'always',
   })
   const approveMutation = useMutation({ mutationFn: (adjustment: InventoryAdjustment) => approveInventoryAdjustment(adjustment), onSuccess: invalidate })
   const postMutation = useMutation({ mutationFn: (adjustment: InventoryAdjustment) => postInventoryAdjustment(adjustment), onSuccess: invalidate })
@@ -96,9 +159,11 @@ export default function InventoryPage() {
         title="Inventory"
         description="Monitor stock, review movement history, and manage inventory adjustments for your branch."
         actions={tab === 'adjustments' && hasPermission('inventory.adjustments.create') ? (
-          <Button disabled={!branchId} onClick={() => setIsFormOpen(true)}><PackagePlus aria-hidden="true" size={17} /> Create adjustment</Button>
+          <Button disabled={!branchId} onClick={() => { setQueuedMessage(null); setIsFormOpen(true) }}><PackagePlus aria-hidden="true" size={17} /> Create adjustment</Button>
         ) : undefined}
       />
+      {!isOnline ? <div className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800" role="status">You are offline. Adjustment drafts you create now will queue and sync automatically once connectivity returns.</div> : null}
+      {queuedMessage ? <div className="rounded-lg border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-800" role="status">{queuedMessage}</div> : null}
       {error ? <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800" role="alert">{error.message}{error.requestId ? ` Request ID: ${error.requestId}` : ''}</div> : null}
 
       <nav aria-label="Inventory sections" className="flex gap-1 border-b border-border">
@@ -164,7 +229,7 @@ export default function InventoryPage() {
       ) : null}
 
       {isFormOpen ? (
-        <AdjustmentFormDialog isSaving={createMutation.isPending} productOptions={productOptionsQuery.data ?? []} onClose={() => setIsFormOpen(false)} onSave={(values) => createMutation.mutate(values)} />
+        <AdjustmentFormDialog isSaving={createMutation.isPending} productOptions={productOptions} onClose={() => setIsFormOpen(false)} onSave={(values) => createMutation.mutate(values)} />
       ) : null}
       {selectedAdjustmentQuery.data ? (
         <AdjustmentDetailsDrawer

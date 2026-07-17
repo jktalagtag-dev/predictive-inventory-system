@@ -22,6 +22,7 @@ const RestockingPage = lazy(() => import('@/features/restocking/pages/Restocking
 const ReportsPage = lazy(() => import('@/features/reports/pages/ReportsPage'))
 const AuditPage = lazy(() => import('@/features/audit/pages/AuditPage'))
 const SettingsPage = lazy(() => import('@/features/settings/pages/SettingsPage'))
+const SyncQueuePage = lazy(() => import('@/features/sync/pages/SyncQueuePage'))
 const LoginPage = lazy(() => import('@/features/auth/pages/LoginPage'))
 const NotFoundPage = lazy(() => import('@/app/router/NotFoundPage'))
 
@@ -53,6 +54,7 @@ export function AppRouter() {
                 <Route path="/reports" element={<ReportsPage />} />
                 <Route path="/audit" element={<AuditPage />} />
                 <Route path="/settings" element={<SettingsPage />} />
+                <Route path="/sync" element={<SyncQueuePage />} />
               </Route>
             </Route>
             <Route path="/workspace" element={<Navigate to="/dashboard" replace />} />
