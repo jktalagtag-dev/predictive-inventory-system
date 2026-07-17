@@ -23,6 +23,17 @@ class UserPolicy
 
     public function update(User $actor, User $target): bool
     {
-        return $actor->hasPermission('users.update');
+        if (! $actor->hasPermission('users.update')) {
+            return false;
+        }
+
+        // Structural guard, not just a permission-grant assumption:
+        // CLAUDE.md section 6 requires this to hold even if a future
+        // change ever grants users.update outside the owner role.
+        if ($target->hasRole('owner') && ! $actor->hasRole('owner')) {
+            return false;
+        }
+
+        return true;
     }
 }

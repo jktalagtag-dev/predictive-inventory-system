@@ -20,6 +20,7 @@ use App\Domains\Sales\Models\SaleLine;
 use Database\Seeders\PermissionSeeder;
 use Database\Seeders\RoleSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
@@ -187,6 +188,80 @@ class DashboardTest extends TestCase
         $response->assertJsonPath('data.syncHealth.pendingCount', 0);
         $response->assertJsonPath('meta.branchId', (string) $this->branch->id);
         $this->assertNotNull($response->json('meta.generatedAt'));
+    }
+
+    public function test_dashboard_query_count_does_not_scale_with_row_count(): void
+    {
+        $owner = $this->userWithRole('owner');
+        $category = Category::query()->create(['code' => 'FILT2', 'name' => 'Filters 2', 'row_version' => 1]);
+
+        for ($i = 1; $i <= 6; $i++) {
+            $product = Product::query()->create([
+                'category_id' => $category->id, 'stock_unit_id' => $this->unit->id, 'sku' => "SHX-FLT-{$i}00",
+                'name' => "Filter {$i}", 'product_type' => 'stock', 'default_tax_rate' => '12.0000',
+                'selling_price' => '100.0000', 'row_version' => 1,
+            ]);
+
+            InventoryBalance::query()->create([
+                'branch_id' => $this->branch->id, 'product_id' => $product->id,
+                'on_hand_quantity' => '40.0000', 'reserved_quantity' => '0.0000',
+                'available_quantity' => '6.0000', 'incoming_quantity' => '0.0000', 'row_version' => 1,
+            ]);
+
+            $policy = ReorderPolicy::query()->create([
+                'branch_id' => $this->branch->id, 'product_id' => $product->id,
+                'safety_stock_quantity' => '5.0000', 'reorder_point_quantity' => '20.0000',
+                'is_active' => true, 'row_version' => 1,
+            ]);
+
+            RestockingAlert::query()->create([
+                'reorder_policy_id' => $policy->id, 'status' => 'active', 'severity' => 'critical',
+                'available_quantity_snapshot' => '6.0000', 'incoming_quantity_snapshot' => '0.0000',
+                'reorder_point_snapshot' => '20.0000', 'recommended_order_quantity' => '30.0000',
+                'first_triggered_at' => now(), 'last_evaluated_at' => now(), 'row_version' => 1,
+            ]);
+
+            $supplier = Supplier::query()->create([
+                'code' => "SUP{$i}", 'legal_name' => "Supplier {$i}",
+                'country_code' => 'PH', 'default_currency_code' => 'PHP', 'is_active' => true, 'row_version' => 1,
+            ]);
+
+            PurchaseOrder::query()->create([
+                'branch_id' => $this->branch->id, 'supplier_id' => $supplier->id, 'po_number' => "PO-DASH-{$i}",
+                'status' => 'submitted', 'currency_code' => 'PHP', 'subtotal_amount' => 5000, 'tax_amount' => 600,
+                'discount_amount' => 0, 'total_amount' => 5600, 'row_version' => 1,
+                'created_by_user_id' => $owner->id, 'updated_by_user_id' => $owner->id,
+            ]);
+
+            $cashier = $this->userWithRole('staff');
+            $sale = Sale::query()->create([
+                'branch_id' => $this->branch->id, 'sale_number' => "SALE-DASH-{$i}", 'status' => 'completed',
+                'currency_code' => 'PHP', 'sold_at' => now(), 'completed_at' => now(),
+                'subtotal_amount' => 1250, 'discount_amount' => 0, 'tax_amount' => 150, 'total_amount' => 1400,
+                'cashier_user_id' => $cashier->id, 'idempotency_key' => "dash-key-{$i}",
+                'correlation_id' => (string) Str::uuid(), 'row_version' => 1,
+            ]);
+            SaleLine::query()->create([
+                'sale_id' => $sale->id, 'line_number' => 1, 'product_id' => $product->id, 'unit_id' => $this->unit->id,
+                'product_sku_snapshot' => $product->sku, 'product_name_snapshot' => $product->name,
+                'quantity' => 5, 'stock_quantity_delta' => -5, 'unit_price' => 250, 'discount_amount' => 0,
+                'tax_rate' => 12, 'tax_amount' => 150, 'line_total_amount' => 1400,
+            ]);
+        }
+
+        $this->actAs($owner);
+
+        DB::enableQueryLog();
+        DB::flushQueryLog();
+        $response = $this->getJson('/api/v1/dashboard?branchId='.$this->branch->id);
+        $queryCount = count(DB::getQueryLog());
+        DB::disableQueryLog();
+
+        $response->assertOk();
+        // Regression guard: each dashboard section issues a fixed, small number of
+        // queries regardless of row count (eager loading of supplier/cashier/product
+        // relations), never one query per related row.
+        $this->assertLessThanOrEqual(25, $queryCount, "Dashboard issued {$queryCount} queries for 6 rows per section — check for N+1 eager loading regressions.");
     }
 
     public function test_dashboard_with_no_data_returns_empty_but_valid_shape(): void

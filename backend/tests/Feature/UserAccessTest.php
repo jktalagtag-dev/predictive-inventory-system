@@ -100,6 +100,27 @@ class UserAccessTest extends TestCase
         $response->assertJsonPath('data.isActive', false);
     }
 
+    public function test_manager_cannot_update_an_owner_account_even_if_granted_users_update(): void
+    {
+        $manager = $this->userWithRole('manager');
+        $managerRole = Role::query()->where('code', 'manager')->firstOrFail();
+        $usersUpdatePermission = \App\Domains\Identity\Models\Permission::query()
+            ->where('code', 'users.update')
+            ->firstOrFail();
+        $managerRole->permissions()->attach($usersUpdatePermission->id, ['created_at' => now()]);
+
+        $this->actingAs($manager, 'web');
+
+        $owner = $this->userWithRole('owner');
+
+        $response = $this->patchJson("/api/v1/users/{$owner->id}", [
+            'isActive' => false,
+            'version' => $owner->row_version,
+        ]);
+
+        $response->assertStatus(403);
+    }
+
     public function test_manager_cannot_create_a_branch(): void
     {
         $manager = $this->userWithRole('manager');

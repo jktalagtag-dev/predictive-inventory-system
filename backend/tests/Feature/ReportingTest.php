@@ -9,6 +9,8 @@ use App\Domains\Identity\Models\Branch;
 use App\Domains\Identity\Models\Role;
 use App\Domains\Identity\Models\User;
 use App\Domains\Inventory\Models\InventoryBalance;
+use App\Domains\Procurement\Models\PurchaseOrder;
+use App\Domains\Procurement\Models\Supplier;
 use App\Domains\Reporting\Models\ReportExport;
 use Database\Seeders\PermissionSeeder;
 use Database\Seeders\RoleSeeder;
@@ -133,6 +135,31 @@ class ReportingTest extends TestCase
         $response = $this->getJson("/api/v1/reports/inventory-on-hand?branchId={$otherBranch->id}");
         $response->assertStatus(422);
         $response->assertJsonPath('error.code', 'INVALID_REPORT_FILTER');
+    }
+
+    public function test_purchase_order_status_report_returns_scoped_rows(): void
+    {
+        $owner = $this->userWithRole('owner');
+
+        $supplier = Supplier::query()->create([
+            'code' => 'AQUAPH', 'legal_name' => 'AquaPure Philippines Inc.',
+            'country_code' => 'PH', 'default_currency_code' => 'PHP', 'is_active' => true, 'row_version' => 1,
+        ]);
+
+        PurchaseOrder::query()->create([
+            'branch_id' => $this->branch->id, 'supplier_id' => $supplier->id, 'po_number' => 'PO-RPT-1',
+            'status' => 'submitted', 'currency_code' => 'PHP', 'subtotal_amount' => 5000, 'tax_amount' => 600,
+            'discount_amount' => 0, 'total_amount' => 5600, 'row_version' => 1,
+            'created_by_user_id' => $owner->id, 'updated_by_user_id' => $owner->id,
+        ]);
+
+        $this->actAs($owner);
+
+        $response = $this->getJson("/api/v1/reports/purchase-order-status?branchId={$this->branch->id}");
+        $response->assertOk();
+        $response->assertJsonPath('data.rows.0.poNumber', 'PO-RPT-1');
+        $response->assertJsonPath('data.rows.0.supplierName', 'AquaPure Philippines Inc.');
+        $response->assertJsonPath('data.aggregates.purchaseOrderCount', 1);
     }
 
     public function test_export_requires_idempotency_key(): void

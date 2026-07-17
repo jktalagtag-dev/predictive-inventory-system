@@ -230,7 +230,7 @@ class ReportRunner
             ->orderByDesc('purchase_orders.created_at')
             ->get([
                 'purchase_orders.po_number as poNumber',
-                'suppliers.name as supplierName',
+                'suppliers.legal_name as supplierName',
                 'purchase_orders.status as status',
                 'purchase_orders.ordered_at as orderedAt',
                 'purchase_orders.expected_receipt_at as expectedReceiptAt',
