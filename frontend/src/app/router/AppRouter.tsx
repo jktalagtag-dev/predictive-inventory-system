@@ -19,6 +19,9 @@ const PosPage = lazy(() => import('@/features/pos/pages/PosPage'))
 const SalesPage = lazy(() => import('@/features/sales/pages/SalesPage'))
 const ForecastingPage = lazy(() => import('@/features/forecasting/pages/ForecastingPage'))
 const RestockingPage = lazy(() => import('@/features/restocking/pages/RestockingPage'))
+const ReportsPage = lazy(() => import('@/features/reports/pages/ReportsPage'))
+const AuditPage = lazy(() => import('@/features/audit/pages/AuditPage'))
+const SettingsPage = lazy(() => import('@/features/settings/pages/SettingsPage'))
 const LoginPage = lazy(() => import('@/features/auth/pages/LoginPage'))
 const NotFoundPage = lazy(() => import('@/app/router/NotFoundPage'))
 
@@ -47,6 +50,9 @@ export function AppRouter() {
                 <Route path="/sales" element={<SalesPage />} />
                 <Route path="/forecasting" element={<ForecastingPage />} />
                 <Route path="/restocking" element={<RestockingPage />} />
+                <Route path="/reports" element={<ReportsPage />} />
+                <Route path="/audit" element={<AuditPage />} />
+                <Route path="/settings" element={<SettingsPage />} />
               </Route>
             </Route>
             <Route path="/workspace" element={<Navigate to="/dashboard" replace />} />

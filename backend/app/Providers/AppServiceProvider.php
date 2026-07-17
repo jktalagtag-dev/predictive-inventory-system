@@ -7,7 +7,9 @@ use App\Domains\Catalog\Models\Product;
 use App\Domains\Catalog\Policies\CategoryPolicy;
 use App\Domains\Catalog\Policies\ProductPolicy;
 use App\Domains\Governance\Models\AuditLog;
+use App\Domains\Governance\Models\Setting;
 use App\Domains\Governance\Policies\AuditLogPolicy;
+use App\Domains\Governance\Policies\SettingPolicy;
 use App\Domains\Identity\Models\Branch;
 use App\Domains\Identity\Models\User;
 use App\Domains\Identity\Policies\BranchPolicy;
@@ -26,6 +28,8 @@ use App\Domains\Procurement\Models\PurchaseOrder;
 use App\Domains\Procurement\Models\Supplier;
 use App\Domains\Procurement\Policies\PurchaseOrderPolicy;
 use App\Domains\Procurement\Policies\SupplierPolicy;
+use App\Domains\Reporting\Models\ReportExport;
+use App\Domains\Reporting\Policies\ReportExportPolicy;
 use App\Domains\Sales\Models\Sale;
 use App\Domains\Sales\Policies\SalePolicy;
 use Illuminate\Support\Facades\Gate;
@@ -59,5 +63,7 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(ForecastRun::class, ForecastRunPolicy::class);
         Gate::policy(ReorderPolicy::class, ReorderPolicyPolicy::class);
         Gate::policy(RestockingAlert::class, RestockingAlertPolicy::class);
+        Gate::policy(Setting::class, SettingPolicy::class);
+        Gate::policy(ReportExport::class, ReportExportPolicy::class);
     }
 }

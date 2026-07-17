@@ -75,6 +75,11 @@ class PermissionSeeder extends Seeder
         'restocking.acknowledge' => ['planning', 'Acknowledge restocking alerts'],
         'restocking.resolve' => ['planning', 'Resolve or dismiss restocking alerts'],
         'restocking.evaluate' => ['planning', 'Trigger restocking alert evaluation'],
+        'reports.read' => ['reporting', 'View and run the report catalog'],
+        'reports.export' => ['reporting', 'Request and download report exports'],
+        'settings.read' => ['governance', 'View system settings'],
+        'settings.manage' => ['governance', 'Change system settings'],
+        'settings.read_sensitive' => ['governance', 'View sensitive system setting values'],
     ];
 
     /**
@@ -102,6 +107,8 @@ class PermissionSeeder extends Seeder
             'planning.eoq.read', 'planning.eoq.calculate',
             'planning.rop.read', 'planning.rop.manage', 'planning.rop.calculate',
             'restocking.read', 'restocking.acknowledge', 'restocking.resolve', 'restocking.evaluate',
+            'reports.read', 'reports.export',
+            'settings.read', 'settings.manage', 'settings.read_sensitive',
         ],
         'manager' => [
             'dashboard.read', 'categories.read', 'categories.create', 'categories.update', 'categories.delete',
@@ -122,6 +129,8 @@ class PermissionSeeder extends Seeder
             'planning.eoq.read', 'planning.eoq.calculate',
             'planning.rop.read', 'planning.rop.manage', 'planning.rop.calculate',
             'restocking.read', 'restocking.acknowledge', 'restocking.resolve', 'restocking.evaluate',
+            'reports.read', 'reports.export',
+            'settings.read', 'settings.manage',
         ],
         'staff' => [
             'dashboard.read', 'products.read', 'categories.read', 'units.read',

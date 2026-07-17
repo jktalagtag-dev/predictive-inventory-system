@@ -1,8 +1,9 @@
 FROM php:8.4-cli
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    git unzip libzip-dev libonig-dev \
-    && docker-php-ext-install pdo_mysql zip bcmath \
+    git unzip libzip-dev libonig-dev libfreetype6-dev libjpeg62-turbo-dev libpng-dev \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install pdo_mysql zip bcmath gd \
     && rm -rf /var/lib/apt/lists/*
 
 # opcache.enable_cli is off by default, so `php artisan serve` (which runs
