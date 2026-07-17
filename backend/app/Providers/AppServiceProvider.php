@@ -20,6 +20,8 @@ use App\Domains\Procurement\Models\PurchaseOrder;
 use App\Domains\Procurement\Models\Supplier;
 use App\Domains\Procurement\Policies\PurchaseOrderPolicy;
 use App\Domains\Procurement\Policies\SupplierPolicy;
+use App\Domains\Sales\Models\Sale;
+use App\Domains\Sales\Policies\SalePolicy;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 
@@ -47,5 +49,6 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(InventoryAdjustment::class, InventoryAdjustmentPolicy::class);
         Gate::policy(GoodsReceipt::class, GoodsReceiptPolicy::class);
         Gate::policy(AuditLog::class, AuditLogPolicy::class);
+        Gate::policy(Sale::class, SalePolicy::class);
     }
 }

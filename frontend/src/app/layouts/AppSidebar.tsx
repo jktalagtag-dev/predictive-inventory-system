@@ -1,4 +1,4 @@
-import { Boxes, ClipboardList, LayoutDashboard, PackageCheck, PackageSearch, PanelLeftClose, PanelLeftOpen, Tags, Truck, Users } from 'lucide-react'
+import { Boxes, ClipboardList, LayoutDashboard, PackageCheck, PackageSearch, PanelLeftClose, PanelLeftOpen, Receipt, ShoppingCart, Tags, Truck, Users } from 'lucide-react'
 import { NavLink } from 'react-router-dom'
 import { Button } from '@/shared/components/Button'
 import { cn } from '@/shared/lib/cn'
@@ -14,6 +14,8 @@ const navigation = [
   { label: 'Suppliers', to: '/suppliers', icon: Truck, permission: 'suppliers.read' },
   { label: 'Purchase Orders', to: '/purchase-orders', icon: ClipboardList, permission: 'purchase_orders.read' },
   { label: 'Goods Receiving', to: '/goods-receipts', icon: PackageCheck, permission: 'goods_receipts.read' },
+  { label: 'Point of Sale', to: '/pos', icon: ShoppingCart, permission: 'pos.use' },
+  { label: 'Sales', to: '/sales', icon: Receipt, permission: 'sales.read' },
 ]
 
 export function AppSidebar() {

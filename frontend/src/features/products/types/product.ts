@@ -33,6 +33,7 @@ export type Product = {
   isSerialTracked: boolean
   isExpiryTracked: boolean
   defaultTaxRate: string
+  sellingPrice: string
   // Present only when the list/detail request included a branchId the
   // caller is authorized to see; null means "not requested or not
   // authorized", never a fabricated zero.
@@ -60,6 +61,7 @@ export type ProductFormValues = {
   description: string
   productType: ProductType
   defaultTaxRate: string
+  sellingPrice: string
   isActive: boolean
   isLotTracked: boolean
   isSerialTracked: boolean

@@ -86,6 +86,7 @@ class ProductController extends Controller
                 'is_serial_tracked' => $validated['isSerialTracked'] ?? false,
                 'is_expiry_tracked' => $validated['isExpiryTracked'] ?? false,
                 'default_tax_rate' => $validated['defaultTaxRate'],
+                'selling_price' => $validated['sellingPrice'] ?? 0,
             ], $request->user());
         } catch (ProductException $exception) {
             return $this->exceptionResponse($exception);
@@ -125,6 +126,7 @@ class ProductController extends Controller
             'isSerialTracked' => 'is_serial_tracked',
             'isExpiryTracked' => 'is_expiry_tracked',
             'defaultTaxRate' => 'default_tax_rate',
+            'sellingPrice' => 'selling_price',
         ];
 
         $attributes = [];

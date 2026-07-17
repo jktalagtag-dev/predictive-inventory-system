@@ -36,6 +36,7 @@ class ProductResource extends JsonResource
             'isSerialTracked' => (bool) $product->is_serial_tracked,
             'isExpiryTracked' => (bool) $product->is_expiry_tracked,
             'defaultTaxRate' => (string) $product->default_tax_rate,
+            'sellingPrice' => (string) $product->selling_price,
             // Only present when the caller requested a branch-scoped stock
             // snapshot (see ProductController::attachStockSnapshots) and is
             // authorized to see it; otherwise null, never fabricated.

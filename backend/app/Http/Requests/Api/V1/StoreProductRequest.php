@@ -28,6 +28,7 @@ class StoreProductRequest extends FormRequest
             'isSerialTracked' => ['sometimes', 'boolean'],
             'isExpiryTracked' => ['sometimes', 'boolean'],
             'defaultTaxRate' => ['required', 'numeric', 'min:0'],
+            'sellingPrice' => ['nullable', 'numeric', 'min:0'],
         ];
     }
 }

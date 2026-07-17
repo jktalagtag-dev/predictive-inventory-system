@@ -23,6 +23,7 @@ function valuesFrom(product?: Product): ProductFormValues {
         description: product.description ?? '',
         productType: product.productType,
         defaultTaxRate: product.defaultTaxRate,
+        sellingPrice: product.sellingPrice,
         isActive: product.isActive,
         isLotTracked: product.isLotTracked,
         isSerialTracked: product.isSerialTracked,
@@ -37,6 +38,7 @@ function valuesFrom(product?: Product): ProductFormValues {
         description: '',
         productType: 'stock',
         defaultTaxRate: '12.0000',
+        sellingPrice: '0.0000',
         isActive: true,
         isLotTracked: false,
         isSerialTracked: false,
@@ -71,6 +73,7 @@ export function ProductFormDialog({ product, categoryOptions, unitOptions, isSav
           </label>
           <label className="text-sm font-semibold text-ink">Barcode<input className="mt-2 h-10 w-full rounded-lg border border-border bg-surface px-3 text-sm outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-600/20" value={values.barcode} onChange={(event) => setValues((state) => ({ ...state, barcode: event.target.value }))} /></label>
           <label className="text-sm font-semibold text-ink">Tax rate<input className="mt-2 h-10 w-full rounded-lg border border-border bg-surface px-3 text-sm outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-600/20" min="0" required step="0.0001" type="number" value={values.defaultTaxRate} onChange={(event) => setValues((state) => ({ ...state, defaultTaxRate: event.target.value }))} /></label>
+          <label className="text-sm font-semibold text-ink">Selling price<input className="mt-2 h-10 w-full rounded-lg border border-border bg-surface px-3 text-sm outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-600/20" min="0" required step="0.0001" type="number" value={values.sellingPrice} onChange={(event) => setValues((state) => ({ ...state, sellingPrice: event.target.value }))} /></label>
           <label className="text-sm font-semibold text-ink">Product type<select className="mt-2 h-10 w-full rounded-lg border border-border bg-surface px-3 text-sm outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-600/20" value={values.productType} onChange={(event) => setValues((state) => ({ ...state, productType: event.target.value as ProductFormValues['productType'] }))}><option value="stock">Stock product</option><option value="non_stock">Non-stock product</option><option value="service">Service</option></select></label>
           <label className="block text-sm font-semibold text-ink sm:col-span-2">Description
             <textarea className="mt-2 w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-600/20" rows={2} value={values.description} onChange={(event) => setValues((state) => ({ ...state, description: event.target.value }))} />

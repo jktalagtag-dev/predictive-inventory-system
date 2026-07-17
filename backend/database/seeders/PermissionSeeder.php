@@ -56,6 +56,13 @@ class PermissionSeeder extends Seeder
         'goods_receipts.post' => ['inventory', 'Post goods receipts'],
         'goods_receipts.reverse' => ['inventory', 'Reverse posted goods receipts'],
         'audit.read' => ['governance', 'View audit trail'],
+        'pos.use' => ['sales', 'Use the point-of-sale product lookup'],
+        'pos.finalize' => ['sales', 'Finalize point-of-sale transactions'],
+        'pos.price_override' => ['sales', 'Override the selling price at checkout'],
+        'pos.discount_override' => ['sales', 'Apply a discount at checkout'],
+        'sales.read' => ['sales', 'View sales history'],
+        'sales.void' => ['sales', 'Void completed sales'],
+        'sales.refund' => ['sales', 'Refund completed sales'],
     ];
 
     /**
@@ -77,6 +84,8 @@ class PermissionSeeder extends Seeder
             'goods_receipts.read', 'goods_receipts.create', 'goods_receipts.update',
             'goods_receipts.post', 'goods_receipts.reverse',
             'audit.read',
+            'pos.use', 'pos.finalize', 'pos.price_override', 'pos.discount_override',
+            'sales.read', 'sales.void', 'sales.refund',
         ],
         'manager' => [
             'dashboard.read', 'categories.read', 'categories.create', 'categories.update', 'categories.delete',
@@ -91,6 +100,8 @@ class PermissionSeeder extends Seeder
             'goods_receipts.read', 'goods_receipts.create', 'goods_receipts.update',
             'goods_receipts.post', 'goods_receipts.reverse',
             'audit.read',
+            'pos.use', 'pos.finalize', 'pos.price_override', 'pos.discount_override',
+            'sales.read', 'sales.void', 'sales.refund',
         ],
         'staff' => [
             'dashboard.read', 'products.read', 'categories.read', 'units.read',
@@ -98,6 +109,7 @@ class PermissionSeeder extends Seeder
             'inventory.adjustments.create',
             'suppliers.read', 'purchase_orders.read',
             'goods_receipts.read', 'goods_receipts.create',
+            'pos.use', 'pos.finalize', 'sales.read',
         ],
     ];
 

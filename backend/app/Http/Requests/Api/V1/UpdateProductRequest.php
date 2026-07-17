@@ -28,6 +28,7 @@ class UpdateProductRequest extends FormRequest
             'isSerialTracked' => ['sometimes', 'boolean'],
             'isExpiryTracked' => ['sometimes', 'boolean'],
             'defaultTaxRate' => ['sometimes', 'numeric', 'min:0'],
+            'sellingPrice' => ['sometimes', 'numeric', 'min:0'],
             'version' => ['required', 'integer'],
         ];
     }
