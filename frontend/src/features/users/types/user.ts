@@ -19,6 +19,7 @@ export type ManagedUser = {
   displayName: string
   email: string
   phone: string | null
+  avatarUrl: string | null
   isActive: boolean
   roles: RoleOption[]
   branches: UserBranchAssignment[]

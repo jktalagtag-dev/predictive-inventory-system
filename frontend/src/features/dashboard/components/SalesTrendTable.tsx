@@ -11,9 +11,9 @@ export function SalesTrendTable({ points }: { points: SalesTrendPoint[] }) {
   const nonZeroDays = points.filter((point) => point.saleCount > 0).length
 
   return (
-    <section className="rounded-xl border border-border bg-surface p-5 shadow-panel">
+    <section className="rounded-card border border-border bg-surface p-8 shadow-panel">
       <div>
-        <h2 className="text-base font-semibold text-ink">Sales trend</h2>
+        <h2 className="text-lg font-semibold text-ink">Sales trend</h2>
         <p className="mt-1 text-sm text-muted">{nonZeroDays} day{nonZeroDays === 1 ? '' : 's'} with completed sales in range.</p>
       </div>
       <div className="mt-4 max-h-64 overflow-y-auto">

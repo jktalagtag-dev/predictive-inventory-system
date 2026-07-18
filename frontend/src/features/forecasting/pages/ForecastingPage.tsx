@@ -61,7 +61,7 @@ export default function ForecastingPage() {
         description="Run and review Simple Moving Average demand forecasts for stock products."
         title="Forecasting"
       />
-      {error ? <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800" role="alert">{error.message}{error.requestId ? ` Request ID: ${error.requestId}` : ''}</div> : null}
+      {error ? <div className="rounded-xl border border-danger/30 bg-danger/10 px-4 py-3 text-sm text-danger-text" role="alert">{error.message}{error.requestId ? ` Request ID: ${error.requestId}` : ''}</div> : null}
 
       <p className="text-sm text-muted">{runsQuery.data?.meta.total ?? 0} forecast runs {runsQuery.isFetching ? '· Updating…' : ''}</p>
       <ForecastRunTable runs={runsQuery.data?.data ?? []} onView={(run) => setSelectedRunId(run.id)} />

@@ -110,7 +110,7 @@ export default function RestockingPage() {
         description="Manage reorder points and review deduplicated restocking alerts."
         title="Restocking"
       />
-      {error ? <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800" role="alert">{error.message}{error.requestId ? ` Request ID: ${error.requestId}` : ''}</div> : null}
+      {error ? <div className="rounded-xl border border-danger/30 bg-danger/10 px-4 py-3 text-sm text-danger-text" role="alert">{error.message}{error.requestId ? ` Request ID: ${error.requestId}` : ''}</div> : null}
 
       <nav aria-label="Restocking sections" className="flex gap-1 border-b border-border">
         {tabs.map((item) => (
@@ -134,15 +134,15 @@ export default function RestockingPage() {
 
       {tab === 'alerts' ? (
         <div className="space-y-4">
-          <section className="grid gap-3 rounded-xl border border-border bg-surface p-4 shadow-panel md:grid-cols-2">
-            <select className="h-11 rounded-lg border border-border bg-surface px-3 text-sm outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-600/20" value={alertFilters.status} onChange={(event) => setAlertFilters((state) => ({ ...state, status: event.target.value as AlertStatus | 'all', page: 1 }))}>
+          <section className="grid gap-3 rounded-card border border-border bg-surface p-4 shadow-panel sm:p-6 md:grid-cols-2">
+            <select className="h-11 rounded-xl border border-border bg-surface px-3 text-sm outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-600/20" value={alertFilters.status} onChange={(event) => setAlertFilters((state) => ({ ...state, status: event.target.value as AlertStatus | 'all', page: 1 }))}>
               <option value="all">All statuses</option>
               <option value="active">Active</option>
               <option value="acknowledged">Acknowledged</option>
               <option value="resolved">Resolved</option>
               <option value="dismissed">Dismissed</option>
             </select>
-            <select className="h-11 rounded-lg border border-border bg-surface px-3 text-sm outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-600/20" value={alertFilters.severity} onChange={(event) => setAlertFilters((state) => ({ ...state, severity: event.target.value as AlertSeverity | 'all', page: 1 }))}>
+            <select className="h-11 rounded-xl border border-border bg-surface px-3 text-sm outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-600/20" value={alertFilters.severity} onChange={(event) => setAlertFilters((state) => ({ ...state, severity: event.target.value as AlertSeverity | 'all', page: 1 }))}>
               <option value="all">All severities</option>
               <option value="critical">Critical</option>
               <option value="high">High</option>

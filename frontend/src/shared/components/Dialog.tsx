@@ -1,15 +1,15 @@
 import { type PropsWithChildren, type ReactNode, useEffect, useId, useRef } from 'react'
 import { X } from 'lucide-react'
-import { cn } from '@/shared/lib/cn'
 import { Button } from '@/shared/components/Button'
+import { modalOverlayClass, modalPanelClass, sheetBodyClass, sheetFooterClass, sheetHeaderClass } from '@/shared/lib/modalClasses'
 
 const FOCUSABLE_SELECTOR = 'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
 
 const sizeClasses = {
-  sm: 'max-w-md',
-  md: 'max-w-lg',
-  lg: 'max-w-2xl',
-  xl: 'max-w-3xl',
+  sm: 'sm:max-w-md',
+  md: 'sm:max-w-lg',
+  lg: 'sm:max-w-2xl',
+  xl: 'sm:max-w-3xl',
 }
 
 type DialogProps = {
@@ -67,18 +67,18 @@ export function Dialog({ title, description, onClose, size = 'md', footer, child
   }, [onClose]);
 
   return (
-    <div className="fixed inset-0 z-50 grid place-items-center bg-slate-950/40 p-4" role="presentation" onMouseDown={onClose}>
+    <div className={modalOverlayClass} role="presentation" onMouseDown={onClose}>
       <section
         ref={panelRef}
         aria-describedby={description ? `${titleId}-description` : undefined}
         aria-labelledby={titleId}
         aria-modal="true"
-        className={cn('max-h-[90vh] w-full overflow-y-auto rounded-xl border border-border bg-surface p-6 shadow-panel', sizeClasses[size])}
+        className={modalPanelClass(sizeClasses[size])}
         role="dialog"
         tabIndex={-1}
         onMouseDown={(event) => event.stopPropagation()}
       >
-        <div className="flex items-start justify-between gap-4">
+        <div className={sheetHeaderClass}>
           <div>
             <h2 id={titleId} className="text-lg font-bold text-ink">{title}</h2>
             {description ? <p id={`${titleId}-description`} className="mt-1 text-sm text-muted">{description}</p> : null}
@@ -88,9 +88,9 @@ export function Dialog({ title, description, onClose, size = 'md', footer, child
           </Button>
         </div>
 
-        <div className="mt-6">{children}</div>
+        <div className={sheetBodyClass}>{children}</div>
 
-        {footer ? <div className="mt-6 flex justify-end gap-3 border-t border-border pt-5">{footer}</div> : null}
+        {footer ? <div className={sheetFooterClass}>{footer}</div> : null}
       </section>
     </div>
   )

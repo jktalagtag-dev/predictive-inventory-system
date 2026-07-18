@@ -10,7 +10,7 @@ type AuditLogFiltersBarProps = {
   onChange: (filters: AuditLogFilters) => void
 }
 
-const inputClass = 'h-10 w-full rounded-lg border border-border bg-surface px-3 text-sm outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-600/20'
+const inputClass = 'h-10 w-full rounded-xl border border-border bg-surface px-3 text-sm outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-600/20'
 
 export function AuditLogFiltersBar({ filters, branchOptions, onChange }: AuditLogFiltersBarProps) {
   const submit = (event: FormEvent<HTMLFormElement>) => {
@@ -19,7 +19,7 @@ export function AuditLogFiltersBar({ filters, branchOptions, onChange }: AuditLo
   }
 
   return (
-    <form className="grid gap-3 rounded-xl border border-border bg-surface p-4 shadow-panel sm:grid-cols-3 lg:grid-cols-6" onSubmit={submit}>
+    <form className="grid gap-3 rounded-card border border-border bg-surface p-4 shadow-panel sm:grid-cols-3 sm:p-6 lg:grid-cols-6" onSubmit={submit}>
       <label className="text-xs font-semibold text-muted">Branch
         <select className={inputClass} value={filters.branchId ?? ''} onChange={(event) => onChange({ ...filters, branchId: event.target.value || null, page: 1 })}>
           <option value="">All branches</option>

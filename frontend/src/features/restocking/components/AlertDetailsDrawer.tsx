@@ -6,6 +6,7 @@ import { ReasonPromptDialog } from '@/features/restocking/components/ReasonPromp
 import { SeverityBadge } from '@/features/restocking/components/SeverityBadge'
 import type { RestockingAlert } from '@/features/restocking/types/restocking'
 import { Button } from '@/shared/components/Button'
+import { drawerPanelClass } from '@/shared/lib/modalClasses'
 
 type AlertDetailsDrawerProps = {
   alert: RestockingAlert
@@ -25,8 +26,8 @@ export function AlertDetailsDrawer({ alert, isActing, onClose, onAcknowledge, on
 
   return (
     <div className="fixed inset-0 z-40 bg-slate-950/30" role="presentation" onMouseDown={onClose}>
-      <aside aria-labelledby="alert-details-title" aria-modal="true" className="ml-auto flex h-full w-full max-w-2xl flex-col border-l border-border bg-surface shadow-panel" role="dialog" onMouseDown={(event) => event.stopPropagation()}>
-        <header className="flex items-start justify-between gap-4 border-b border-border p-6">
+      <aside aria-labelledby="alert-details-title" aria-modal="true" className={drawerPanelClass()} role="dialog" onMouseDown={(event) => event.stopPropagation()}>
+        <header className="flex items-start justify-between gap-4 border-b border-border p-4 sm:p-6">
           <div>
             <p className="font-mono text-xs text-muted">Alert #{alert.id}</p>
             <h2 id="alert-details-title" className="mt-1 text-xl font-bold tracking-tight text-ink">{alert.productName}</h2>
@@ -34,8 +35,8 @@ export function AlertDetailsDrawer({ alert, isActing, onClose, onAcknowledge, on
           </div>
           <Button aria-label="Close alert details" size="icon" variant="ghost" onClick={onClose}><X aria-hidden="true" size={18} /></Button>
         </header>
-        <div className="flex-1 space-y-6 overflow-y-auto p-6">
-          <section className="grid grid-cols-2 gap-4 rounded-lg border border-border p-4 text-sm">
+        <div className="flex-1 space-y-6 overflow-y-auto p-4 sm:p-6">
+          <section className="grid grid-cols-1 gap-4 rounded-xl border border-border p-4 text-sm sm:grid-cols-2">
             <div><p className="text-muted">Available stock</p><p className="font-semibold text-ink">{alert.availableQuantitySnapshot}</p></div>
             <div><p className="text-muted">Reorder point</p><p className="font-semibold text-ink">{alert.reorderPointSnapshot}</p></div>
             <div><p className="text-muted">Incoming stock</p><p className="font-semibold text-ink">{alert.incomingQuantitySnapshot}</p></div>
@@ -48,7 +49,7 @@ export function AlertDetailsDrawer({ alert, isActing, onClose, onAcknowledge, on
             <h3 className="text-sm font-semibold text-ink">History</h3>
             <ul className="mt-3 space-y-2">
               {alert.events.map((event) => (
-                <li key={event.id} className="rounded-lg border border-border px-3 py-2 text-sm">
+                <li key={event.id} className="rounded-xl border border-border px-3 py-2 text-sm">
                   <p className="font-medium capitalize text-ink">{event.eventType.replace('_', ' ')}</p>
                   <p className="text-xs text-muted">{event.occurredAt ? new Date(event.occurredAt).toLocaleString() : '—'}</p>
                 </li>
@@ -56,7 +57,7 @@ export function AlertDetailsDrawer({ alert, isActing, onClose, onAcknowledge, on
             </ul>
           </section>
         </div>
-        <footer className="flex flex-wrap gap-2 border-t border-border p-6">
+        <footer className="flex flex-wrap gap-2 border-t border-border p-4 pb-[calc(1rem+env(safe-area-inset-bottom))] sm:p-6">
           {canAcknowledge ? <Button disabled={isActing} onClick={onAcknowledge}>Acknowledge</Button> : null}
           {canResolve ? <Button disabled={isActing} onClick={() => setPrompt('resolve')}>Resolve</Button> : null}
           {canResolve ? <Button disabled={isActing} variant="danger" onClick={() => setPrompt('dismiss')}>Dismiss</Button> : null}

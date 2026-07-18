@@ -74,21 +74,21 @@ export default function PosPage() {
   const error = finalizeMutation.error as ApiError | null
 
   return (
-    <div className="flex h-[calc(100vh-8rem)] flex-col gap-4">
+    <div className="flex flex-col gap-4 lg:h-[calc(100dvh-8rem)]">
       <PageHeader description="Search or scan a product, review the cart, then finalize the sale." title="Point of Sale" />
 
       {receiptSaleNumber ? (
-        <div className="flex items-center justify-between rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800" role="status">
+        <div className="flex items-center justify-between rounded-xl border border-success/30 bg-success/10 px-4 py-3 text-sm text-success-text" role="status">
           <span>Sale {receiptSaleNumber} completed.</span>
           <button className="font-semibold underline" type="button" onClick={() => setReceiptSaleNumber(null)}>Dismiss</button>
         </div>
       ) : null}
-      {error ? <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800" role="alert">{error.message}{error.requestId ? ` Request ID: ${error.requestId}` : ''}</div> : null}
+      {error ? <div className="rounded-xl border border-danger/30 bg-danger/10 px-4 py-3 text-sm text-danger-text" role="alert">{error.message}{error.requestId ? ` Request ID: ${error.requestId}` : ''}</div> : null}
 
-      <div className="grid flex-1 gap-4 overflow-hidden lg:grid-cols-[380px_1fr_300px]">
+      <div className="flex flex-col gap-4 lg:grid lg:flex-1 lg:grid-cols-[380px_1fr_300px] lg:overflow-hidden">
         <ProductSearchPanel branchId={cart.branchId} onAdd={cart.addProduct} />
 
-        <div className="flex flex-col gap-4 overflow-y-auto">
+        <div className="flex flex-col gap-4 lg:overflow-y-auto">
           <CartTable
             canOverrideDiscount={canOverrideDiscount}
             canOverridePrice={canOverridePrice}
@@ -101,17 +101,30 @@ export default function PosPage() {
           />
         </div>
 
-        <div className="flex flex-col gap-4 overflow-y-auto">
+        <div className="flex flex-col gap-4 lg:overflow-y-auto">
           <PaymentsPanel payments={cart.payments} onAdd={cart.addPayment} onRemove={cart.removePayment} onUpdate={cart.updatePayment} />
-          <CheckoutSummary
-            disabledReason={disabledReason}
-            isSubmitting={finalizeMutation.isPending}
-            isValid={isValid}
-            paymentsTotal={paymentsTotal}
-            totals={totals}
-            onFinalize={finalize}
-          />
+          <div className="hidden lg:block">
+            <CheckoutSummary
+              disabledReason={disabledReason}
+              isSubmitting={finalizeMutation.isPending}
+              isValid={isValid}
+              paymentsTotal={paymentsTotal}
+              totals={totals}
+              onFinalize={finalize}
+            />
+          </div>
         </div>
+      </div>
+
+      <div className="sticky bottom-[calc(4rem+env(safe-area-inset-bottom))] z-30 lg:hidden">
+        <CheckoutSummary
+          disabledReason={disabledReason}
+          isSubmitting={finalizeMutation.isPending}
+          isValid={isValid}
+          paymentsTotal={paymentsTotal}
+          totals={totals}
+          onFinalize={finalize}
+        />
       </div>
     </div>
   )

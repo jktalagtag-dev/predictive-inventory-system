@@ -24,7 +24,7 @@ export default function AuditPage() {
   return (
     <div className="space-y-6">
       <PageHeader description="Search the append-only trail of authenticated actions, approvals, and inventory-affecting events." title="Audit trail" />
-      {error ? <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800" role="alert">{error.message}{error.requestId ? ` Request ID: ${error.requestId}` : ''}</div> : null}
+      {error ? <div className="rounded-xl border border-danger/30 bg-danger/10 px-4 py-3 text-sm text-danger-text" role="alert">{error.message}{error.requestId ? ` Request ID: ${error.requestId}` : ''}</div> : null}
 
       <AuditLogFiltersBar branchOptions={branchOptions} filters={filters} onChange={setFilters} />
 

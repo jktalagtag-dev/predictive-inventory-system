@@ -32,7 +32,7 @@ export default function SyncQueuePage() {
         description="Operations queued on this device while offline. Accepted operations sync automatically; rejected or conflicted ones need your review."
         title="Sync queue"
       />
-      <div className="rounded-lg border border-border bg-surface px-4 py-3 text-sm text-muted shadow-panel">
+      <div className="rounded-xl border border-border bg-surface px-4 py-3 text-sm text-muted shadow-panel">
         {isOnline ? 'Connected — the queue syncs automatically.' : 'Offline — queued operations will sync once connectivity returns.'}
       </div>
 

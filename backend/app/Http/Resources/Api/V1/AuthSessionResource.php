@@ -24,6 +24,7 @@ class AuthSessionResource extends JsonResource
                 'lastName' => $user->last_name,
                 'displayName' => $user->display_name,
                 'email' => $user->email,
+                'avatarUrl' => $user->avatar_url,
                 'roles' => $roles->pluck('code')->values(),
                 'permissions' => $permissionCodes,
                 'branches' => $user->branches->map(fn ($branch) => [

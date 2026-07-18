@@ -53,21 +53,21 @@ export default function ProductsPage() {
   return (
     <div className="space-y-6">
       <PageHeader title="Product management" description="Maintain stock products, service items, and units. Inventory monitoring is not yet available." actions={<Button onClick={openCreate}><PackagePlus aria-hidden="true" size={17} /> Create product</Button>} />
-      {error ? <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800" role="alert">{error.message}{error.requestId ? ` Request ID: ${error.requestId}` : ''}</div> : null}
+      {error ? <div className="rounded-xl border border-danger/30 bg-danger/10 px-4 py-3 text-sm text-danger-text" role="alert">{error.message}{error.requestId ? ` Request ID: ${error.requestId}` : ''}</div> : null}
 
-      <section className="grid gap-3 rounded-xl border border-border bg-surface p-4 shadow-panel lg:grid-cols-[minmax(0,1fr)_190px_180px_160px]">
-        <label className="relative block"><span className="sr-only">Search products</span><Search aria-hidden="true" className="absolute left-3 top-1/2 -translate-y-1/2 text-muted" size={18} /><input className="h-11 w-full rounded-lg border border-border bg-surface pl-10 pr-3 text-sm outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-600/20" placeholder="Search by product, SKU, or barcode" value={filters.search} onChange={(event: ChangeEvent<HTMLInputElement>) => updateFilter('search', event.target.value)} /></label>
-        <select className="h-11 rounded-lg border border-border bg-surface px-3 text-sm outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-600/20" value={filters.categoryId} onChange={(event) => updateFilter('categoryId', event.target.value)}>
+      <section className="grid gap-3 rounded-card border border-border bg-surface p-4 shadow-panel sm:p-6 lg:grid-cols-[minmax(0,1fr)_190px_180px_160px]">
+        <label className="relative block"><span className="sr-only">Search products</span><Search aria-hidden="true" className="absolute left-3 top-1/2 -translate-y-1/2 text-muted" size={18} /><input className="h-11 w-full rounded-xl border border-border bg-surface pl-10 pr-3 text-sm outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-600/20" placeholder="Search by product, SKU, or barcode" value={filters.search} onChange={(event: ChangeEvent<HTMLInputElement>) => updateFilter('search', event.target.value)} /></label>
+        <select className="h-11 rounded-xl border border-border bg-surface px-3 text-sm outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-600/20" value={filters.categoryId} onChange={(event) => updateFilter('categoryId', event.target.value)}>
           <option value="all">All categories</option>
           {categoryOptions.map((category) => <option key={category.id} value={category.id}>{category.name}</option>)}
         </select>
-        <select className="h-11 rounded-lg border border-border bg-surface px-3 text-sm outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-600/20" value={filters.productType} onChange={(event) => updateFilter('productType', event.target.value as ProductType | 'all')}>
+        <select className="h-11 rounded-xl border border-border bg-surface px-3 text-sm outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-600/20" value={filters.productType} onChange={(event) => updateFilter('productType', event.target.value as ProductType | 'all')}>
           <option value="all">All product types</option>
           <option value="stock">Stock product</option>
           <option value="non_stock">Non-stock product</option>
           <option value="service">Service</option>
         </select>
-        <select className="h-11 rounded-lg border border-border bg-surface px-3 text-sm outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-600/20" value={filters.active} onChange={(event) => updateFilter('active', event.target.value as ProductFilters['active'])}>
+        <select className="h-11 rounded-xl border border-border bg-surface px-3 text-sm outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-600/20" value={filters.active} onChange={(event) => updateFilter('active', event.target.value as ProductFilters['active'])}>
           <option value="all">All states</option>
           <option value="active">Active</option>
           <option value="inactive">Inactive</option>

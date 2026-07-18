@@ -2,6 +2,8 @@
 
 namespace App\Domains\Catalog\Models;
 
+use Database\Factories\ProductFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -14,6 +16,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string|null $barcode
  * @property string $name
  * @property string|null $description
+ * @property string|null $image_url
  * @property string $product_type
  * @property bool $is_active
  * @property bool $is_lot_tracked
@@ -26,12 +29,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Product extends Model
 {
-    use SoftDeletes;
+    /** @use HasFactory<ProductFactory> */
+    use HasFactory, SoftDeletes;
 
     public const TYPES = ['stock', 'non_stock', 'service'];
 
     protected $fillable = [
-        'category_id', 'stock_unit_id', 'sku', 'barcode', 'name', 'description',
+        'category_id', 'stock_unit_id', 'sku', 'barcode', 'name', 'description', 'image_url',
         'product_type', 'is_active', 'is_lot_tracked', 'is_serial_tracked',
         'is_expiry_tracked', 'default_tax_rate', 'selling_price', 'default_lead_time_days',
     ];
@@ -59,5 +63,10 @@ class Product extends Model
     public function stockUnit(): BelongsTo
     {
         return $this->belongsTo(UnitOfMeasure::class, 'stock_unit_id');
+    }
+
+    protected static function newFactory(): ProductFactory
+    {
+        return ProductFactory::new();
     }
 }

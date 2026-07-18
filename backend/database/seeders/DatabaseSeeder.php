@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             BranchSeeder::class,
             OwnerUserSeeder::class,
             UnitOfMeasureSeeder::class,
+            DemoDataSeeder::class,
         ]);
     }
 }

@@ -23,14 +23,16 @@ class OwnerUserSeeder extends Seeder
 
         $email = env('OWNER_SEED_EMAIL', 'owner@stevenhydrotech.example');
         $password = env('OWNER_SEED_PASSWORD', 'ChangeMe!12345');
+        $displayName = 'Ella Mañaga';
 
         $user = User::query()->updateOrCreate(
             ['email' => $email],
             [
                 'password_hash' => Hash::make($password),
-                'first_name' => 'Maria',
-                'last_name' => 'Santos',
-                'display_name' => 'Maria Santos',
+                'first_name' => 'Ella',
+                'last_name' => 'Mañaga',
+                'display_name' => $displayName,
+                'avatar_url' => 'https://api.dicebear.com/7.x/initials/svg?seed='.urlencode($displayName),
                 'is_active' => true,
                 'email_verified_at' => now(),
             ],

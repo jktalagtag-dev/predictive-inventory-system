@@ -35,7 +35,7 @@ export function ExportRequestDialog({ definition, isCreating, isDownloading, pen
       <div className="space-y-4">
         <label className="text-sm font-semibold text-ink">Format
           <select
-            className="mt-2 h-10 w-full rounded-lg border border-border bg-surface px-3 text-sm outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-600/20"
+            className="mt-2 h-10 w-full rounded-xl border border-border bg-surface px-3 text-sm outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-600/20"
             disabled={pendingExport !== undefined}
             value={format}
             onChange={(event) => setFormat(event.target.value as ReportFormat)}
@@ -45,9 +45,9 @@ export function ExportRequestDialog({ definition, isCreating, isDownloading, pen
         </label>
 
         {pendingExport ? (
-          <div className="rounded-lg border border-border bg-subtle p-4 text-sm">
+          <div className="rounded-xl border border-border bg-subtle p-4 text-sm">
             <p className="font-medium text-ink">Status: {pendingExport.status}</p>
-            {pendingExport.status === 'failed' ? <p className="mt-1 text-red-700">The export could not be generated. Try again.</p> : null}
+            {pendingExport.status === 'failed' ? <p className="mt-1 text-danger-text">The export could not be generated. Try again.</p> : null}
             {pendingExport.status === 'completed' ? (
               <Button className="mt-3" disabled={isDownloading} onClick={() => onDownload(pendingExport)}>
                 <Download aria-hidden="true" size={16} /> {isDownloading ? 'Downloading…' : 'Download file'}

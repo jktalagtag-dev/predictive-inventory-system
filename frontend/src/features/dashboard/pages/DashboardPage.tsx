@@ -32,29 +32,29 @@ export default function DashboardPage() {
       />
 
       {!branchId ? (
-        <div className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800" role="status">
+        <div className="rounded-xl border border-warning/30 bg-warning/10 px-4 py-3 text-sm text-warning-text" role="status">
           You are not assigned to a branch, so no dashboard data is available.
         </div>
       ) : dashboardQuery.isLoading ? (
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4" role="status">
+        <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4" role="status">
           {[1, 2, 3, 4].map((key) => (
-            <div key={key} className="h-32 animate-pulse rounded-xl border border-border bg-subtle" />
+            <div key={key} className="h-32 animate-pulse rounded-card border border-border bg-subtle" />
           ))}
         </div>
       ) : dashboardQuery.isError && error ? (
-        <div className="flex items-center gap-2 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800" role="alert">
+        <div className="flex items-center gap-2 rounded-xl border border-danger/30 bg-danger/10 px-4 py-3 text-sm text-danger-text" role="alert">
           <AlertCircle aria-hidden="true" size={16} />
           {error.message}
           {error.requestId ? ` Request ID: ${error.requestId}` : ''}
         </div>
       ) : dashboardQuery.data ? (
         <>
-          <div className="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
+          <div className="rounded-xl border border-success/30 bg-success/10 px-4 py-3 text-sm text-success-text">
             Live data refreshed {new Date(dashboardQuery.data.meta.generatedAt).toLocaleString()} · Scope: {dashboardQuery.data.meta.from} to{' '}
             {dashboardQuery.data.meta.to} ({dashboardQuery.data.meta.timezone}) · Currency: {dashboardQuery.data.meta.currency}
           </div>
 
-          <section aria-label="Operational summary" className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          <section aria-label="Operational summary" className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
             <MetricCard icon={<Boxes aria-hidden="true" size={20} />} metric={dashboardQuery.data.data.kpis.inventoryOnHand} tone="default" />
             <MetricCard icon={<TrendingUp aria-hidden="true" size={20} />} metric={dashboardQuery.data.data.kpis.salesToday} tone="success" />
             <MetricCard icon={<PackageCheck aria-hidden="true" size={20} />} metric={dashboardQuery.data.data.kpis.lowStockCount} tone="warning" />

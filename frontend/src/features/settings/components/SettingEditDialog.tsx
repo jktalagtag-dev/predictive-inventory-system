@@ -29,7 +29,7 @@ export function SettingEditDialog({ setting, isSaving, error, onClose, onSave }:
 
   return (
     <div className="fixed inset-0 z-50 grid place-items-center bg-slate-950/40 p-4" role="presentation">
-      <section aria-labelledby="setting-edit-title" aria-modal="true" className="w-full max-w-md rounded-xl border border-border bg-surface p-6 shadow-panel" role="dialog">
+      <section aria-labelledby="setting-edit-title" aria-modal="true" className="max-h-[85dvh] w-full max-w-md overflow-y-auto rounded-card border border-border bg-surface p-6 shadow-panel sm:p-8" role="dialog">
         <div className="flex items-start justify-between gap-4">
           <div>
             <h2 id="setting-edit-title" className="font-mono text-base font-bold text-ink">{setting.key}</h2>
@@ -39,7 +39,7 @@ export function SettingEditDialog({ setting, isSaving, error, onClose, onSave }:
         </div>
 
         {error ? (
-          <div className="mt-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800" role="alert">
+          <div className="mt-4 rounded-xl border border-danger/30 bg-danger/10 px-4 py-3 text-sm text-danger-text" role="alert">
             {error.code === 'VERSION_CONFLICT' ? 'This setting was changed by someone else. Close and reopen to see the latest value.' : error.message}
           </div>
         ) : null}
@@ -52,7 +52,7 @@ export function SettingEditDialog({ setting, isSaving, error, onClose, onSave }:
           ) : (
             <label className="text-sm font-semibold text-ink">Value
               <input
-                className="mt-2 h-10 w-full rounded-lg border border-border bg-surface px-3 text-sm outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-600/20"
+                className="mt-2 h-10 w-full rounded-xl border border-border bg-surface px-3 text-sm outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-600/20"
                 required
                 step={setting.valueType === 'decimal' ? '0.0001' : setting.valueType === 'integer' ? '1' : undefined}
                 type={setting.valueType === 'integer' || setting.valueType === 'decimal' ? 'number' : setting.valueType === 'date' ? 'date' : 'text'}

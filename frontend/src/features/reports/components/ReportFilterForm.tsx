@@ -13,7 +13,7 @@ type ReportFilterFormProps = {
   onRun: () => void
 }
 
-const inputClass = 'mt-1 h-10 w-full rounded-lg border border-border bg-surface px-3 text-sm outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-600/20'
+const inputClass = 'mt-1 h-10 w-full rounded-xl border border-border bg-surface px-3 text-sm outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-600/20'
 
 export function ReportFilterForm({ definition, values, branchOptions, isRunning, onChange, onRun }: ReportFilterFormProps) {
   const submit = (event: FormEvent<HTMLFormElement>) => {
@@ -22,7 +22,7 @@ export function ReportFilterForm({ definition, values, branchOptions, isRunning,
   }
 
   return (
-    <form className="grid gap-3 rounded-xl border border-border bg-surface p-4 shadow-panel sm:grid-cols-3" onSubmit={submit}>
+    <form className="grid gap-3 rounded-card border border-border bg-surface p-4 shadow-panel sm:grid-cols-3 sm:p-6" onSubmit={submit}>
       {definition.filters.map((filter) => (
         <label key={filter.key} className="text-xs font-semibold text-muted">
           {filter.key}{filter.required ? ' *' : ''}

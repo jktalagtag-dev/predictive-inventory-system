@@ -4,10 +4,10 @@ import type { RecentSaleItem } from '@/features/dashboard/types/dashboard'
 
 export function RecentSalesPanel({ sales }: { sales: RecentSaleItem[] }) {
   return (
-    <section className="rounded-xl border border-border bg-surface p-5 shadow-panel">
+    <section className="rounded-card border border-border bg-surface p-8 shadow-panel">
       <div className="flex items-center justify-between gap-4">
         <div>
-          <h2 className="text-base font-semibold text-ink">Recent sales</h2>
+          <h2 className="text-lg font-semibold text-ink">Recent sales</h2>
           <p className="mt-1 text-sm text-muted">Latest completed transactions for this branch.</p>
         </div>
         <Link className="text-sm font-medium text-brand-700 hover:underline" to="/sales">View all</Link>
@@ -18,7 +18,7 @@ export function RecentSalesPanel({ sales }: { sales: RecentSaleItem[] }) {
         <ol className="mt-5 divide-y divide-border">
           {sales.map((sale) => (
             <li key={sale.id} className="flex items-center gap-3 py-4 first:pt-0 last:pb-0">
-              <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-brand-50 text-brand-700">
+              <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-brand-50 text-brand-700">
                 <Receipt aria-hidden="true" size={17} />
               </span>
               <div className="min-w-0 flex-1">

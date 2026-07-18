@@ -12,7 +12,7 @@ const variants = {
   primary: 'bg-brand-600 text-white hover:bg-brand-700 focus-visible:ring-brand-600',
   secondary: 'border border-border bg-surface text-ink hover:bg-subtle focus-visible:ring-brand-600',
   ghost: 'text-muted hover:bg-subtle hover:text-ink focus-visible:ring-brand-600',
-  danger: 'bg-red-700 text-white hover:bg-red-800 focus-visible:ring-red-700',
+  danger: 'bg-danger text-white hover:bg-[#B91C1C] focus-visible:ring-danger',
 }
 
 export function Button({
@@ -24,8 +24,8 @@ export function Button({
   ...props
 }: PropsWithChildren<ButtonProps>) {
   const classes = cn(
-    'inline-flex min-h-10 items-center justify-center gap-2 rounded-lg px-4 text-sm font-semibold outline-none transition-colors disabled:pointer-events-none disabled:opacity-50 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-canvas',
-    size === 'icon' && 'h-10 w-10 min-h-10 px-0',
+    'inline-flex min-h-11 items-center justify-center gap-2 rounded-xl px-4 text-sm font-semibold outline-none transition-colors disabled:pointer-events-none disabled:opacity-50 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-canvas',
+    size === 'icon' && 'h-11 w-11 min-h-11 px-0',
     variants[variant],
     className,
   )

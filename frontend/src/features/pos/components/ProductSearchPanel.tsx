@@ -23,7 +23,7 @@ export function ProductSearchPanel({ branchId, onAdd }: ProductSearchPanelProps)
   }
 
   return (
-    <section aria-label="Product search" className="flex h-full flex-col rounded-xl border border-border bg-surface shadow-panel">
+    <section aria-label="Product search" className="flex max-h-[60dvh] flex-col rounded-card border border-border bg-surface shadow-panel lg:h-full lg:max-h-none">
       <div className="border-b border-border p-4">
         <label className="sr-only" htmlFor="pos-search">Search products or scan barcode</label>
         <div className="relative">
@@ -31,7 +31,7 @@ export function ProductSearchPanel({ branchId, onAdd }: ProductSearchPanelProps)
           <input
             ref={inputRef}
             autoFocus
-            className="h-11 w-full rounded-lg border border-border bg-surface pl-10 pr-3 text-sm outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-600/20"
+            className="h-11 w-full rounded-xl border border-border bg-surface pl-10 pr-3 text-sm outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-600/20"
             id="pos-search"
             placeholder="Search by name, SKU, or scan barcode"
             type="text"
@@ -64,7 +64,7 @@ export function ProductSearchPanel({ branchId, onAdd }: ProductSearchPanelProps)
                       <span className="block text-sm font-semibold text-ink">{product.name}</span>
                       <span className="block font-mono text-xs text-muted">{product.sku}{product.barcode ? ` · ${product.barcode}` : ''}</span>
                       {product.productType === 'stock' ? (
-                        <span className={`block text-xs ${outOfStock ? 'text-red-700' : 'text-muted'}`}>
+                        <span className={`block text-xs ${outOfStock ? 'text-danger-text' : 'text-muted'}`}>
                           {outOfStock ? 'Out of stock' : `${product.stock?.availableQuantity ?? '0'} available`}
                         </span>
                       ) : null}

@@ -22,6 +22,7 @@ class UserResource extends JsonResource
             'displayName' => $user->display_name,
             'email' => $user->email,
             'phone' => $user->phone,
+            'avatarUrl' => $user->avatar_url,
             'isActive' => (bool) $user->is_active,
             'roles' => $user->roles->map(fn ($role) => [
                 'id' => (string) $role->id,

@@ -19,9 +19,9 @@ type ToastContextValue = {
 const ToastContext = createContext<ToastContextValue | null>(null)
 
 const variantClasses: Record<ToastVariant, string> = {
-  success: 'border-emerald-200 bg-emerald-50 text-emerald-800',
-  error: 'border-red-200 bg-red-50 text-red-800',
-  info: 'border-blue-200 bg-blue-50 text-blue-800',
+  success: 'border-success/30 bg-success/10 text-success-text',
+  error: 'border-danger/30 bg-danger/10 text-danger-text',
+  info: 'border-info/30 bg-info/10 text-info-text',
 }
 
 const variantIcons: Record<ToastVariant, typeof Info> = {
@@ -64,19 +64,19 @@ export function ToastProvider({ children }: PropsWithChildren) {
   return (
     <ToastContext.Provider value={value}>
       {children}
-      <div aria-atomic="false" aria-live="polite" className="pointer-events-none fixed bottom-4 right-4 z-[100] flex w-full max-w-sm flex-col gap-2">
+      <div aria-atomic="false" aria-live="polite" className="pointer-events-none fixed inset-x-4 bottom-20 z-[100] flex flex-col gap-2 sm:inset-x-auto sm:bottom-4 sm:right-4 sm:w-full sm:max-w-sm">
         {toasts.map((item) => {
           const Icon = variantIcons[item.variant]
 
           return (
-            <div key={item.id} className={cn('pointer-events-auto rounded-lg border p-4 shadow-panel', variantClasses[item.variant])} role="status">
+            <div key={item.id} className={cn('pointer-events-auto rounded-xl border p-4 shadow-panel', variantClasses[item.variant])} role="status">
               <div className="flex items-start gap-3">
                 <Icon aria-hidden="true" className="mt-0.5 shrink-0" size={18} />
                 <div className="min-w-0 flex-1">
                   <p className="text-sm font-semibold">{item.title}</p>
                   {item.description ? <p className="mt-1 text-sm opacity-90">{item.description}</p> : null}
                 </div>
-                <button aria-label="Dismiss notification" className="shrink-0 opacity-70 hover:opacity-100" type="button" onClick={() => dismiss(item.id)}>
+                <button aria-label="Dismiss notification" className="-m-3.5 shrink-0 rounded-full p-3.5 opacity-70 hover:opacity-100" type="button" onClick={() => dismiss(item.id)}>
                   <X aria-hidden="true" size={16} />
                 </button>
               </div>

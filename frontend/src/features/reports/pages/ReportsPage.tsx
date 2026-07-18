@@ -59,7 +59,7 @@ export default function ReportsPage() {
   return (
     <div className="space-y-6">
       <PageHeader description="Run governed operational reports and request exports of the full filtered result set." title="Reports" />
-      {error ? <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800" role="alert">{error.message}{error.requestId ? ` Request ID: ${error.requestId}` : ''}</div> : null}
+      {error ? <div className="rounded-xl border border-danger/30 bg-danger/10 px-4 py-3 text-sm text-danger-text" role="alert">{error.message}{error.requestId ? ` Request ID: ${error.requestId}` : ''}</div> : null}
 
       <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
         <ReportCatalogSidebar reports={catalogQuery.data ?? []} selectedCode={selectedCode} onSelect={setSelectedCode} />

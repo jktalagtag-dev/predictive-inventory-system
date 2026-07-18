@@ -6,10 +6,10 @@ export function SyncHealthPanel({ health }: { health: SyncHealth }) {
   const hasAttention = health.conflictedCount > 0 || health.rejectedCount > 0
 
   return (
-    <section className="rounded-xl border border-border bg-surface p-5 shadow-panel">
+    <section className="rounded-card border border-border bg-surface p-8 shadow-panel">
       <div className="flex items-center justify-between gap-4">
         <div>
-          <h2 className="text-base font-semibold text-ink">Sync health</h2>
+          <h2 className="text-lg font-semibold text-ink">Sync health</h2>
           <p className="mt-1 text-sm text-muted">Branch-wide offline operation status.</p>
         </div>
         <Link className="text-sm font-medium text-brand-700 hover:underline" to="/sync">View queue</Link>
@@ -21,19 +21,19 @@ export function SyncHealthPanel({ health }: { health: SyncHealth }) {
         </div>
         <div>
           <dt className="text-muted">Accepted</dt>
-          <dd className="mt-1 text-lg font-semibold tabular-nums text-emerald-700">{health.acceptedCount}</dd>
+          <dd className="mt-1 text-lg font-semibold tabular-nums text-success-text">{health.acceptedCount}</dd>
         </div>
         <div>
           <dt className="text-muted">Conflicted</dt>
-          <dd className="mt-1 text-lg font-semibold tabular-nums text-amber-700">{health.conflictedCount}</dd>
+          <dd className="mt-1 text-lg font-semibold tabular-nums text-warning-text">{health.conflictedCount}</dd>
         </div>
         <div>
           <dt className="text-muted">Rejected</dt>
-          <dd className="mt-1 text-lg font-semibold tabular-nums text-red-700">{health.rejectedCount}</dd>
+          <dd className="mt-1 text-lg font-semibold tabular-nums text-danger-text">{health.rejectedCount}</dd>
         </div>
       </dl>
       {hasAttention ? (
-        <p className="mt-4 flex items-center gap-1.5 text-sm text-amber-800" role="status">
+        <p className="mt-4 flex items-center gap-1.5 text-sm text-warning-text" role="status">
           <RefreshCw aria-hidden="true" size={14} /> Some offline operations need review.
         </p>
       ) : null}

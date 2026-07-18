@@ -10,7 +10,7 @@ import { cn } from '@/shared/lib/cn'
  */
 export function Table({ children, minWidth = 600 }: PropsWithChildren<{ minWidth?: number }>) {
   return (
-    <section className="overflow-hidden rounded-xl border border-border bg-surface shadow-panel">
+    <section className="overflow-hidden rounded-card border border-border bg-surface shadow-panel">
       <div className="overflow-x-auto">
         <table className="w-full text-sm" style={{ minWidth }}>
           {children}
@@ -21,7 +21,7 @@ export function Table({ children, minWidth = 600 }: PropsWithChildren<{ minWidth
 }
 
 export function TableHead({ children }: PropsWithChildren) {
-  return <thead className="bg-subtle text-left text-xs font-semibold text-muted">{children}</thead>
+  return <thead className="bg-subtle text-left text-xs font-semibold uppercase tracking-wide text-muted">{children}</thead>
 }
 
 export function TableBody({ children }: PropsWithChildren) {
@@ -29,14 +29,14 @@ export function TableBody({ children }: PropsWithChildren) {
 }
 
 export function TableRow({ children, className }: PropsWithChildren<{ className?: string }>) {
-  return <tr className={cn('hover:bg-subtle/70', className)}>{children}</tr>
+  return <tr className={cn('transition-colors duration-150 hover:bg-subtle/70', className)}>{children}</tr>
 }
 
 type AlignProp = { align?: 'left' | 'right' }
 
 export function TableHeaderCell({ children, align = 'left', ...rest }: PropsWithChildren<AlignProp & ThHTMLAttributes<HTMLTableCellElement>>) {
   return (
-    <th className={cn('px-4 py-3', align === 'right' && 'text-right')} {...rest}>
+    <th className={cn('px-5 py-3.5', align === 'right' && 'text-right')} {...rest}>
       {children}
     </th>
   )
@@ -44,7 +44,7 @@ export function TableHeaderCell({ children, align = 'left', ...rest }: PropsWith
 
 export function TableCell({ children, align = 'left', className, ...rest }: PropsWithChildren<AlignProp & TdHTMLAttributes<HTMLTableCellElement>>) {
   return (
-    <td className={cn('px-4 py-3', align === 'right' && 'text-right tabular-nums', className)} {...rest}>
+    <td className={cn('px-5 py-4', align === 'right' && 'text-right tabular-nums', className)} {...rest}>
       {children}
     </td>
   )
@@ -53,7 +53,7 @@ export function TableCell({ children, align = 'left', className, ...rest }: Prop
 export function TableEmptyState({ colSpan, children }: { colSpan: number; children: ReactNode }) {
   return (
     <tr>
-      <td className="px-4 py-6 text-center text-sm text-muted" colSpan={colSpan}>
+      <td className="px-5 py-8 text-center text-sm text-muted" colSpan={colSpan}>
         {children}
       </td>
     </tr>

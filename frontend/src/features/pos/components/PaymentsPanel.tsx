@@ -24,14 +24,14 @@ export function PaymentsPanel({ payments, onAdd, onUpdate, onRemove }: PaymentsP
           {payments.map((payment) => (
             <li key={payment.localId} className="flex items-center gap-2">
               <select
-                className="h-10 flex-1 rounded-lg border border-border bg-surface px-2 text-sm outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-600/20"
+                className="h-11 flex-1 rounded-xl border border-border bg-surface px-2 text-sm outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-600/20"
                 value={payment.paymentMethod}
                 onChange={(event) => onUpdate(payment.localId, { paymentMethod: event.target.value as CartPayment['paymentMethod'] })}
               >
                 {PAYMENT_METHODS.map((method) => <option key={method.value} value={method.value}>{method.label}</option>)}
               </select>
               <input
-                className="h-10 w-28 rounded-lg border border-border bg-surface px-2 text-right text-sm outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-600/20"
+                className="h-11 w-28 rounded-xl border border-border bg-surface px-2 text-right text-sm outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-600/20"
                 min="0"
                 placeholder="Amount"
                 step="0.01"

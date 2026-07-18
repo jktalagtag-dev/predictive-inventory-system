@@ -35,20 +35,20 @@ export function ConflictResolverDialog({ operation, onClose, onDiscard, onRetry 
     >
       <div className="space-y-4">
         {operation.errorCode ? (
-          <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
+          <div className="rounded-xl border border-danger/30 bg-danger/10 px-4 py-3 text-sm text-danger-text">
             <p className="font-semibold">{operation.errorCode}</p>
           </div>
         ) : null}
 
         <div>
           <p className="text-xs font-semibold text-muted">Local (queued on this device)</p>
-          <pre className="mt-1 overflow-x-auto rounded-lg border border-border bg-subtle p-3 text-xs">{JSON.stringify(operation.payload, null, 2)}</pre>
+          <pre className="mt-1 overflow-x-auto rounded-xl border border-border bg-subtle p-3 text-xs">{JSON.stringify(operation.payload, null, 2)}</pre>
         </div>
 
         {operation.conflictPayload ? (
           <div>
             <p className="text-xs font-semibold text-muted">Server</p>
-            <pre className="mt-1 overflow-x-auto rounded-lg border border-border bg-subtle p-3 text-xs">{JSON.stringify(operation.conflictPayload, null, 2)}</pre>
+            <pre className="mt-1 overflow-x-auto rounded-xl border border-border bg-subtle p-3 text-xs">{JSON.stringify(operation.conflictPayload, null, 2)}</pre>
           </div>
         ) : null}
       </div>

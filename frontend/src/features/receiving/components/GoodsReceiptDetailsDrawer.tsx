@@ -5,6 +5,7 @@ import type { GoodsReceipt } from '@/features/receiving/types/goodsReceipt'
 import { GoodsReceiptStatusBadge } from '@/features/receiving/components/GoodsReceiptStatusBadge'
 import { ReasonPromptDialog } from '@/features/receiving/components/ReasonPromptDialog'
 import { Button } from '@/shared/components/Button'
+import { drawerPanelClass } from '@/shared/lib/modalClasses'
 
 type GoodsReceiptDetailsDrawerProps = {
   goodsReceipt: GoodsReceipt
@@ -20,8 +21,8 @@ export function GoodsReceiptDetailsDrawer({ goodsReceipt: receipt, isActing, onC
 
   return (
     <div className="fixed inset-0 z-40 bg-slate-950/30" role="presentation" onMouseDown={onClose}>
-      <aside aria-labelledby="gr-details-title" aria-modal="true" className="ml-auto flex h-full w-full max-w-2xl flex-col border-l border-border bg-surface shadow-panel" role="dialog" onMouseDown={(event) => event.stopPropagation()}>
-        <header className="flex items-start justify-between gap-4 border-b border-border p-6">
+      <aside aria-labelledby="gr-details-title" aria-modal="true" className={drawerPanelClass()} role="dialog" onMouseDown={(event) => event.stopPropagation()}>
+        <header className="flex items-start justify-between gap-4 border-b border-border p-4 sm:p-6">
           <div>
             <p className="font-mono text-xs text-muted">{receipt.receiptNumber}</p>
             <h2 id="gr-details-title" className="mt-1 text-xl font-bold tracking-tight text-ink">{receipt.supplierDeliveryNumber ?? 'No delivery reference'}</h2>
@@ -29,10 +30,23 @@ export function GoodsReceiptDetailsDrawer({ goodsReceipt: receipt, isActing, onC
           </div>
           <Button aria-label="Close goods receipt details" size="icon" variant="ghost" onClick={onClose}><X aria-hidden="true" size={18} /></Button>
         </header>
-        <div className="flex-1 space-y-6 overflow-y-auto p-6">
+        <div className="flex-1 space-y-6 overflow-y-auto p-4 sm:p-6">
           <section>
             <h3 className="text-sm font-semibold text-ink">Lines</h3>
-            <div className="mt-3 overflow-x-auto rounded-lg border border-border">
+            <div className="mt-3 space-y-2 sm:hidden">
+              {receipt.lines.map((line) => (
+                <div className="rounded-xl border border-border p-3 text-sm" key={line.id}>
+                  <p className="font-medium text-ink">{line.productName}</p>
+                  <p className="text-xs text-muted">{line.productSku}</p>
+                  <dl className="mt-2 grid grid-cols-3 gap-2 text-xs">
+                    <div><dt className="text-muted">Received</dt><dd className="tabular-nums text-ink">{line.receivedQuantity}</dd></div>
+                    <div><dt className="text-muted">Accepted</dt><dd className="tabular-nums text-ink">{line.acceptedQuantity}</dd></div>
+                    <div><dt className="text-muted">Rejected</dt><dd className="tabular-nums text-ink">{line.rejectedQuantity}</dd></div>
+                  </dl>
+                </div>
+              ))}
+            </div>
+            <div className="mt-3 hidden overflow-x-auto rounded-xl border border-border sm:block">
               <table className="w-full min-w-[550px] text-sm">
                 <thead className="bg-subtle text-left text-xs font-semibold text-muted"><tr><th className="px-3 py-2">Product</th><th className="px-3 py-2 text-right">Received</th><th className="px-3 py-2 text-right">Accepted</th><th className="px-3 py-2 text-right">Rejected</th></tr></thead>
                 <tbody className="divide-y divide-border">
@@ -53,7 +67,7 @@ export function GoodsReceiptDetailsDrawer({ goodsReceipt: receipt, isActing, onC
               <h3 className="text-sm font-semibold text-ink">Rejections</h3>
               <ul className="mt-3 space-y-2">
                 {receipt.lines.filter((line) => line.rejectionReason).map((line) => (
-                  <li className="rounded-lg border border-border p-3 text-sm" key={line.id}>
+                  <li className="rounded-xl border border-border p-3 text-sm" key={line.id}>
                     <p className="font-medium text-ink">{line.productName}</p>
                     <p className="mt-1 text-muted">{line.rejectionReason}</p>
                   </li>
@@ -63,7 +77,7 @@ export function GoodsReceiptDetailsDrawer({ goodsReceipt: receipt, isActing, onC
           ) : null}
           {receipt.notes ? <section><h3 className="text-sm font-semibold text-ink">Notes</h3><p className="mt-2 whitespace-pre-wrap text-sm text-muted">{receipt.notes}</p></section> : null}
         </div>
-        <footer className="flex flex-wrap gap-2 border-t border-border p-6">
+        <footer className="flex flex-wrap gap-2 border-t border-border p-4 pb-[calc(1rem+env(safe-area-inset-bottom))] sm:p-6">
           {receipt.status === 'draft' && hasPermission('goods_receipts.post') ? <Button disabled={isActing} onClick={onPost}>Post receipt</Button> : null}
           {receipt.status === 'posted' && hasPermission('goods_receipts.reverse') ? <Button disabled={isActing} variant="danger" onClick={() => setShowReversePrompt(true)}>Reverse</Button> : null}
         </footer>

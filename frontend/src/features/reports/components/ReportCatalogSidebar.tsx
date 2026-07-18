@@ -19,7 +19,7 @@ export function ReportCatalogSidebar({ reports, selectedCode, onSelect }: Report
           key={report.code}
           aria-current={selectedCode === report.code ? 'true' : undefined}
           className={cn(
-            'block w-full rounded-lg border px-4 py-3 text-left transition-colors',
+            'block w-full rounded-xl border px-4 py-3 text-left transition-colors duration-150',
             selectedCode === report.code ? 'border-brand-600 bg-brand-50' : 'border-border bg-surface hover:bg-subtle',
           )}
           type="button"

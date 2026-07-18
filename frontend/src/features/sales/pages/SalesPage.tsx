@@ -49,11 +49,11 @@ export default function SalesPage() {
   return (
     <div className="space-y-6">
       <PageHeader description="Review completed sales, then void or refund as authorized." title="Sales" />
-      {error ? <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800" role="alert">{error.message}{error.requestId ? ` Request ID: ${error.requestId}` : ''}</div> : null}
+      {error ? <div className="rounded-xl border border-danger/30 bg-danger/10 px-4 py-3 text-sm text-danger-text" role="alert">{error.message}{error.requestId ? ` Request ID: ${error.requestId}` : ''}</div> : null}
 
-      <section className="grid gap-3 rounded-xl border border-border bg-surface p-4 shadow-panel md:grid-cols-[minmax(0,1fr)_200px]">
-        <input className="h-11 rounded-lg border border-border bg-surface px-3 text-sm outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-600/20" placeholder="Search by sale number" value={filters.saleNumber} onChange={(event) => setFilters((state) => ({ ...state, saleNumber: event.target.value, page: 1 }))} />
-        <select className="h-11 rounded-lg border border-border bg-surface px-3 text-sm outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-600/20" value={filters.status} onChange={(event) => setFilters((state) => ({ ...state, status: event.target.value as SaleStatus | 'all', page: 1 }))}>
+      <section className="grid gap-3 rounded-card border border-border bg-surface p-4 shadow-panel sm:p-6 md:grid-cols-[minmax(0,1fr)_200px]">
+        <input className="h-11 rounded-xl border border-border bg-surface px-3 text-sm outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-600/20" placeholder="Search by sale number" value={filters.saleNumber} onChange={(event) => setFilters((state) => ({ ...state, saleNumber: event.target.value, page: 1 }))} />
+        <select className="h-11 rounded-xl border border-border bg-surface px-3 text-sm outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-600/20" value={filters.status} onChange={(event) => setFilters((state) => ({ ...state, status: event.target.value as SaleStatus | 'all', page: 1 }))}>
           <option value="all">All statuses</option>
           <option value="completed">Completed</option>
           <option value="voided">Voided</option>

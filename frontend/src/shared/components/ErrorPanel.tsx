@@ -13,9 +13,9 @@ export function ErrorPanel({
   onRetry,
 }: ErrorPanelProps) {
   return (
-    <section aria-labelledby="error-panel-title" className="max-w-lg rounded-xl border border-red-200 bg-surface p-6 shadow-panel">
+    <section aria-labelledby="error-panel-title" className="max-w-lg rounded-card border border-danger/30 bg-surface p-6 shadow-panel">
       <div className="flex items-start gap-3">
-        <AlertTriangle aria-hidden="true" className="mt-0.5 text-red-700" size={22} />
+        <AlertTriangle aria-hidden="true" className="mt-0.5 text-danger-text" size={22} />
         <div>
           <h1 id="error-panel-title" className="text-lg font-bold text-ink">{title}</h1>
           <p className="mt-2 text-sm leading-6 text-muted">{description}</p>

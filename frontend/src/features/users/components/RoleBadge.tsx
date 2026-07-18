@@ -7,9 +7,9 @@ import { Badge } from '@/shared/components/Badge'
 const roleClasses: Record<string, string> = {
   owner: 'bg-violet-50 text-violet-700',
   manager: 'bg-brand-50 text-brand-700',
-  staff: 'bg-slate-100 text-slate-700',
+  staff: 'bg-subtle text-muted',
 }
 
 export function RoleBadge({ code, name }: { code: string; name: string }) {
-  return <Badge className={roleClasses[code] ?? 'bg-slate-100 text-slate-700'}>{name}</Badge>
+  return <Badge className={roleClasses[code] ?? 'bg-subtle text-muted'}>{name}</Badge>
 }

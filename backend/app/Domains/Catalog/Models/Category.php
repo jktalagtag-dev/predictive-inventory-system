@@ -2,6 +2,8 @@
 
 namespace App\Domains\Catalog\Models;
 
+use Database\Factories\CategoryFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -18,7 +20,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Category extends Model
 {
-    use SoftDeletes;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'parent_category_id', 'code', 'name', 'description', 'is_active',
@@ -41,5 +43,10 @@ class Category extends Model
     public function children(): HasMany
     {
         return $this->hasMany(self::class, 'parent_category_id');
+    }
+
+    protected static function newFactory(): CategoryFactory
+    {
+        return CategoryFactory::new();
     }
 }

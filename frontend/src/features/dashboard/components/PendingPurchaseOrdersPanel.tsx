@@ -6,10 +6,10 @@ type PendingPurchaseOrdersPanelProps = { count: number; items: PendingPurchaseOr
 
 export function PendingPurchaseOrdersPanel({ count, items }: PendingPurchaseOrdersPanelProps) {
   return (
-    <section className="rounded-xl border border-border bg-surface p-5 shadow-panel">
+    <section className="rounded-card border border-border bg-surface p-8 shadow-panel">
       <div className="flex items-center justify-between gap-4">
         <div>
-          <h2 className="text-base font-semibold text-ink">Pending procurement</h2>
+          <h2 className="text-lg font-semibold text-ink">Pending procurement</h2>
           <p className="mt-1 text-sm text-muted">{count} purchase order{count === 1 ? '' : 's'} awaiting action.</p>
         </div>
         <Link className="text-sm font-medium text-brand-700 hover:underline" to="/purchase-orders">View all</Link>
@@ -20,7 +20,7 @@ export function PendingPurchaseOrdersPanel({ count, items }: PendingPurchaseOrde
         <ol className="mt-5 divide-y divide-border">
           {items.map((po) => (
             <li key={po.id} className="flex items-center gap-3 py-4 first:pt-0 last:pb-0">
-              <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-brand-50 text-brand-700">
+              <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-brand-50 text-brand-700">
                 <ClipboardList aria-hidden="true" size={17} />
               </span>
               <div className="min-w-0 flex-1">

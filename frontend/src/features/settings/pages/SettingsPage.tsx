@@ -30,7 +30,7 @@ export default function SettingsPage() {
   return (
     <div className="space-y-6">
       <PageHeader description="Typed, versioned system configuration. Owner-only and sensitive values are marked and protected." title="Settings" />
-      {error && !updateMutation.isPending ? <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800" role="alert">{error.message}{error.requestId ? ` Request ID: ${error.requestId}` : ''}</div> : null}
+      {error && !updateMutation.isPending ? <div className="rounded-xl border border-danger/30 bg-danger/10 px-4 py-3 text-sm text-danger-text" role="alert">{error.message}{error.requestId ? ` Request ID: ${error.requestId}` : ''}</div> : null}
 
       <SettingsTable canManage={hasPermission('settings.manage')} settings={settingsQuery.data ?? []} onEdit={(setting: Setting) => setSelectedKey(setting.key)} />
 

@@ -11,6 +11,7 @@ export type AuthenticatedUser = {
   lastName: string
   displayName: string
   email: string
+  avatarUrl: string | null
   roles: string[]
   permissions: string[]
   branches: BranchAccess[]

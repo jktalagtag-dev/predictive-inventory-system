@@ -41,12 +41,9 @@ export function LoginForm() {
   }
 
   return (
-    <form className="w-full max-w-md rounded-xl border border-border bg-surface p-8 shadow-panel" onSubmit={submit}>
-      <h1 className="text-2xl font-bold tracking-tight text-ink">Sign in</h1>
-      <p className="mt-2 text-sm leading-6 text-muted">Use your authorized account to access the inventory workspace.</p>
-
+    <form aria-label="Sign in" className="w-full max-w-md rounded-card border border-border bg-surface p-8 shadow-panel" onSubmit={submit}>
       {error ? (
-        <div className="mt-5 flex gap-3 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-800" role="alert">
+        <div className="flex gap-3 rounded-lg border border-danger/30 bg-danger/10 p-3 text-sm text-danger" role="alert">
           <AlertCircle aria-hidden="true" className="mt-0.5 shrink-0" size={18} />
           <div>
             <p>{error.message}</p>
@@ -55,12 +52,12 @@ export function LoginForm() {
         </div>
       ) : null}
 
-      <div className="mt-6 space-y-4">
+      <div className={error ? 'mt-6 space-y-4' : 'space-y-4'}>
         <label className="block text-sm font-semibold text-ink">
           Email address
           <input
             autoComplete="email"
-            className="mt-2 h-11 w-full rounded-lg border border-border bg-surface px-3 text-sm outline-none transition focus:border-brand-600 focus:ring-2 focus:ring-brand-600/20"
+            className="mt-2 h-11 w-full rounded-xl border border-border bg-surface px-3 text-sm outline-none transition focus:border-brand-600 focus:ring-2 focus:ring-brand-600/20"
             name="email"
             onChange={(event) => setCredentials((state) => ({ ...state, email: event.target.value }))}
             required
@@ -72,7 +69,7 @@ export function LoginForm() {
           Password
           <input
             autoComplete="current-password"
-            className="mt-2 h-11 w-full rounded-lg border border-border bg-surface px-3 text-sm outline-none transition focus:border-brand-600 focus:ring-2 focus:ring-brand-600/20"
+            className="mt-2 h-11 w-full rounded-xl border border-border bg-surface px-3 text-sm outline-none transition focus:border-brand-600 focus:ring-2 focus:ring-brand-600/20"
             name="password"
             onChange={(event) => setCredentials((state) => ({ ...state, password: event.target.value }))}
             required

@@ -21,6 +21,7 @@ class ProductResource extends JsonResource
             'barcode' => $product->barcode,
             'name' => $product->name,
             'description' => $product->description,
+            'imageUrl' => $product->image_url,
             'category' => $product->relationLoaded('category') && $product->category ? [
                 'id' => (string) $product->category->id,
                 'name' => $product->category->name,

@@ -4,28 +4,46 @@
 
 :root {
   color-scheme: light;
-  --color-canvas: 247 249 252;
+  --color-canvas: 247 250 252;
   --color-surface: 255 255 255;
-  --color-subtle: 241 245 249;
-  --color-border: 216 224 234;
-  --color-ink: 23 32 51;
-  --color-muted: 82 97 118;
-  --color-brand-50: 239 246 255;
-  --color-brand-600: 37 99 235;
-  --color-brand-700: 29 78 216;
+  --color-subtle: 239 243 248;
+  --color-border: 231 237 245;
+  --color-ink: 17 24 39;
+  --color-muted: 107 114 128;
+  --color-brand-50: 234 241 248;
+  --color-brand-600: 16 58 111;
+  --color-brand-700: 11 42 84;
+  --color-sidebar: 15 47 90;
+  --color-success: 22 163 74;
+  --color-warning: 245 158 11;
+  --color-danger: 220 38 38;
+  --color-info: 32 184 230;
+  --color-success-text: 21 128 61;
+  --color-warning-text: 146 64 14;
+  --color-danger-text: 185 28 28;
+  --color-info-text: 16 58 111;
 }
 
 :root[data-theme='dark'] {
   color-scheme: dark;
-  --color-canvas: 15 23 42;
-  --color-surface: 30 41 59;
-  --color-subtle: 51 65 85;
-  --color-border: 71 85 105;
+  --color-canvas: 10 25 46;
+  --color-surface: 20 38 63;
+  --color-subtle: 30 52 82;
+  --color-border: 45 66 94;
   --color-ink: 241 245 249;
-  --color-muted: 203 213 225;
-  --color-brand-50: 30 58 138;
-  --color-brand-600: 96 165 250;
-  --color-brand-700: 147 197 253;
+  --color-muted: 180 195 214;
+  --color-brand-50: 20 45 77;
+  --color-brand-600: 32 184 230;
+  --color-brand-700: 90 210 245;
+  --color-sidebar: 15 47 90;
+  --color-success: 22 163 74;
+  --color-warning: 245 158 11;
+  --color-danger: 220 38 38;
+  --color-info: 32 184 230;
+  --color-success-text: 74 222 128;
+  --color-warning-text: 251 191 36;
+  --color-danger-text: 248 113 113;
+  --color-info-text: 32 184 230;
 }
 
 * {
@@ -40,7 +58,7 @@ html {
 body {
   margin: 0;
   min-width: 320px;
-  min-height: 100vh;
+  min-height: 100dvh;
   background: rgb(var(--color-canvas));
   color: rgb(var(--color-ink));
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;

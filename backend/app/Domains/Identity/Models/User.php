@@ -15,6 +15,7 @@ use Illuminate\Notifications\Notifiable;
  * @property string $first_name
  * @property string $last_name
  * @property string $display_name
+ * @property string|null $avatar_url
  * @property bool $is_active
  * @property int $row_version
  */
@@ -30,6 +31,7 @@ class User extends Authenticatable
         'last_name',
         'display_name',
         'phone',
+        'avatar_url',
         'is_active',
     ];
 

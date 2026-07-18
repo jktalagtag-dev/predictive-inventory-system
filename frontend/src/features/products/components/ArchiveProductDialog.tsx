@@ -5,7 +5,7 @@ import { Button } from '@/shared/components/Button'
 export function ArchiveProductDialog({ product, isArchiving, onClose, onConfirm }: { product: Product; isArchiving: boolean; onClose: () => void; onConfirm: () => void }) {
   return (
     <div className="fixed inset-0 z-50 grid place-items-center bg-slate-950/40 p-4" role="presentation">
-      <section aria-labelledby="archive-product-title" aria-modal="true" className="w-full max-w-md rounded-xl border border-border bg-surface p-6 shadow-panel" role="dialog">
+      <section aria-labelledby="archive-product-title" aria-modal="true" className="max-h-[85dvh] w-full max-w-md overflow-y-auto rounded-card border border-border bg-surface p-6 shadow-panel sm:p-8" role="dialog">
         <div className="flex items-start justify-between gap-4">
           <h2 id="archive-product-title" className="text-lg font-bold text-ink">Archive product</h2>
           <Button aria-label="Close dialog" size="icon" variant="ghost" onClick={onClose}><X aria-hidden="true" size={18} /></Button>

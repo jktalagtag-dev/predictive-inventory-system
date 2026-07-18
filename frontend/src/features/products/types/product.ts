@@ -25,6 +25,7 @@ export type Product = {
   barcode: string | null
   name: string
   description: string | null
+  imageUrl: string | null
   category: CategoryOption | null
   stockUnit: { id: string; code: string; symbol: string } | null
   productType: ProductType
