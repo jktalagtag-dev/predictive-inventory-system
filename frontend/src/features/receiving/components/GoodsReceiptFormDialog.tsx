@@ -6,6 +6,7 @@ import type { GoodsReceiptFormValues, GoodsReceiptLineInput } from '@/features/r
 import { Button } from '@/shared/components/Button'
 import { cn } from '@/shared/lib/cn'
 import { modalOverlayClass, modalPanelClass, sheetBodyClass, sheetFooterClass, sheetHeaderClass } from '@/shared/lib/modalClasses'
+import { Portal } from '@/shared/components/Portal'
 
 type GoodsReceiptFormDialogProps = {
   receivablePurchaseOrders: PurchaseOrder[]
@@ -67,6 +68,7 @@ export function GoodsReceiptFormDialog({ receivablePurchaseOrders, isSaving, onC
       && (Number(line.rejectedQuantity) === 0 || line.rejectionReason.trim() !== ''))
 
   return (
+    <Portal>
     <div className={modalOverlayClass} role="presentation">
       <section aria-labelledby="gr-form-title" aria-modal="true" className={modalPanelClass('sm:max-w-4xl')} role="dialog">
         <div className={sheetHeaderClass}>
@@ -128,5 +130,6 @@ export function GoodsReceiptFormDialog({ receivablePurchaseOrders, isSaving, onC
         </form>
       </section>
     </div>
+    </Portal>
   )
 }

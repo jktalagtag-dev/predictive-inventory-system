@@ -54,7 +54,7 @@ export function PurchaseOrderTable({ purchaseOrders, onView }: { purchaseOrders:
                   <TableCell className="text-muted">{po.expectedReceiptAt ? new Date(po.expectedReceiptAt).toLocaleDateString() : '—'}</TableCell>
                   <TableCell align="right">
                     <div className="flex justify-end gap-1">
-                      <Button aria-label={`View ${po.poNumber}`} size="icon" variant="ghost" onClick={() => onView(po)}><PanelRightOpen aria-hidden="true" size={17} /></Button>
+                      <Button aria-label={`View ${po.poNumber}`} size="icon" variant="ghost" onClick={() => onView(po)}><PanelRightOpen aria-hidden="true" size={18} /></Button>
                     </div>
                   </TableCell>
                 </TableRow>

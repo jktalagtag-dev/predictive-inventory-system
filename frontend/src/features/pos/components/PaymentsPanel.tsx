@@ -15,7 +15,7 @@ export function PaymentsPanel({ payments, onAdd, onUpdate, onRemove }: PaymentsP
     <section aria-label="Payments" className="space-y-3">
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-semibold text-ink">Payments</h3>
-        <Button type="button" variant="secondary" onClick={onAdd}><Plus aria-hidden="true" size={15} /> Add payment</Button>
+        <Button type="button" variant="secondary" onClick={onAdd}><Plus aria-hidden="true" size={16} /> Add payment</Button>
       </div>
       {payments.length === 0 ? (
         <p className="text-sm text-muted">Add at least one payment covering the sale total.</p>

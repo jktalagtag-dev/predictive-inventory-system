@@ -29,7 +29,7 @@ export function SidebarGroup({ group, isExpanded, isSidebarExpanded, onToggle, o
         type="button"
         onClick={() => onToggle(group.key)}
       >
-        <GroupIcon aria-hidden="true" className="shrink-0" size={19} />
+        <GroupIcon aria-hidden="true" className="shrink-0" size={18} />
 
         {isSidebarExpanded ? (
           <>

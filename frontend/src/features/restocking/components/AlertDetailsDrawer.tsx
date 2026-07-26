@@ -6,7 +6,8 @@ import { ReasonPromptDialog } from '@/features/restocking/components/ReasonPromp
 import { SeverityBadge } from '@/features/restocking/components/SeverityBadge'
 import type { RestockingAlert } from '@/features/restocking/types/restocking'
 import { Button } from '@/shared/components/Button'
-import { drawerPanelClass } from '@/shared/lib/modalClasses'
+import { drawerOverlayClass, drawerPanelClass } from '@/shared/lib/modalClasses'
+import { Portal } from '@/shared/components/Portal'
 
 type AlertDetailsDrawerProps = {
   alert: RestockingAlert
@@ -25,7 +26,8 @@ export function AlertDetailsDrawer({ alert, isActing, onClose, onAcknowledge, on
   const canResolve = (alert.status === 'active' || alert.status === 'acknowledged') && hasPermission('restocking.resolve')
 
   return (
-    <div className="fixed inset-0 z-40 bg-slate-950/30" role="presentation" onMouseDown={onClose}>
+    <Portal>
+    <div className={drawerOverlayClass} role="presentation" onMouseDown={onClose}>
       <aside aria-labelledby="alert-details-title" aria-modal="true" className={drawerPanelClass()} role="dialog" onMouseDown={(event) => event.stopPropagation()}>
         <header className="flex items-start justify-between gap-4 border-b border-border p-4 sm:p-6">
           <div>
@@ -84,5 +86,6 @@ export function AlertDetailsDrawer({ alert, isActing, onClose, onAcknowledge, on
         />
       ) : null}
     </div>
+    </Portal>
   )
 }

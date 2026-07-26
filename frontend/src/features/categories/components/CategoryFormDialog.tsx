@@ -2,6 +2,8 @@ import { type FormEvent, useEffect, useState } from 'react'
 import { X } from 'lucide-react'
 import type { Category, CategoryFormValues } from '@/features/categories/types/category'
 import { Button } from '@/shared/components/Button'
+import { confirmDialogOverlayClass, confirmDialogPanelClass } from '@/shared/lib/modalClasses'
+import { Portal } from '@/shared/components/Portal'
 
 type CategoryFormDialogProps = { category?: Category; parentOptions: Category[]; isSaving: boolean; onClose: () => void; onSave: (values: CategoryFormValues) => void }
 
@@ -16,8 +18,9 @@ export function CategoryFormDialog({ category, parentOptions, isSaving, onClose,
   const availableParents = parentOptions.filter((option) => option.id !== category?.id)
 
   return (
-    <div className="fixed inset-0 z-50 grid place-items-center bg-slate-950/40 p-4" role="presentation">
-      <section aria-labelledby="category-form-title" aria-modal="true" className="w-full max-w-lg rounded-card border border-border bg-surface p-8 shadow-panel" role="dialog">
+    <Portal>
+    <div className={confirmDialogOverlayClass} role="presentation">
+      <section aria-labelledby="category-form-title" aria-modal="true" className={confirmDialogPanelClass('max-w-lg')} role="dialog">
         <div className="flex items-start justify-between gap-4"><div><h2 id="category-form-title" className="text-lg font-bold text-ink">{category ? 'Edit category' : 'Create category'}</h2><p className="mt-1 text-sm text-muted">Categories classify products and control new-product eligibility.</p></div><Button aria-label="Close dialog" size="icon" variant="ghost" onClick={onClose}><X aria-hidden="true" size={18} /></Button></div>
         <form className="mt-6 space-y-4" onSubmit={submit}>
           <div className="grid gap-4 sm:grid-cols-2">
@@ -41,5 +44,6 @@ export function CategoryFormDialog({ category, parentOptions, isSaving, onClose,
         </form>
       </section>
     </div>
+    </Portal>
   )
 }

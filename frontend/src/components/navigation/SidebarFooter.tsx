@@ -16,9 +16,9 @@ export function SidebarFooter({ isSidebarOpen, isSidebarExpanded, onToggleSideba
         onClick={onToggleSidebar}
       >
         {isSidebarOpen ? (
-          <PanelLeftClose aria-hidden="true" className="shrink-0" size={19} />
+          <PanelLeftClose aria-hidden="true" className="shrink-0" size={18} />
         ) : (
-          <PanelLeftOpen aria-hidden="true" className="shrink-0" size={19} />
+          <PanelLeftOpen aria-hidden="true" className="shrink-0" size={18} />
         )}
 
         {isSidebarExpanded ? <span>{isSidebarOpen ? 'Collapse' : 'Expand'}</span> : null}

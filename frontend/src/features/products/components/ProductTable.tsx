@@ -90,7 +90,7 @@ export function ProductTable({ products, onEdit, onView, onArchive }: ProductTab
                   </TableCell>
                   <TableCell align="right">
                     <div className="flex justify-end gap-1">
-                      <Button aria-label={`View ${product.name}`} size="icon" variant="ghost" onClick={() => onView(product)}><PanelRightOpen aria-hidden="true" size={17} /></Button>
+                      <Button aria-label={`View ${product.name}`} size="icon" variant="ghost" onClick={() => onView(product)}><PanelRightOpen aria-hidden="true" size={18} /></Button>
                       <Button aria-label={`Edit ${product.name}`} size="icon" variant="ghost" onClick={() => onEdit(product)}><Edit3 aria-hidden="true" size={16} /></Button>
                       <Button aria-label={`Archive ${product.name}`} size="icon" variant="ghost" onClick={() => onArchive(product)}><Archive aria-hidden="true" size={16} /></Button>
                     </div>

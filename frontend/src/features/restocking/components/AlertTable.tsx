@@ -62,7 +62,7 @@ export function AlertTable({ alerts, onView }: { alerts: RestockingAlert[]; onVi
                   <TableCell align="right" className="font-semibold text-ink">{alert.recommendedOrderQuantity ?? '—'}</TableCell>
                   <TableCell align="right">
                     <div className="flex justify-end gap-1">
-                      <Button aria-label={`View alert for ${alert.productName}`} size="icon" variant="ghost" onClick={() => onView(alert)}><PanelRightOpen aria-hidden="true" size={17} /></Button>
+                      <Button aria-label={`View alert for ${alert.productName}`} size="icon" variant="ghost" onClick={() => onView(alert)}><PanelRightOpen aria-hidden="true" size={18} /></Button>
                     </div>
                   </TableCell>
                 </TableRow>

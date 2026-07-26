@@ -53,7 +53,7 @@ export function AuditLogTable({ entries, onView }: { entries: AuditLogEntry[]; o
                   <TableCell className="font-mono text-xs text-muted">{entry.correlationId}</TableCell>
                   <TableCell align="right">
                     <div className="flex justify-end">
-                      <Button aria-label="View audit event details" size="icon" variant="ghost" onClick={() => onView(entry)}><PanelRightOpen aria-hidden="true" size={17} /></Button>
+                      <Button aria-label="View audit event details" size="icon" variant="ghost" onClick={() => onView(entry)}><PanelRightOpen aria-hidden="true" size={18} /></Button>
                     </div>
                   </TableCell>
                 </TableRow>

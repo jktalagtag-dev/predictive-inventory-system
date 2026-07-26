@@ -54,7 +54,7 @@ export function AdjustmentTable({ adjustments, onView }: { adjustments: Inventor
                   <TableCell align="right" className="text-ink">{adjustment.lineCount ?? '—'}</TableCell>
                   <TableCell align="right">
                     <div className="flex justify-end gap-1">
-                      <Button aria-label={`View ${adjustment.adjustmentNumber}`} size="icon" variant="ghost" onClick={() => onView(adjustment)}><PanelRightOpen aria-hidden="true" size={17} /></Button>
+                      <Button aria-label={`View ${adjustment.adjustmentNumber}`} size="icon" variant="ghost" onClick={() => onView(adjustment)}><PanelRightOpen aria-hidden="true" size={18} /></Button>
                     </div>
                   </TableCell>
                 </TableRow>

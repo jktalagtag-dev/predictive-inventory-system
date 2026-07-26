@@ -54,7 +54,7 @@ export function GoodsReceiptTable({ goodsReceipts, onView }: { goodsReceipts: Go
                   <TableCell align="right" className="text-ink">{receipt.lineCount ?? '—'}</TableCell>
                   <TableCell align="right">
                     <div className="flex justify-end gap-1">
-                      <Button aria-label={`View ${receipt.receiptNumber}`} size="icon" variant="ghost" onClick={() => onView(receipt)}><PanelRightOpen aria-hidden="true" size={17} /></Button>
+                      <Button aria-label={`View ${receipt.receiptNumber}`} size="icon" variant="ghost" onClick={() => onView(receipt)}><PanelRightOpen aria-hidden="true" size={18} /></Button>
                     </div>
                   </TableCell>
                 </TableRow>

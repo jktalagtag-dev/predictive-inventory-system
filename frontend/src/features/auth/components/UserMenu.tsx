@@ -49,7 +49,7 @@ export function UserMenu() {
           </div>
           <div className="mt-2 space-y-1">
             <DropdownMenuItem
-              icon={theme === 'light' ? <Moon aria-hidden="true" size={17} /> : <Sun aria-hidden="true" size={17} />}
+              icon={theme === 'light' ? <Moon aria-hidden="true" size={18} /> : <Sun aria-hidden="true" size={18} />}
               onClick={() => {
                 toggleTheme()
                 close()
@@ -58,7 +58,7 @@ export function UserMenu() {
               {theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}
             </DropdownMenuItem>
             <DropdownMenuItem
-              icon={<LogOut aria-hidden="true" size={17} />}
+              icon={<LogOut aria-hidden="true" size={18} />}
               onClick={() => {
                 close()
                 void handleLogout()

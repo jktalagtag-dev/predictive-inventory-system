@@ -4,6 +4,7 @@ import type { Supplier, SupplierFormValues } from '@/features/suppliers/types/su
 import { Button } from '@/shared/components/Button'
 import { cn } from '@/shared/lib/cn'
 import { modalOverlayClass, modalPanelClass, sheetBodyClass, sheetFooterClass, sheetHeaderClass } from '@/shared/lib/modalClasses'
+import { Portal } from '@/shared/components/Portal'
 
 type SupplierFormDialogProps = { supplier?: Supplier; isSaving: boolean; onClose: () => void; onSave: (values: SupplierFormValues) => void }
 
@@ -35,6 +36,7 @@ export function SupplierFormDialog({ supplier, isSaving, onClose, onSave }: Supp
   const submit = (event: FormEvent<HTMLFormElement>) => { event.preventDefault(); onSave(values) }
 
   return (
+    <Portal>
     <div className={modalOverlayClass} role="presentation">
       <section aria-labelledby="supplier-form-title" aria-modal="true" className={modalPanelClass('sm:max-w-2xl')} role="dialog">
         <div className={sheetHeaderClass}><div><h2 id="supplier-form-title" className="text-lg font-bold text-ink">{supplier ? 'Edit supplier' : 'Create supplier'}</h2><p className="mt-1 text-sm text-muted">Suppliers must be deactivated rather than deleted once referenced by a purchase order.</p></div><Button aria-label="Close dialog" size="icon" variant="ghost" onClick={onClose}><X aria-hidden="true" size={18} /></Button></div>
@@ -57,5 +59,6 @@ export function SupplierFormDialog({ supplier, isSaving, onClose, onSave }: Supp
         </form>
       </section>
     </div>
+    </Portal>
   )
 }

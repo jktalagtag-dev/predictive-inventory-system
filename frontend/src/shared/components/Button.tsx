@@ -24,7 +24,9 @@ export function Button({
   ...props
 }: PropsWithChildren<ButtonProps>) {
   const classes = cn(
-    'inline-flex min-h-11 items-center justify-center gap-2 rounded-xl px-4 text-sm font-semibold outline-none transition-colors disabled:pointer-events-none disabled:opacity-50 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-canvas',
+    // Cursor is intentionally not set here: the base `button:not(:disabled)` rule
+    // in index.css owns it, so disabled buttons correctly keep the default arrow.
+    'inline-flex min-h-11 items-center justify-center gap-2 rounded-xl px-4 text-sm font-semibold outline-none transition-colors motion-reduce:transition-none disabled:pointer-events-none disabled:opacity-50 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-canvas',
     size === 'icon' && 'h-11 w-11 min-h-11 px-0',
     variants[variant],
     className,

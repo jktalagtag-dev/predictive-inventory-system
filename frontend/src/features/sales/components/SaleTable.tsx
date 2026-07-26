@@ -57,7 +57,7 @@ export function SaleTable({ sales, onView }: { sales: Sale[]; onView: (sale: Sal
                   <TableCell align="right" className="font-semibold text-ink">{sale.totalAmount}</TableCell>
                   <TableCell align="right">
                     <div className="flex justify-end gap-1">
-                      <Button aria-label={`View ${sale.saleNumber}`} size="icon" variant="ghost" onClick={() => onView(sale)}><PanelRightOpen aria-hidden="true" size={17} /></Button>
+                      <Button aria-label={`View ${sale.saleNumber}`} size="icon" variant="ghost" onClick={() => onView(sale)}><PanelRightOpen aria-hidden="true" size={18} /></Button>
                     </div>
                   </TableCell>
                 </TableRow>

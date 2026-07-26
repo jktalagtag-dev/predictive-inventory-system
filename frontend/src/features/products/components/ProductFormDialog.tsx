@@ -4,6 +4,7 @@ import type { CategoryOption, Product, ProductFormValues, UnitOption } from '@/f
 import { Button } from '@/shared/components/Button'
 import { cn } from '@/shared/lib/cn'
 import { modalOverlayClass, modalPanelClass, sheetBodyClass, sheetFooterClass, sheetHeaderClass } from '@/shared/lib/modalClasses'
+import { Portal } from '@/shared/components/Portal'
 
 type ProductFormDialogProps = {
   product?: Product
@@ -55,6 +56,7 @@ export function ProductFormDialog({ product, categoryOptions, unitOptions, isSav
   const isValid = values.categoryId !== '' && values.stockUnitId !== ''
 
   return (
+    <Portal>
     <div className={modalOverlayClass} role="presentation">
       <section aria-labelledby="product-form-title" aria-modal="true" className={modalPanelClass('sm:max-w-2xl')} role="dialog">
         <div className={sheetHeaderClass}><div><h2 id="product-form-title" className="text-lg font-bold text-ink">{product ? 'Edit product' : 'Create product'}</h2><p className="mt-1 text-sm text-muted">Product setup is validated by the inventory API before it becomes operational.</p></div><Button aria-label="Close dialog" size="icon" variant="ghost" onClick={onClose}><X aria-hidden="true" size={18} /></Button></div>
@@ -92,5 +94,6 @@ export function ProductFormDialog({ product, categoryOptions, unitOptions, isSav
         </form>
       </section>
     </div>
+    </Portal>
   )
 }

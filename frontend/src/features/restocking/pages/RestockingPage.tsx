@@ -103,9 +103,9 @@ export default function RestockingPage() {
     <div className="space-y-6">
       <PageHeader
         actions={tab === 'policies' && hasPermission('planning.rop.manage') ? (
-          <Button disabled={!branchId} onClick={() => setIsFormOpen(true)}><PlusCircle aria-hidden="true" size={17} /> New policy</Button>
+          <Button disabled={!branchId} onClick={() => setIsFormOpen(true)}><PlusCircle aria-hidden="true" size={18} /> New policy</Button>
         ) : tab === 'alerts' && hasPermission('restocking.evaluate') ? (
-          <Button disabled={!branchId || evaluateMutation.isPending} onClick={() => evaluateMutation.mutate()}><RefreshCw aria-hidden="true" size={17} /> {evaluateMutation.isPending ? 'Evaluating…' : 'Evaluate now'}</Button>
+          <Button disabled={!branchId || evaluateMutation.isPending} onClick={() => evaluateMutation.mutate()}><RefreshCw aria-hidden="true" size={18} /> {evaluateMutation.isPending ? 'Evaluating…' : 'Evaluate now'}</Button>
         ) : undefined}
         description="Manage reorder points and review deduplicated restocking alerts."
         title="Restocking"

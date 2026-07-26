@@ -54,7 +54,7 @@ export function RecordCard({ title, subtitle, badge, fields, actions, onClick, a
 
   if (onClick) {
     return (
-      <div className={cardClass}>
+      <div className={`${cardClass} transition-colors duration-200 motion-reduce:transition-none hover:border-brand-600/40 hover:bg-subtle`}>
         <button
           aria-label={ariaLabel}
           className="block w-full min-h-11 text-left outline-none focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2 focus-visible:ring-offset-surface"

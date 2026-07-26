@@ -21,7 +21,7 @@ export function PendingPurchaseOrdersPanel({ count, items }: PendingPurchaseOrde
           {items.map((po) => (
             <li key={po.id} className="flex items-center gap-3 py-4 first:pt-0 last:pb-0">
               <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-brand-50 text-brand-700">
-                <ClipboardList aria-hidden="true" size={17} />
+                <ClipboardList aria-hidden="true" size={18} />
               </span>
               <div className="min-w-0 flex-1">
                 <p className="text-sm font-semibold text-ink">{po.poNumber}</p>

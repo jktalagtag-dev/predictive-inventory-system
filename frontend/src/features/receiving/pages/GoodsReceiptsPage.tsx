@@ -67,7 +67,7 @@ export default function GoodsReceiptsPage() {
       <PageHeader
         title="Goods receiving"
         description="Record deliveries against ordered purchase orders and post them into stock."
-        actions={<Button disabled={!filters.branchId || receivablePurchaseOrders.length === 0} onClick={() => setIsFormOpen(true)}><PackagePlus aria-hidden="true" size={17} /> Record receipt</Button>}
+        actions={<Button disabled={!filters.branchId || receivablePurchaseOrders.length === 0} onClick={() => setIsFormOpen(true)}><PackagePlus aria-hidden="true" size={18} /> Record receipt</Button>}
       />
       {error ? <div className="rounded-xl border border-danger/30 bg-danger/10 px-4 py-3 text-sm text-danger-text" role="alert">{error.message}{error.requestId ? ` Request ID: ${error.requestId}` : ''}</div> : null}
 

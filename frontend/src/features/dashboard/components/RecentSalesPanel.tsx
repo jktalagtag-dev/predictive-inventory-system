@@ -19,7 +19,7 @@ export function RecentSalesPanel({ sales }: { sales: RecentSaleItem[] }) {
           {sales.map((sale) => (
             <li key={sale.id} className="flex items-center gap-3 py-4 first:pt-0 last:pb-0">
               <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-brand-50 text-brand-700">
-                <Receipt aria-hidden="true" size={17} />
+                <Receipt aria-hidden="true" size={18} />
               </span>
               <div className="min-w-0 flex-1">
                 <p className="text-sm font-semibold text-ink">{sale.saleNumber}</p>

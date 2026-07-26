@@ -6,7 +6,8 @@ import { ReasonPromptDialog } from '@/features/sales/components/ReasonPromptDial
 import { RefundDialog } from '@/features/sales/components/RefundDialog'
 import { SaleStatusBadge } from '@/features/sales/components/SaleStatusBadge'
 import { Button } from '@/shared/components/Button'
-import { drawerPanelClass } from '@/shared/lib/modalClasses'
+import { drawerOverlayClass, drawerPanelClass } from '@/shared/lib/modalClasses'
+import { Portal } from '@/shared/components/Portal'
 
 type SaleDetailsDrawerProps = {
   sale: Sale
@@ -25,7 +26,8 @@ export function SaleDetailsDrawer({ sale, isActing, onClose, onVoid, onRefund }:
   const canRefund = sale.status === 'completed' && hasPermission('sales.refund')
 
   return (
-    <div className="fixed inset-0 z-40 bg-slate-950/30" role="presentation" onMouseDown={onClose}>
+    <Portal>
+    <div className={drawerOverlayClass} role="presentation" onMouseDown={onClose}>
       <aside aria-labelledby="sale-details-title" aria-modal="true" className={drawerPanelClass()} role="dialog" onMouseDown={(event) => event.stopPropagation()}>
         <header className="flex items-start justify-between gap-4 border-b border-border p-4 sm:p-6">
           <div>
@@ -105,5 +107,6 @@ export function SaleDetailsDrawer({ sale, isActing, onClose, onVoid, onRefund }:
         />
       ) : null}
     </div>
+    </Portal>
   )
 }

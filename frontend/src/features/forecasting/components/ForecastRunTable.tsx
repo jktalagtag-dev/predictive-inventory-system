@@ -53,7 +53,7 @@ export function ForecastRunTable({ runs, onView }: { runs: ForecastRun[]; onView
                   <TableCell align="right">
                     <div className="flex justify-end gap-1">
                       <Button aria-label={`View run ${run.id}`} size="icon" variant="ghost" onClick={() => onView(run)}>
-                        <PanelRightOpen aria-hidden="true" size={17} />
+                        <PanelRightOpen aria-hidden="true" size={18} />
                       </Button>
                     </div>
                   </TableCell>

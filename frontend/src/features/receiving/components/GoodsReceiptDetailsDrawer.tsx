@@ -5,7 +5,8 @@ import type { GoodsReceipt } from '@/features/receiving/types/goodsReceipt'
 import { GoodsReceiptStatusBadge } from '@/features/receiving/components/GoodsReceiptStatusBadge'
 import { ReasonPromptDialog } from '@/features/receiving/components/ReasonPromptDialog'
 import { Button } from '@/shared/components/Button'
-import { drawerPanelClass } from '@/shared/lib/modalClasses'
+import { drawerOverlayClass, drawerPanelClass } from '@/shared/lib/modalClasses'
+import { Portal } from '@/shared/components/Portal'
 
 type GoodsReceiptDetailsDrawerProps = {
   goodsReceipt: GoodsReceipt
@@ -20,7 +21,8 @@ export function GoodsReceiptDetailsDrawer({ goodsReceipt: receipt, isActing, onC
   const [showReversePrompt, setShowReversePrompt] = useState(false)
 
   return (
-    <div className="fixed inset-0 z-40 bg-slate-950/30" role="presentation" onMouseDown={onClose}>
+    <Portal>
+    <div className={drawerOverlayClass} role="presentation" onMouseDown={onClose}>
       <aside aria-labelledby="gr-details-title" aria-modal="true" className={drawerPanelClass()} role="dialog" onMouseDown={(event) => event.stopPropagation()}>
         <header className="flex items-start justify-between gap-4 border-b border-border p-4 sm:p-6">
           <div>
@@ -93,5 +95,6 @@ export function GoodsReceiptDetailsDrawer({ goodsReceipt: receipt, isActing, onC
         />
       ) : null}
     </div>
+    </Portal>
   )
 }

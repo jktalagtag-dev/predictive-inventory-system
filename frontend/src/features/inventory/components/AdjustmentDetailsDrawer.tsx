@@ -6,7 +6,8 @@ import type { InventoryAdjustment } from '@/features/inventory/types/inventory'
 import { AdjustmentStatusBadge } from '@/features/inventory/components/AdjustmentStatusBadge'
 import { ReasonPromptDialog } from '@/features/inventory/components/ReasonPromptDialog'
 import { Button } from '@/shared/components/Button'
-import { drawerPanelClass } from '@/shared/lib/modalClasses'
+import { drawerOverlayClass, drawerPanelClass } from '@/shared/lib/modalClasses'
+import { Portal } from '@/shared/components/Portal'
 
 type AdjustmentDetailsDrawerProps = {
   adjustment: InventoryAdjustment
@@ -23,7 +24,8 @@ export function AdjustmentDetailsDrawer({ adjustment, isActing, onClose, onAppro
   const actions = getAdjustmentActions(adjustment)
 
   return (
-    <div className="fixed inset-0 z-40 bg-slate-950/30" role="presentation" onMouseDown={onClose}>
+    <Portal>
+    <div className={drawerOverlayClass} role="presentation" onMouseDown={onClose}>
       <aside aria-labelledby="adj-details-title" aria-modal="true" className={drawerPanelClass()} role="dialog" onMouseDown={(event) => event.stopPropagation()}>
         <header className="flex items-start justify-between gap-4 border-b border-border p-4 sm:p-6">
           <div>
@@ -86,5 +88,6 @@ export function AdjustmentDetailsDrawer({ adjustment, isActing, onClose, onAppro
         />
       ) : null}
     </div>
+    </Portal>
   )
 }

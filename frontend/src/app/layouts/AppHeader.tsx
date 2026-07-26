@@ -19,7 +19,7 @@ export function AppHeader() {
           size="icon"
           onClick={toggleMobileNav}
         >
-          <Menu aria-hidden="true" size={20} />
+          <Menu aria-hidden="true" size={18} />
         </Button>
         <div className="min-w-0">
           <p className="truncate text-sm font-semibold text-ink">Predictive Inventory System</p>

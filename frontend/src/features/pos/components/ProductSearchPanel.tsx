@@ -27,7 +27,7 @@ export function ProductSearchPanel({ branchId, onAdd }: ProductSearchPanelProps)
       <div className="border-b border-border p-4">
         <label className="sr-only" htmlFor="pos-search">Search products or scan barcode</label>
         <div className="relative">
-          <Search aria-hidden="true" className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted" size={17} />
+          <Search aria-hidden="true" className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted" size={18} />
           <input
             ref={inputRef}
             autoFocus

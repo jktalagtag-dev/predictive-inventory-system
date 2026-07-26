@@ -6,3 +6,4 @@ coverage/
 !.env.example
 storage/*.key
 vendor/
+.vscode/

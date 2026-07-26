@@ -4,7 +4,8 @@ import { ColdStartBadge } from '@/features/forecasting/components/ColdStartBadge
 import { ManualPlanDialog } from '@/features/forecasting/components/ManualPlanDialog'
 import type { ForecastRun, ForecastRunItem } from '@/features/forecasting/types/forecast'
 import { Button } from '@/shared/components/Button'
-import { drawerPanelClass } from '@/shared/lib/modalClasses'
+import { drawerOverlayClass, drawerPanelClass } from '@/shared/lib/modalClasses'
+import { Portal } from '@/shared/components/Portal'
 
 type ForecastRunDetailsDrawerProps = {
   run: ForecastRun
@@ -18,7 +19,8 @@ export function ForecastRunDetailsDrawer({ run, canOverride, isSaving, onClose, 
   const [overrideItem, setOverrideItem] = useState<ForecastRunItem | null>(null)
 
   return (
-    <div className="fixed inset-0 z-40 bg-slate-950/30" role="presentation" onMouseDown={onClose}>
+    <Portal>
+    <div className={drawerOverlayClass} role="presentation" onMouseDown={onClose}>
       <aside aria-labelledby="forecast-run-details-title" aria-modal="true" className={drawerPanelClass('sm:max-w-3xl')} role="dialog" onMouseDown={(event) => event.stopPropagation()}>
         <header className="flex items-start justify-between gap-4 border-b border-border p-4 sm:p-6">
           <div>
@@ -82,5 +84,6 @@ export function ForecastRunDetailsDrawer({ run, canOverride, isSaving, onClose, 
         />
       ) : null}
     </div>
+    </Portal>
   )
 }

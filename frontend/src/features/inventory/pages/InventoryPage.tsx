@@ -170,7 +170,7 @@ export default function InventoryPage() {
         title="Inventory"
         description="Monitor stock, review movement history, and manage inventory adjustments for your branch."
         actions={tab === 'adjustments' && hasPermission('inventory.adjustments.create') ? (
-          <Button disabled={!branchId} onClick={() => { setQueuedMessage(null); setIsFormOpen(true) }}><PackagePlus aria-hidden="true" size={17} /> Create adjustment</Button>
+          <Button disabled={!branchId} onClick={() => { setQueuedMessage(null); setIsFormOpen(true) }}><PackagePlus aria-hidden="true" size={18} /> Create adjustment</Button>
         ) : undefined}
       />
       {!isOnline ? <div className="rounded-xl border border-warning/30 bg-warning/10 px-4 py-3 text-sm text-warning-text" role="status">You are offline. Adjustment drafts you create now will queue and sync automatically once connectivity returns.</div> : null}

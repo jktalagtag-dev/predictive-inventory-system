@@ -40,7 +40,7 @@ export default function UsersPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader title="User management" description="Manage access, roles, account status, and operational responsibility." actions={<Button onClick={openCreate}><UserPlus aria-hidden="true" size={17} /> Create user</Button>} />
+      <PageHeader title="User management" description="Manage access, roles, account status, and operational responsibility." actions={<Button onClick={openCreate}><UserPlus aria-hidden="true" size={18} /> Create user</Button>} />
       {error ? <div className="rounded-xl border border-danger/30 bg-danger/10 px-4 py-3 text-sm text-danger-text" role="alert">{error.message}{error.requestId ? ` Request ID: ${error.requestId}` : ''}</div> : null}
 
       <section className="grid gap-3 rounded-card border border-border bg-surface p-4 shadow-panel sm:p-6 md:grid-cols-[minmax(0,1fr)_180px_160px]">

@@ -3,6 +3,8 @@ import { X } from 'lucide-react'
 import { computeHistoryStartDate, defaultHistoryEndDate } from '@/features/forecasting/lib/period'
 import type { CreateForecastRunPayload, PeriodGrain } from '@/features/forecasting/types/forecast'
 import { Button } from '@/shared/components/Button'
+import { Portal } from '@/shared/components/Portal'
+import { confirmDialogOverlayClass, confirmDialogPanelClass } from '@/shared/lib/modalClasses'
 
 type ForecastRunFormDialogProps = {
   isSaving: boolean
@@ -24,8 +26,9 @@ export function ForecastRunFormDialog({ isSaving, onClose, onSave }: ForecastRun
   }
 
   return (
-    <div className="fixed inset-0 z-50 grid place-items-center bg-slate-950/40 p-4" role="presentation">
-      <section aria-labelledby="forecast-run-form-title" aria-modal="true" className="max-h-[85dvh] w-full max-w-lg overflow-y-auto rounded-card border border-border bg-surface p-6 shadow-panel sm:p-8" role="dialog">
+    <Portal>
+    <div className={confirmDialogOverlayClass} role="presentation">
+      <section aria-labelledby="forecast-run-form-title" aria-modal="true" className={confirmDialogPanelClass('max-w-lg')} role="dialog">
         <div className="flex items-start justify-between gap-4">
           <div><h2 id="forecast-run-form-title" className="text-lg font-bold text-ink">Run a demand forecast</h2><p className="mt-1 text-sm text-muted">Uses the Simple Moving Average of net completed sales for every active stock product.</p></div>
           <Button aria-label="Close dialog" size="icon" variant="ghost" onClick={onClose}><X aria-hidden="true" size={18} /></Button>
@@ -49,5 +52,6 @@ export function ForecastRunFormDialog({ isSaving, onClose, onSave }: ForecastRun
         </form>
       </section>
     </div>
+    </Portal>
   )
 }

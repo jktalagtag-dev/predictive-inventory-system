@@ -17,7 +17,7 @@ export function ForecastSummaryPanel({ summary }: { summary: ForecastSummary }) 
       ) : (
         <div className="mt-4 flex items-start gap-3">
           <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-brand-50 text-brand-700">
-            <Sparkles aria-hidden="true" size={17} />
+            <Sparkles aria-hidden="true" size={18} />
           </span>
           <div className="min-w-0 flex-1">
             <p className="text-3xl font-semibold tabular-nums text-ink">{Math.round(summary.coverageRatio * 100)}%</p>

@@ -3,7 +3,8 @@ import { RefreshCw, X } from 'lucide-react'
 import { useEoqHistory } from '@/features/restocking/hooks/useRestocking'
 import type { ReorderPolicy } from '@/features/restocking/types/restocking'
 import { Button } from '@/shared/components/Button'
-import { drawerPanelClass } from '@/shared/lib/modalClasses'
+import { drawerOverlayClass, drawerPanelClass } from '@/shared/lib/modalClasses'
+import { Portal } from '@/shared/components/Portal'
 
 type ReorderPolicyDetailsDrawerProps = {
   policy: ReorderPolicy
@@ -27,7 +28,8 @@ export function ReorderPolicyDetailsDrawer({ policy, canCalculate, canCalculateE
   }
 
   return (
-    <div className="fixed inset-0 z-40 bg-slate-950/30" role="presentation" onMouseDown={onClose}>
+    <Portal>
+    <div className={drawerOverlayClass} role="presentation" onMouseDown={onClose}>
       <aside aria-labelledby="rop-details-title" aria-modal="true" className={drawerPanelClass()} role="dialog" onMouseDown={(event) => event.stopPropagation()}>
         <header className="flex items-start justify-between gap-4 border-b border-border p-4 sm:p-6">
           <div>
@@ -80,5 +82,6 @@ export function ReorderPolicyDetailsDrawer({ policy, canCalculate, canCalculateE
         </div>
       </aside>
     </div>
+    </Portal>
   )
 }

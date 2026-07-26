@@ -4,6 +4,7 @@ import type { BranchOption, ManagedUser, RoleOption, UserFormValues } from '@/fe
 import { Button } from '@/shared/components/Button'
 import { cn } from '@/shared/lib/cn'
 import { modalOverlayClass, modalPanelClass, sheetBodyClass, sheetFooterClass, sheetHeaderClass } from '@/shared/lib/modalClasses'
+import { Portal } from '@/shared/components/Portal'
 
 type UserFormDialogProps = {
   user?: ManagedUser
@@ -60,6 +61,7 @@ export function UserFormDialog({ user, roleOptions, branchOptions, isSaving, onC
   const isValid = values.roleIds.length > 0 && values.branchIds.length > 0 && values.defaultBranchId !== ''
 
   return (
+    <Portal>
     <div className={modalOverlayClass} role="presentation">
       <section aria-labelledby="user-form-title" aria-modal="true" className={modalPanelClass('sm:max-w-lg')} role="dialog">
         <div className={sheetHeaderClass}>
@@ -128,5 +130,6 @@ export function UserFormDialog({ user, roleOptions, branchOptions, isSaving, onC
         </form>
       </section>
     </div>
+    </Portal>
   )
 }

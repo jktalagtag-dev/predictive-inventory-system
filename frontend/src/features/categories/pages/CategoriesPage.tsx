@@ -42,7 +42,7 @@ export default function CategoriesPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader title="Category management" description="Maintain product classification, hierarchy, and new-product eligibility." actions={<Button onClick={openCreate}><FolderPlus aria-hidden="true" size={17} /> Create category</Button>} />
+      <PageHeader title="Category management" description="Maintain product classification, hierarchy, and new-product eligibility." actions={<Button onClick={openCreate}><FolderPlus aria-hidden="true" size={18} /> Create category</Button>} />
       {previewMode ? <div className="rounded-xl border border-warning/30 bg-warning/10 px-4 py-3 text-sm text-warning-text">Preview categories are shown until the category-management API is available.</div> : null}
       {error ? <div className="rounded-xl border border-danger/30 bg-danger/10 px-4 py-3 text-sm text-danger-text" role="alert">{error.message}{error.requestId ? ` Request ID: ${error.requestId}` : ''}</div> : null}
 

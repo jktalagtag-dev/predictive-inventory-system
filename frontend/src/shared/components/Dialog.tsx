@@ -2,6 +2,7 @@ import { type PropsWithChildren, type ReactNode, useEffect, useId, useRef } from
 import { X } from 'lucide-react'
 import { Button } from '@/shared/components/Button'
 import { modalOverlayClass, modalPanelClass, sheetBodyClass, sheetFooterClass, sheetHeaderClass } from '@/shared/lib/modalClasses'
+import { Portal } from '@/shared/components/Portal'
 
 const FOCUSABLE_SELECTOR = 'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
 
@@ -67,6 +68,7 @@ export function Dialog({ title, description, onClose, size = 'md', footer, child
   }, [onClose]);
 
   return (
+    <Portal>
     <div className={modalOverlayClass} role="presentation" onMouseDown={onClose}>
       <section
         ref={panelRef}
@@ -93,5 +95,6 @@ export function Dialog({ title, description, onClose, size = 'md', footer, child
         {footer ? <div className={sheetFooterClass}>{footer}</div> : null}
       </section>
     </div>
+    </Portal>
   )
 }

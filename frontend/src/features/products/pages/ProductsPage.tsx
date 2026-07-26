@@ -52,7 +52,7 @@ export default function ProductsPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader title="Product management" description="Maintain stock products, service items, and units. Inventory monitoring is not yet available." actions={<Button onClick={openCreate}><PackagePlus aria-hidden="true" size={17} /> Create product</Button>} />
+      <PageHeader title="Product management" description="Maintain stock products, service items, and units. Inventory monitoring is not yet available." actions={<Button onClick={openCreate}><PackagePlus aria-hidden="true" size={18} /> Create product</Button>} />
       {error ? <div className="rounded-xl border border-danger/30 bg-danger/10 px-4 py-3 text-sm text-danger-text" role="alert">{error.message}{error.requestId ? ` Request ID: ${error.requestId}` : ''}</div> : null}
 
       <section className="grid gap-3 rounded-card border border-border bg-surface p-4 shadow-panel sm:p-6 lg:grid-cols-[minmax(0,1fr)_190px_180px_160px]">

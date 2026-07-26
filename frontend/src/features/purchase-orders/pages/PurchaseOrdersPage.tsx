@@ -73,7 +73,7 @@ export default function PurchaseOrdersPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader title="Purchase orders" description="Draft, submit, and approve purchase orders for your branch." actions={<Button disabled={!filters.branchId} onClick={() => setIsFormOpen(true)}><FilePlus2 aria-hidden="true" size={17} /> Create purchase order</Button>} />
+      <PageHeader title="Purchase orders" description="Draft, submit, and approve purchase orders for your branch." actions={<Button disabled={!filters.branchId} onClick={() => setIsFormOpen(true)}><FilePlus2 aria-hidden="true" size={18} /> Create purchase order</Button>} />
       {error ? <div className="rounded-xl border border-danger/30 bg-danger/10 px-4 py-3 text-sm text-danger-text" role="alert">{error.message}{error.requestId ? ` Request ID: ${error.requestId}` : ''}</div> : null}
 
       <section className="grid gap-3 rounded-card border border-border bg-surface p-4 shadow-panel sm:p-6 md:grid-cols-[minmax(0,1fr)_180px_180px]">

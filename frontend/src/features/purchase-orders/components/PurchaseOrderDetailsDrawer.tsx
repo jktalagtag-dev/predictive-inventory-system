@@ -5,7 +5,8 @@ import type { PurchaseOrder } from '@/features/purchase-orders/types/purchaseOrd
 import { PurchaseOrderStatusBadge } from '@/features/purchase-orders/components/PurchaseOrderStatusBadge'
 import { ReasonPromptDialog } from '@/features/purchase-orders/components/ReasonPromptDialog'
 import { Button } from '@/shared/components/Button'
-import { drawerPanelClass } from '@/shared/lib/modalClasses'
+import { drawerOverlayClass, drawerPanelClass } from '@/shared/lib/modalClasses'
+import { Portal } from '@/shared/components/Portal'
 
 type PurchaseOrderDetailsDrawerProps = {
   purchaseOrder: PurchaseOrder
@@ -26,7 +27,8 @@ export function PurchaseOrderDetailsDrawer({ purchaseOrder: po, isActing, onClos
   const canCancel = hasPermission('purchase_orders.cancel') && ['draft', 'submitted', 'approved', 'ordered'].includes(po.status)
 
   return (
-    <div className="fixed inset-0 z-40 bg-slate-950/30" role="presentation" onMouseDown={onClose}>
+    <Portal>
+    <div className={drawerOverlayClass} role="presentation" onMouseDown={onClose}>
       <aside aria-labelledby="po-details-title" aria-modal="true" className={drawerPanelClass()} role="dialog" onMouseDown={(event) => event.stopPropagation()}>
         <header className="flex items-start justify-between gap-4 border-b border-border p-4 sm:p-6">
           <div><p className="font-mono text-xs text-muted">{po.poNumber}</p><h2 id="po-details-title" className="mt-1 text-xl font-bold tracking-tight text-ink">{po.supplier?.legalName ?? 'Unknown supplier'}</h2><div className="mt-3"><PurchaseOrderStatusBadge status={po.status} /></div></div>
@@ -102,6 +104,7 @@ export function PurchaseOrderDetailsDrawer({ purchaseOrder: po, isActing, onClos
         <ReasonPromptDialog confirmLabel="Cancel order" description="This purchase order will be cancelled and cannot be reopened." isSubmitting={isActing} title="Cancel purchase order" onClose={() => setPrompt(null)} onConfirm={(reason) => { onCancel(reason); setPrompt(null) }} />
       ) : null}
     </div>
+    </Portal>
   )
 }
 

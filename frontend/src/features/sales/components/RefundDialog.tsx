@@ -4,6 +4,7 @@ import { PAYMENT_METHODS, type PaymentMethod, type Sale } from '@/features/sales
 import { Button } from '@/shared/components/Button'
 import { cn } from '@/shared/lib/cn'
 import { modalOverlayClass, modalPanelClass, sheetBodyClass, sheetFooterClass, sheetHeaderClass } from '@/shared/lib/modalClasses'
+import { Portal } from '@/shared/components/Portal'
 
 type RefundLineDraft = { productId: string; sku: string; name: string; unitPrice: string; taxRate: string; originalQuantity: string; refundQuantity: string }
 type RefundPaymentDraft = { localId: string; paymentMethod: PaymentMethod; amount: string }
@@ -45,6 +46,7 @@ export function RefundDialog({ sale, isSubmitting, onClose, onConfirm }: RefundD
   }
 
   return (
+    <Portal>
     <div className={modalOverlayClass} role="presentation" onMouseDown={(event) => event.stopPropagation()}>
       <section aria-labelledby="refund-dialog-title" aria-modal="true" className={modalPanelClass('sm:max-w-2xl')} role="dialog">
         <div className={sheetHeaderClass}>
@@ -106,7 +108,7 @@ export function RefundDialog({ sale, isSubmitting, onClose, onConfirm }: RefundD
           </label>
 
           <div className="mt-4 space-y-2">
-            <div className="flex items-center justify-between"><h3 className="text-sm font-semibold text-ink">Refund payments</h3><Button type="button" variant="secondary" onClick={() => setPayments((state) => [...state, { localId: crypto.randomUUID(), paymentMethod: 'cash', amount: '' }])}><Plus aria-hidden="true" size={15} /> Add</Button></div>
+            <div className="flex items-center justify-between"><h3 className="text-sm font-semibold text-ink">Refund payments</h3><Button type="button" variant="secondary" onClick={() => setPayments((state) => [...state, { localId: crypto.randomUUID(), paymentMethod: 'cash', amount: '' }])}><Plus aria-hidden="true" size={16} /> Add</Button></div>
             {payments.map((payment, index) => (
               <div key={payment.localId} className="flex items-center gap-2">
                 <select className="h-11 flex-1 rounded-xl border border-border bg-surface px-2 text-sm outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-600/20" value={payment.paymentMethod} onChange={(event) => setPayments((state) => state.map((item, itemIndex) => (itemIndex === index ? { ...item, paymentMethod: event.target.value as PaymentMethod } : item)))}>
@@ -130,5 +132,6 @@ export function RefundDialog({ sale, isSubmitting, onClose, onConfirm }: RefundD
         </div>
       </section>
     </div>
+    </Portal>
   )
 }

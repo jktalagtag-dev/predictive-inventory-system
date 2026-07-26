@@ -1,11 +1,14 @@
 import { X } from 'lucide-react'
 import type { Category } from '@/features/categories/types/category'
 import { Button } from '@/shared/components/Button'
+import { Portal } from '@/shared/components/Portal'
+import { confirmDialogOverlayClass, confirmDialogPanelClass } from '@/shared/lib/modalClasses'
 
 export function ArchiveCategoryDialog({ category, isArchiving, onClose, onConfirm }: { category: Category; isArchiving: boolean; onClose: () => void; onConfirm: () => void }) {
   return (
-    <div className="fixed inset-0 z-50 grid place-items-center bg-slate-950/40 p-4" role="presentation">
-      <section aria-labelledby="archive-category-title" aria-modal="true" className="max-h-[85dvh] w-full max-w-md overflow-y-auto rounded-card border border-border bg-surface p-6 shadow-panel sm:p-8" role="dialog">
+    <Portal>
+    <div className={confirmDialogOverlayClass} role="presentation">
+      <section aria-labelledby="archive-category-title" aria-modal="true" className={confirmDialogPanelClass('max-w-md')} role="dialog">
         <div className="flex items-start justify-between gap-4">
           <h2 id="archive-category-title" className="text-lg font-bold text-ink">Archive category</h2>
           <Button aria-label="Close dialog" size="icon" variant="ghost" onClick={onClose}><X aria-hidden="true" size={18} /></Button>
@@ -21,5 +24,6 @@ export function ArchiveCategoryDialog({ category, isArchiving, onClose, onConfir
         </div>
       </section>
     </div>
+    </Portal>
   )
 }

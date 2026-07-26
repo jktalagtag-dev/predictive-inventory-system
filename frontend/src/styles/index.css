@@ -9,7 +9,10 @@
   --color-subtle: 239 243 248;
   --color-border: 231 237 245;
   --color-ink: 17 24 39;
-  --color-muted: 107 114 128;
+  /* Darkened from 107 114 128 (gray-500): that value scored only 4.34:1 against
+     --color-subtle, failing WCAG AA for the muted-on-subtle pairing used by table
+     headers and neutral status pills. This passes on subtle, canvas, and surface. */
+  --color-muted: 100 107 120;
   --color-brand-50: 234 241 248;
   --color-brand-600: 16 58 111;
   --color-brand-700: 11 42 84;
@@ -71,6 +74,30 @@ textarea {
   font: inherit;
 }
 
+/* Native <button> defaults to cursor:default, which reads as non-interactive.
+   Set it once here so every control — including ones added later — gets the
+   correct affordance, while genuinely disabled controls keep the default arrow. */
+button:not(:disabled),
+[role='button']:not([aria-disabled='true']),
+summary {
+  cursor: pointer;
+}
+
 :focus-visible {
   outline: none;
+}
+
+/* Per-component `motion-reduce:` utilities only covered a handful of the
+   transitions in the app. This guarantees the preference is honoured everywhere,
+   including animations no component remembered to guard. Loading state stays
+   legible because spinners and skeletons are announced via role="status". */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

@@ -50,13 +50,13 @@ export function MobileTabBar() {
             to={tab.to}
             className={({ isActive }) => cn(tabBaseClass, isActive ? 'text-brand-700' : 'text-muted hover:text-ink')}
           >
-            <Icon aria-hidden="true" size={21} />
+            <Icon aria-hidden="true" size={22} />
             <span>{tab.label}</span>
           </NavLink>
         )
       })}
       <button className={cn(tabBaseClass, 'text-muted hover:text-ink')} type="button" onClick={openMobileNav}>
-        <MoreHorizontal aria-hidden="true" size={21} />
+        <MoreHorizontal aria-hidden="true" size={22} />
         <span>More</span>
       </button>
     </nav>

@@ -4,6 +4,7 @@ import { ADJUSTMENT_REASON_CODES, type AdjustmentFormValues, type AdjustmentLine
 import { Button } from '@/shared/components/Button'
 import { cn } from '@/shared/lib/cn'
 import { modalOverlayClass, modalPanelClass, sheetBodyClass, sheetFooterClass, sheetHeaderClass } from '@/shared/lib/modalClasses'
+import { Portal } from '@/shared/components/Portal'
 
 type ProductOption = { id: string; sku: string; name: string }
 
@@ -41,6 +42,7 @@ export function AdjustmentFormDialog({ productOptions, isSaving, onClose, onSave
   const isValid = values.lines.length > 0 && values.lines.every((line) => line.productId && line.quantityDelta && Number(line.quantityDelta) !== 0)
 
   return (
+    <Portal>
     <div className={modalOverlayClass} role="presentation">
       <section aria-labelledby="adj-form-title" aria-modal="true" className={modalPanelClass('sm:max-w-3xl')} role="dialog">
         <div className={sheetHeaderClass}><div><h2 id="adj-form-title" className="text-lg font-bold text-ink">Create inventory adjustment</h2><p className="mt-1 text-sm text-muted">Before/after quantities are calculated by the server once the draft is created.</p></div><Button aria-label="Close dialog" size="icon" variant="ghost" onClick={onClose}><X aria-hidden="true" size={18} /></Button></div>
@@ -94,5 +96,6 @@ export function AdjustmentFormDialog({ productOptions, isSaving, onClose, onSave
         </form>
       </section>
     </div>
+    </Portal>
   )
 }

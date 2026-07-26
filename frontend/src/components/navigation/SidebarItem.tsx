@@ -45,7 +45,7 @@ export function SidebarItem({
             <Icon
               aria-hidden="true"
               className={cn('shrink-0 transition-colors duration-150', isActive && 'text-info')}
-              size={19}
+              size={18}
             />
           ) : null}
           {isExpanded ? <span className="truncate">{label}</span> : <span className="lg:sr-only">{label}</span>}

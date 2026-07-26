@@ -2,6 +2,8 @@ import { type FormEvent, useState } from 'react'
 import { X } from 'lucide-react'
 import type { ForecastRunItem } from '@/features/forecasting/types/forecast'
 import { Button } from '@/shared/components/Button'
+import { Portal } from '@/shared/components/Portal'
+import { confirmDialogOverlayClass, confirmDialogPanelClass } from '@/shared/lib/modalClasses'
 
 type ManualPlanDialogProps = {
   item: ForecastRunItem
@@ -29,8 +31,9 @@ export function ManualPlanDialog({ item, isSaving, onClose, onSave }: ManualPlan
   }
 
   return (
-    <div className="fixed inset-0 z-50 grid place-items-center bg-slate-950/40 p-4" role="presentation" onMouseDown={(event) => event.stopPropagation()}>
-      <section aria-labelledby="manual-plan-title" aria-modal="true" className="max-h-[85dvh] w-full max-w-md overflow-y-auto rounded-card border border-border bg-surface p-6 shadow-panel sm:p-8" role="dialog">
+    <Portal>
+    <div className={confirmDialogOverlayClass} role="presentation" onMouseDown={(event) => event.stopPropagation()}>
+      <section aria-labelledby="manual-plan-title" aria-modal="true" className={confirmDialogPanelClass('max-w-md')} role="dialog">
         <div className="flex items-start justify-between gap-4">
           <div><h2 id="manual-plan-title" className="text-lg font-bold text-ink">Manual plan override</h2><p className="mt-1 text-sm text-muted">{item.productName} ({item.productSku}). This is audited and does not rewrite the original SMA output.</p></div>
           <Button aria-label="Close dialog" size="icon" variant="ghost" onClick={onClose}><X aria-hidden="true" size={18} /></Button>
@@ -49,5 +52,6 @@ export function ManualPlanDialog({ item, isSaving, onClose, onSave }: ManualPlan
         </form>
       </section>
     </div>
+    </Portal>
   )
 }

@@ -32,6 +32,25 @@ export function drawerPanelClass(sizeMax = 'sm:max-w-2xl', className?: string): 
   )
 }
 
+/** Drawer scrim: not the flex-centering overlay dialogs use, since drawers anchor right. */
+export const drawerOverlayClass = 'fixed inset-0 z-40 bg-slate-950/40'
+
+/**
+ * Short confirmation dialogs (archive/reason-prompt/single-setting edits) stay
+ * centered on every breakpoint rather than becoming full-screen mobile sheets —
+ * that's deliberate per CLAUDE.md section 34, so this is a distinct pair from
+ * modalOverlayClass/modalPanelClass above, not a variant of it.
+ */
+export const confirmDialogOverlayClass = 'fixed inset-0 z-50 grid place-items-center bg-slate-950/40 p-4'
+
+export function confirmDialogPanelClass(sizeMax: string, className?: string): string {
+  return cn(
+    'max-h-[85dvh] w-full overflow-y-auto rounded-card border border-border bg-surface p-6 shadow-panel sm:p-8',
+    sizeMax,
+    className,
+  )
+}
+
 /** Sticky sheet header (title + close). */
 export const sheetHeaderClass =
   'sticky top-0 z-10 flex items-start justify-between gap-4 border-b border-border bg-surface px-5 py-4 sm:px-8 sm:py-6'

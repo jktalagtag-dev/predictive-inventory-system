@@ -67,7 +67,7 @@ export function ReorderPolicyTable({ policies, onView }: { policies: ReorderPoli
                   </TableCell>
                   <TableCell align="right">
                     <div className="flex justify-end gap-1">
-                      <Button aria-label={`View policy for ${policy.productName}`} size="icon" variant="ghost" onClick={() => onView(policy)}><PanelRightOpen aria-hidden="true" size={17} /></Button>
+                      <Button aria-label={`View policy for ${policy.productName}`} size="icon" variant="ghost" onClick={() => onView(policy)}><PanelRightOpen aria-hidden="true" size={18} /></Button>
                     </div>
                   </TableCell>
                 </TableRow>

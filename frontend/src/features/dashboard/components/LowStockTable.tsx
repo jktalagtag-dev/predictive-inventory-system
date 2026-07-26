@@ -24,7 +24,7 @@ const severityClasses: Record<LowStockItem['severity'], string> = {
 
 const severityPill = (severity: LowStockItem['severity']) => (
   <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold ${severityClasses[severity]}`}>
-    <AlertTriangle aria-hidden="true" size={12} />
+    <AlertTriangle aria-hidden="true" size={14} />
     {severityLabels[severity]}
   </span>
 )

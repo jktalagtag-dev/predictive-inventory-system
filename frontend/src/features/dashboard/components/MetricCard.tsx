@@ -6,6 +6,7 @@ type MetricCardProps = {
   metric: DashboardMetric
   icon: ReactNode
   tone: 'default' | 'warning' | 'danger' | 'success'
+  isCurrency?: boolean
 }
 
 const toneClasses = {
@@ -15,19 +16,91 @@ const toneClasses = {
   success: 'bg-success/10 text-success-text',
 }
 
-export function MetricCard({ metric, icon, tone }: MetricCardProps) {
+function formatMetricValue(value: string, isCurrency: boolean) {
+  const numericValue = Number(value)
+
+  // If it's not a plain number string, display the raw value untouched.
+  if (Number.isNaN(numericValue)) {
+    return value
+  }
+
+  return new Intl.NumberFormat('en-PH', {
+    minimumFractionDigits: isCurrency ? 2 : 0,
+    maximumFractionDigits: 2,
+  }).format(numericValue)
+}
+
+export function MetricCard({
+  metric,
+  icon,
+  tone,
+  isCurrency = false,
+}: MetricCardProps) {
   return (
-    <section className="rounded-card border border-border bg-surface p-8 shadow-panel">
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <p className="text-sm font-semibold text-muted">{metric.label}</p>
-          <p className="mt-3 text-[2.5rem] font-semibold leading-none tracking-tight text-ink tabular-nums">{metric.value}</p>
+    <section
+      className="
+        group
+        rounded-2xl
+        border
+        border-border/60
+        bg-surface
+        p-7
+        shadow-sm
+        transition-all
+        duration-300
+        motion-reduce:transition-none
+        hover:-translate-y-1
+        hover:border-brand-200
+        hover:shadow-xl
+      "
+    >
+      <div className="flex items-start justify-between gap-5">
+
+        <div className="min-w-0 flex-1">
+
+          <p className="text-sm font-semibold tracking-wide text-muted">
+            {metric.label}
+          </p>
+
+          <h3 className="mt-4 text-5xl font-bold leading-none tracking-tight text-ink tabular-nums">
+            {formatMetricValue(metric.value, isCurrency)}
+          </h3>
+
         </div>
-        <span className={`grid h-10 w-10 place-items-center rounded-xl ${toneClasses[tone]}`}>{icon}</span>
+
+        <div
+          className={`
+            flex
+            h-14
+            w-14
+            shrink-0
+            items-center
+            justify-center
+            rounded-2xl
+            transition-transform
+            duration-300
+            motion-reduce:transition-none
+            group-hover:scale-110
+            ${toneClasses[tone]}
+          `}
+        >
+          {icon}
+        </div>
+
       </div>
-      <div className="mt-5 flex items-center gap-1 text-xs leading-5 text-muted">
-        <ArrowUpRight aria-hidden="true" size={14} />
-        <span>{metric.detail}</span>
+
+      <div className="mt-6 flex items-center gap-2 text-sm text-muted">
+
+        <ArrowUpRight
+          aria-hidden="true"
+          size={16}
+          className="opacity-70"
+        />
+
+        <span className="truncate">
+          {metric.detail}
+        </span>
+
       </div>
     </section>
   )

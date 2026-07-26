@@ -2,6 +2,8 @@ import { type FormEvent, useState } from 'react'
 import { X } from 'lucide-react'
 import type { CreateReorderPolicyPayload, LeadTimeBasis, SafetyStockBasis } from '@/features/restocking/types/restocking'
 import { Button } from '@/shared/components/Button'
+import { Portal } from '@/shared/components/Portal'
+import { confirmDialogOverlayClass, confirmDialogPanelClass } from '@/shared/lib/modalClasses'
 
 type ProductOption = { id: string; sku: string; name: string }
 
@@ -33,8 +35,9 @@ export function ReorderPolicyFormDialog({ productOptions, isSaving, onClose, onS
   }
 
   return (
-    <div className="fixed inset-0 z-50 grid place-items-center bg-slate-950/40 p-4" role="presentation">
-      <section aria-labelledby="reorder-policy-form-title" aria-modal="true" className="max-h-[85dvh] w-full max-w-lg overflow-y-auto rounded-card border border-border bg-surface p-6 shadow-panel sm:p-8" role="dialog">
+    <Portal>
+    <div className={confirmDialogOverlayClass} role="presentation">
+      <section aria-labelledby="reorder-policy-form-title" aria-modal="true" className={confirmDialogPanelClass('max-w-lg')} role="dialog">
         <div className="flex items-start justify-between gap-4">
           <div><h2 id="reorder-policy-form-title" className="text-lg font-bold text-ink">Create reorder policy</h2><p className="mt-1 text-sm text-muted">The reorder point itself is calculated afterward, never entered directly.</p></div>
           <Button aria-label="Close dialog" size="icon" variant="ghost" onClick={onClose}><X aria-hidden="true" size={18} /></Button>
@@ -63,5 +66,6 @@ export function ReorderPolicyFormDialog({ productOptions, isSaving, onClose, onS
         </form>
       </section>
     </div>
+    </Portal>
   )
 }

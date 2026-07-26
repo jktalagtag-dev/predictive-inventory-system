@@ -6,6 +6,7 @@ import type { PurchaseOrderFormValues, PurchaseOrderLineInput } from '@/features
 import { Button } from '@/shared/components/Button'
 import { cn } from '@/shared/lib/cn'
 import { modalOverlayClass, modalPanelClass, sheetBodyClass, sheetFooterClass, sheetHeaderClass } from '@/shared/lib/modalClasses'
+import { Portal } from '@/shared/components/Portal'
 
 type ProductOption = { id: string; sku: string; name: string }
 
@@ -38,6 +39,7 @@ export function PurchaseOrderFormDialog({ supplierOptions, productOptions, unitO
     && values.lines.every((line) => line.productId && line.unitId && line.orderedQuantity && line.unitCost)
 
   return (
+    <Portal>
     <div className={modalOverlayClass} role="presentation">
       <section aria-labelledby="po-form-title" aria-modal="true" className={modalPanelClass('sm:max-w-4xl')} role="dialog">
         <div className={sheetHeaderClass}><div><h2 id="po-form-title" className="text-lg font-bold text-ink">Create purchase order</h2><p className="mt-1 text-sm text-muted">Totals are calculated by the server once the draft is created.</p></div><Button aria-label="Close dialog" size="icon" variant="ghost" onClick={onClose}><X aria-hidden="true" size={18} /></Button></div>
@@ -107,5 +109,6 @@ export function PurchaseOrderFormDialog({ supplierOptions, productOptions, unitO
         </form>
       </section>
     </div>
+    </Portal>
   )
 }

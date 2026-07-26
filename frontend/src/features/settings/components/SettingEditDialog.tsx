@@ -3,6 +3,8 @@ import { X } from 'lucide-react'
 import type { Setting } from '@/features/settings/types/settings'
 import { type ApiError } from '@/shared/api/client'
 import { Button } from '@/shared/components/Button'
+import { Portal } from '@/shared/components/Portal'
+import { confirmDialogOverlayClass, confirmDialogPanelClass } from '@/shared/lib/modalClasses'
 
 type SettingEditDialogProps = {
   setting: Setting
@@ -28,8 +30,9 @@ export function SettingEditDialog({ setting, isSaving, error, onClose, onSave }:
   }
 
   return (
-    <div className="fixed inset-0 z-50 grid place-items-center bg-slate-950/40 p-4" role="presentation">
-      <section aria-labelledby="setting-edit-title" aria-modal="true" className="max-h-[85dvh] w-full max-w-md overflow-y-auto rounded-card border border-border bg-surface p-6 shadow-panel sm:p-8" role="dialog">
+    <Portal>
+    <div className={confirmDialogOverlayClass} role="presentation">
+      <section aria-labelledby="setting-edit-title" aria-modal="true" className={confirmDialogPanelClass('max-w-md')} role="dialog">
         <div className="flex items-start justify-between gap-4">
           <div>
             <h2 id="setting-edit-title" className="font-mono text-base font-bold text-ink">{setting.key}</h2>
@@ -68,5 +71,6 @@ export function SettingEditDialog({ setting, isSaving, error, onClose, onSave }:
         </form>
       </section>
     </div>
+    </Portal>
   )
 }

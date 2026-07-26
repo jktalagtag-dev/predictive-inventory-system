@@ -57,7 +57,7 @@ export default function ForecastingPage() {
   return (
     <div className="space-y-6">
       <PageHeader
-        actions={hasPermission('forecasting.run') ? <Button disabled={!branchId} onClick={() => setIsFormOpen(true)}><PlayCircle aria-hidden="true" size={17} /> Run forecast</Button> : undefined}
+        actions={hasPermission('forecasting.run') ? <Button disabled={!branchId} onClick={() => setIsFormOpen(true)}><PlayCircle aria-hidden="true" size={18} /> Run forecast</Button> : undefined}
         description="Run and review Simple Moving Average demand forecasts for stock products."
         title="Forecasting"
       />

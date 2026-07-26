@@ -2,11 +2,13 @@ import { X } from 'lucide-react'
 import type { Product } from '@/features/products/types/product'
 import { StockBadge } from '@/features/products/components/StockBadge'
 import { Button } from '@/shared/components/Button'
-import { drawerPanelClass } from '@/shared/lib/modalClasses'
+import { drawerOverlayClass, drawerPanelClass } from '@/shared/lib/modalClasses'
+import { Portal } from '@/shared/components/Portal'
 
 export function ProductDetailsDrawer({ product, onClose, onEdit }: { product: Product; onClose: () => void; onEdit: (product: Product) => void }) {
   return (
-    <div className="fixed inset-0 z-40 bg-slate-950/30" role="presentation" onMouseDown={onClose}>
+    <Portal>
+    <div className={drawerOverlayClass} role="presentation" onMouseDown={onClose}>
       <aside aria-labelledby="product-details-title" aria-modal="true" className={drawerPanelClass('sm:max-w-xl')} role="dialog" onMouseDown={(event) => event.stopPropagation()}>
         <header className="flex items-start justify-between gap-4 border-b border-border p-4 sm:p-6"><div><p className="font-mono text-xs text-muted">{product.sku}</p><h2 id="product-details-title" className="mt-1 text-xl font-bold tracking-tight text-ink">{product.name}</h2><div className="mt-3"><StockBadge stock={product.stock} /></div></div><Button aria-label="Close product details" size="icon" variant="ghost" onClick={onClose}><X aria-hidden="true" size={18} /></Button></header>
         <div className="flex-1 space-y-6 overflow-y-auto p-4 sm:p-6">
@@ -39,6 +41,7 @@ export function ProductDetailsDrawer({ product, onClose, onEdit }: { product: Pr
         <footer className="border-t border-border p-4 pb-[calc(1rem+env(safe-area-inset-bottom))] sm:p-6"><Button className="w-full" onClick={() => onEdit(product)}>Edit product</Button></footer>
       </aside>
     </div>
+    </Portal>
   )
 }
 

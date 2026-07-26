@@ -15,8 +15,8 @@ function formatValue(setting: Setting): string {
 const settingTitle = (setting: Setting) => (
   <span className="flex items-center gap-1.5 font-mono text-xs font-semibold text-ink">
     {setting.key}
-    {setting.ownerOnly ? <Lock aria-label="Owner only" className="text-muted" size={13} /> : null}
-    {setting.isSensitive ? <ShieldAlert aria-label="Sensitive value" className="text-warning-text" size={13} /> : null}
+    {setting.ownerOnly ? <Lock aria-label="Owner only" className="text-muted" size={14} /> : null}
+    {setting.isSensitive ? <ShieldAlert aria-label="Sensitive value" className="text-warning-text" size={14} /> : null}
   </span>
 )
 
